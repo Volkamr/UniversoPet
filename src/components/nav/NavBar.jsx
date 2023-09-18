@@ -32,7 +32,7 @@ export const NavBar = () => {
                         Nosotros
                     </p>
                 </Link>
-                <Link to="registro">
+                <Link to="/login">
                     <FaUserCircle className="nav_iconR"> </FaUserCircle>
                 </Link>
             </div>

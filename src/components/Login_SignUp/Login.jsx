@@ -1,0 +1,111 @@
+import React, { useState } from "react";
+import './Login.css';
+
+export const Login = () => {
+
+    const [action, setAction] = useState("Login");
+    const registerLink = document.querySelector('.registrarse');
+    const wrapper = document.querySelector('.wrapper');
+    const loginLink = document.querySelector('.login-l');
+    const divRegistro = document.getElementById('registro-box');
+
+    
+    return (
+
+
+        <section className="Login">
+            
+            <div className= {`wrapper ${action === 'Registrarse' ? 'active' : ''}`}>
+                
+                <div class="form-box login">
+                    <form>
+                        <h2>Login</h2>
+                        <span className="line"></span>
+
+                        <div className="inputs">
+
+                            <label for="email">Email</label>
+                            <input class="input-box" type="email" name="email" placeholder="Ingrese su correo electrónico" id="email"></input>
+
+                            <label for="psswd">Contraseña</label>
+                            <input class="input-box" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
+
+                            <p class="mensaje">
+                                ¿Olvidó su contraseña?
+                                <a class="enlaces" href="#">Recuperar contraseña</a>
+                            </p>
+
+                            <input class="btn btn-depth" type="submit" value="Ingresar"></input>
+
+                        </div>
+                    </form>
+                </div>
+
+                <div class="form-box registro" id="registro-box">
+                    <form>
+                        <h2>Registro</h2>
+                        <span className="line"></span>
+
+                        <div className="inputs">
+
+                            <label for="nombres">Nombres</label>
+                            <input type="text" name="nombres" placeholder="Ingrese sus nombres" id="nombres"></input>
+
+                            <label for="apellidos">Apellidos</label>
+                            <input type="text" name="nombres" placeholder="Ingrese sus apellidos" id="nombres"></input>
+        
+                            <label for="email">Email</label>
+                            <input class="input-box" type="email" name="email" placeholder="Ingrese su correo electrónico" id="email"></input>
+
+                            <label for="psswd">Contraseña</label>
+                            <input class="input-box" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
+
+                            <div class="terminos y cond">
+                                <input type="checkbox" id="Terminos"></input>
+                                <label for="Terminos" id="l-terminos">Acepto los
+                                <a id="a-terminos" href="">Términos y condiciones</a>
+                                </label>
+                            </div>
+ 
+                            <input class="btn btn-depth" type="submit" value="Registrarse"></input>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+            {
+
+                action === "Login"
+                    ?
+                    <div class="cambio">
+                        <p>
+                            ¿No tiene una cuenta? <a className="registrarse" href="#"
+                                onClick={() => {
+                                    setAction("Registrarse");
+                                    
+                                }}>Crear cuenta</a>
+                        </p>
+                    </div>
+                    :
+                    <div class="cambio">
+                        <p>
+                            ¿Ya tiene una cuenta? <a className="login-l" href="#"
+                                onClick={() => {
+                                    setAction("Login");
+                                   
+                                }}>Inice sesión</a>
+                        </p>
+                    </div>
+
+            }
+
+
+        </section>
+
+
+    );
+};
+
+export default Login;

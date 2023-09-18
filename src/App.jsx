@@ -3,6 +3,7 @@ import './App.css'
 import Home from "./components/home/Home";
 import Services from './components/services/Services';
 import { Routes, Route } from "react-router-dom";
+import Login from './components/Login_SignUp/Login'
 function App() {
     const [data, setData] = React.useState(null);
 
@@ -17,9 +18,9 @@ function App() {
             <Routes>
                 <Route path="/UniversoPet" element={<Home />} />
                 <Route path="/servicios" element={<Services />} />
-                <Route path="/registro" element={<Services />} />
+                <Route path="/login" element={<Login />} />
             </Routes>
-            <p>{!data ? "Loading..." : data}</p>
+           
         </div>
     );
 }
