@@ -1,38 +1,225 @@
-.App {
+/* GOOGLE FONTS*/
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Jost:wght@400;500;700&display=swap');
+
+/* CSS VARIABLES*/
+:root {
+  /*colors*/
+  --color-primario: rgb(33, 149, 132);
+  --color-titulo: #2E2D31;
+  --color-texto: hsl(100, 100%, 0%);
+  --color-grande: #E6E5E0;
+  --color-grande-alt: hsl(68, 18%, 100%);
+  --color-contenedor: hsl(60, 20%, 99%);
+  --color-borde: hsl(210, 2%, 65%);
+  --primer-gradiante: linear-gradient(0deg, var(--color-grande-alt) 0%, var(--color-grande) 100%);
+  --segundo-gradiante: linear-gradient(180deg, var(--color-grande-alt) 0%, var(--color-grande) 100%);
+  --tercero-gradiante: linear-gradient(180deg, var(--color-grande) 0%, var(--color-grande) 100%);
+
+  /*Tipografia*/
+  --fuente-cuerpo: 'Jost', sans-serif;
+  --fuente-secundaria: 'Caveat', cursive;
+
+  --fuente-tamaño-grande: 75px;
+  --fuente-tamaño-h1: 44px;
+  --fuente-tamaño-h2: 30px;
+  --fuente-tamaño-h3: 28px;
+  --fuente-tamaño-h4: 24px;
+  --fuente-tamaño-h5: 22px;
+
+  --fuente-tamaño-mas-larga: 21px;
+  --fuente-tamaño-larga: 20px;
+  --fuente-tamaño-normal: 18px;
+  --fuente-tamaño-pequeño: 16px;
+  --fuente-tamaño-mas-pequeño: 14px;
+  --fuente-tamaño-chiquito: 13px;
+
+
+  /*Sombras*/
+  --sombra: 5px 5px rgb(0 0 0 / 10%);
+
+  /*Transicion*/
+  --transicion: cubic-bezier(0.3, 0, 0.3, 1);
+
+}
+
+/*Reseteo*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+button,
+input,
+body {
+  font-family: var(--fuente-cuerpo);
+  font-size: var(--fuente-tamaño-pequeño);
+}
+
+body {
+  color: var(--color-texto);
+  background-color: var(--color-grande);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-titulo);
+  font-weight: 600;
+}
+
+ul {
+  list-style: none;
+}
+
+p {
+  line-height: 1.35;
+}
+
+a {
+  text-decoration: none;
+}
+
+input,
+textarea,
+button {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+}
+
+/*Clases reusables*/
+.container {
+  max-width: 1200px;
+  padding-inline: 12px;
+  margin-inline: auto;
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+}
+
+.text-cs {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.btn,
+.hero__link {
+  color: var(--color-titulo);
+  font-size: var(--fuente-tamaño-chiquito);
+  font-weight: 600;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.btn {
+  border: 2px solid var(--color-borde);
+  padding-inline: 40px;
+  border-radius: 56px;
+  box-shadow: var(--sombra);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background-color: var(--color-primario);
+  border-radius: inherit;
+  transform: scale(0.3);
+  filter: blur(10px);
+  opacity: 0;
+  transition: all 0.7s var(--transicion);
+  z-index: -1;
+}
+
+.btn:hover::before {
+  transform: scale(1);
+  filter: blur(0);
+  opacity: 1;
+}
+
+.section {
+  margin-bottom: 8%;
+  margin-left: 7%;
+  margin-right: 7%;
+}
+
+.section__title,
+.section__subtitle {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.section__title {
+  font-size: var(--fuente-tamaño-h1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.section__subtitle {
+  color: var(--color-primario);
+  font-size: var(--fuente-tamaño-chiquito);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 60px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.section__subtitle span {
+  font-family: var(--fuente-secundaria);
+  color: var(--color-titulo);
+  font-size: var(--fuente-tamaño-h3);
+  text-transform: capitalize;
+  margin-left: 10px;
+}
+
+.card {
+  background-color: var(--color-contenedor);
+  overflow: hidden;
+  text-align: left;
+  position: relative;
+}
+
+.card-one {
+  padding: 30px 35px;
+  border-radius: 18px;
+}
+
+.card-two {
+  padding: 30px;
+  border-radius: 20px;
+}
+
+.link {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--color-titulo);
+  font-weight: 600;
 }
 
-.App-link {
-  color: #61dafb;
+.link__icon {
+  color: var(--color-primario);
+  margin-left: 20px;
+  transition: all 0.3s var(--transicion);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.link:hover .link__icon {
+  margin-left: 15px;
+}
+
+.c__shape {
+  position: absolute;
+  right: -24px;
+  bottom: -24px;
+  opacity: 0.6;
+  width: 110px;
+  height: 110px;
 }
