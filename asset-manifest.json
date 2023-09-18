@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/UniversoPet/static/css/main.cc27a634.css",
-    "main.js": "/UniversoPet/static/js/main.a9b9c0b3.js",
-    "static/media/cali.jpg": "/UniversoPet/static/media/cali.09ad80ff37a5ce35bf05.jpg",
-    "static/media/bogota.jpg": "/UniversoPet/static/media/bogota.94383fa05493a53d82b8.jpg",
-    "static/media/profile-img.png": "/UniversoPet/static/media/profile-img.ccfe28973949c4a0d540.png",
-    "static/media/bogota2.jpg": "/UniversoPet/static/media/bogota2.58359296b2c6d436c1f1.jpg",
-    "static/media/cartagena.jpg": "/UniversoPet/static/media/cartagena.db147829e43cfe5edbb6.jpg",
-    "static/media/medellin.jpg": "/UniversoPet/static/media/medellin.1fc5be3c1ea9a8e9ca4f.jpg",
-    "static/media/testimonial4.jpg": "/UniversoPet/static/media/testimonial4.2296f37ed6eca7f3fe31.jpg",
-    "static/media/medellin2.jpg": "/UniversoPet/static/media/medellin2.8895335d56b40fb9bb02.jpg",
-    "static/media/testimonial3.jpg": "/UniversoPet/static/media/testimonial3.02fce6a4237d2640fae2.jpg",
-    "static/media/testimonial5.jpg": "/UniversoPet/static/media/testimonial5.0b0b560f5dba55981e2a.jpg",
-    "static/media/testimonial2.jpg": "/UniversoPet/static/media/testimonial2.fcf2f56a751d02c10736.jpg",
-    "static/media/testimonial1.jpg": "/UniversoPet/static/media/testimonial1.de869147145b5c04238c.jpg",
-    "static/media/shape-1.png": "/UniversoPet/static/media/shape-1.25e4d49076a6fd169b83.png",
-    "index.html": "/UniversoPet/index.html",
-    "main.cc27a634.css.map": "/UniversoPet/static/css/main.cc27a634.css.map",
-    "main.a9b9c0b3.js.map": "/UniversoPet/static/js/main.a9b9c0b3.js.map"
+    "main.css": "/static/css/main.cc27a634.css",
+    "main.js": "/static/js/main.2ce32316.js",
+    "static/media/cali.jpg": "/static/media/cali.09ad80ff37a5ce35bf05.jpg",
+    "static/media/bogota.jpg": "/static/media/bogota.94383fa05493a53d82b8.jpg",
+    "static/media/profile-img.png": "/static/media/profile-img.ccfe28973949c4a0d540.png",
+    "static/media/bogota2.jpg": "/static/media/bogota2.58359296b2c6d436c1f1.jpg",
+    "static/media/cartagena.jpg": "/static/media/cartagena.db147829e43cfe5edbb6.jpg",
+    "static/media/medellin.jpg": "/static/media/medellin.1fc5be3c1ea9a8e9ca4f.jpg",
+    "static/media/testimonial4.jpg": "/static/media/testimonial4.2296f37ed6eca7f3fe31.jpg",
+    "static/media/medellin2.jpg": "/static/media/medellin2.8895335d56b40fb9bb02.jpg",
+    "static/media/testimonial3.jpg": "/static/media/testimonial3.02fce6a4237d2640fae2.jpg",
+    "static/media/testimonial5.jpg": "/static/media/testimonial5.0b0b560f5dba55981e2a.jpg",
+    "static/media/testimonial2.jpg": "/static/media/testimonial2.fcf2f56a751d02c10736.jpg",
+    "static/media/testimonial1.jpg": "/static/media/testimonial1.de869147145b5c04238c.jpg",
+    "static/media/shape-1.png": "/static/media/shape-1.25e4d49076a6fd169b83.png",
+    "index.html": "/index.html",
+    "main.cc27a634.css.map": "/static/css/main.cc27a634.css.map",
+    "main.2ce32316.js.map": "/static/js/main.2ce32316.js.map"
   },
   "entrypoints": [
     "static/css/main.cc27a634.css",
-    "static/js/main.a9b9c0b3.js"
+    "static/js/main.2ce32316.js"
   ]
 }
