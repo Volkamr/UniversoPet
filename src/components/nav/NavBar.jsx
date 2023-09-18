@@ -9,10 +9,10 @@ export const NavBar = () => {
 
         <section className="nav" id="nav">
             <div className="nav__left container">
-                <Link to="/" className="nav_link text-cs">
+                <Link to="/UniversoPet" className="nav_link text-cs">
                     <GiDogHouse className="nav_iconL"></GiDogHouse>
                 </Link>
-                <Link to="/" className="nav_link text-cs">
+                <Link to="/UniversoPet" className="nav_link text-cs">
                     <h1 className="Nav_home text-cs"> Home </h1>
                 </Link>
             </div>

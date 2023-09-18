@@ -6,8 +6,8 @@ import { FaTwitter, FaDribbble, FaBehance } from 'react-icons/fa'
 import './home.css'
 import '../nav/NavBar'
 import { NavBar } from "../nav/NavBar";
-import "../services/Services";
-import { Services } from "../services/Services";
+import "../services/ServicesSlider/ServicesSlider";
+import { ServicesSlider } from "../services/ServicesSlider/ServicesSlider";
 import Ubc from "../ubc/Ubc";
 import Contact from "../contact/Contact";
 
@@ -78,7 +78,7 @@ const Home = () => {
                 </div>
 
             </div>
-            <Services></Services>
+            <ServicesSlider></ServicesSlider>
             <Ubc></Ubc>
             <Contact></Contact>
         </section>

@@ -1,65 +1,47 @@
-import React from "react";
+import React from 'react'
+import { NavBar } from '../nav/NavBar'
 import './services.css'
-import { FaArrowRight } from "react-icons/fa";
-import { services } from "../../Data";
-import shapeTwo from '../../assets/shape-2.png'
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Pagination } from 'swiper/modules';
-
-export const Services = () => {
+export default function Services() {
     return (
-        <section className="services section" id="services">
-            <h2 className="section__title"> Nuestros Servicios </h2>
-            <p className="section__subtitle">
-                En <span> Universo Pet</span>
-            </p>
+        <section className="services_view">
+            <container className="services_container">
+                <NavBar className="nav_bar"></NavBar>
+                <div className="services_title">
+                    <h1 class="services_main_title">Nuestros servicios</h1>
+                </div>
 
-            <Swiper
-                pagination={{
-                    clickable: true,
-                }}
-                breakpoints={{
-                    540: {
-                        slidesPerWiew: 1,
-                        spaceBetween: 30,
-                    },
-                    768: {
-                        slidesPerView: 2,
-                        spaceBetween: 30,
-                    },
-                    1200: {
-                        slidesPerView: 3,
-                        spaceBetween: 40,
-                    },
-                }}
-                modules={[Pagination]}
-                className="services__container container"
-            >
+                <container className="servicios">
+                    <div className="servicios_s" id="consulta">
+                        <p className="servicios-p">Consulta general</p>
+                    </div>
 
-                {services.map(({ name, title, description }, index) => {
-                    return (
-                        <SwiperSlide className="services__item card card-one" key={index}>
-                            <span className="services__subtitle text-cs">
-                                {name}
-                            </span>
 
-                            <h3 className="services__title">{title}</h3>
-                            <a href="https://www.upb.edu.co/es/home" className="link">
-                                Más Información
-                                <FaArrowRight className="link__icon"></FaArrowRight>
-                            </a>
+                    <div className="servicios_s" id="vacunación">
+                        <p className="servicios-p">Vacunación</p>
+                    </div>
 
-                            <img src={shapeTwo} alt="" className="shape c__shape" />
-                        </SwiperSlide>
-                    )
-                })}
+                    <div className="servicios_s" id="urgencias">
+                        <p className="servicios-p">Urgencias 24h</p>
+                    </div>
 
-            </Swiper>
+                    <div className='servicios_s' id="laboratorio">
+                        <p className="servicios-p">Laboratorio clínico</p>
+                    </div>
+
+                    <div className='servicios_s' id="cirugía">
+                        <p className="servicios-p">Laboratorio clínico</p>
+                    </div>
+
+                    <div className='servicios_s' id="peluquería">
+                        <p className="servicios-p">Laboratorio clínico</p>
+                    </div>
+
+
+                </container>
+
+            </container>
         </section>
-    );
-};
+    )
+}
 
-export default Services;
