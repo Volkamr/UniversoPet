@@ -45,6 +45,11 @@
     color: var(--color-primario);
 }
 
+.nav_link:hover{
+    text-decoration: underline;
+    color: #42f5ca;
+}
+
 .nav_iconL {
     color: var(--color-titulo);
     height: 25px;
