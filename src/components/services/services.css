@@ -13,8 +13,16 @@
     grid-template-rows: 1fr 1fr 6fr;
 }
 
+.services_title{
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    align-items: center;
+    justify-content: center;
+
+}
 
 .services_main_title{
+    grid-column: 2;
     grid-row: 2;
     color: var(--color-primario);
     font-size: 50px;
@@ -41,7 +49,7 @@
 
 .servicios_s{
     background-color: rgba(255, 255, 255, 0.74);
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(90px);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.007);
     height: 150px;
     border-radius: 25px;
@@ -50,6 +58,9 @@
     justify-self: center;
     margin-top: 50px;
     margin-bottom: 40px;
+    justify-items: center;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
 }
 
 .servicios_s:hover{
@@ -58,11 +69,53 @@
 }
 
 .servicios-p{
+    grid-column: 1/2;
     margin-top: 5px;
     font-weight: 500;
     font-size: 20px;
+    justify-self: center;
 }
 
+.container-servicios{
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+}
+
+.services_img{
+    grid-column: 1;
+    height: 80px;
+    margin-top: 7px;
+}
+
+.btn-servicios{
+    border-radius: 20px;
+    background-color: var(--color-primario);
+    text-align: center;
+    padding: 2px 2px 2px 2px;
+    width: 100px;
+    height: 30px;
+    margin-bottom: 5px;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-servicios:hover{
+    background-color: rgb(35, 209, 183); 
+    color: var(--color-primario);
+}
+.div-btn{
+    grid-column:2;
+    display:grid;
+    grid-template-rows: 2fr 2fr;
+}
+
+#conoce-mas{
+    grid-row:1;
+}
+
+#agendar{
+    grid-row:2;
+}
 
 #consulta{
     grid-column: 1;
