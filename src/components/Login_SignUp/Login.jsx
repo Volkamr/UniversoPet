@@ -31,9 +31,9 @@ export const Login = () => {
                                 <label for="psswd">Contraseña</label>
                                 <input className="input-log" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
 
-                                <p class="mensaje">
+                                <p className="mensaje">
                                     ¿Olvidó su contraseña?
-                                    <a class="enlaces" href="#">Recuperar contraseña</a>
+                                    <a className="a-login" href="#">Recuperar contraseña</a>
                                 </p>
 
                                 <input className="btn-login-reg btn-login-depth" type="submit" value="Ingresar"></input>
@@ -64,7 +64,7 @@ export const Login = () => {
                                 <div class="terminos y cond">
                                     <input  type="checkbox" id="Terminos"></input>
                                     <label for="Terminos" id="l-terminos">Acepto los
-                                        <a id="a-terminos" href="">Términos y condiciones</a>
+                                        <a className="a-login" id="a-terminos" href="">Términos y condiciones</a>
                                     </label>
                                 </div>
 
@@ -81,8 +81,8 @@ export const Login = () => {
                     action === "Login"
                         ?
                         <div class="cambio">
-                            <p>
-                                ¿No tiene una cuenta? <a className="registrarse" href="#"
+                            <p className="mensaje">
+                                ¿No tiene una cuenta? <a className="registrarse a-login" href="#"
                                     onClick={() => {
                                         setAction("Registrarse");
 
@@ -91,8 +91,8 @@ export const Login = () => {
                         </div>
                         :
                         <div class="cambio">
-                            <p>
-                                ¿Ya tiene una cuenta? <a className="login-l" href="#"
+                            <p className="mensaje">
+                                ¿Ya tiene una cuenta? <a className="login-l a-login" href="#"
                                     onClick={() => {
                                         setAction("Login");
 

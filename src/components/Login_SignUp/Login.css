@@ -141,11 +141,11 @@ label {
     text-align: center;
 }
 
-p {
+.mensaje {
     font-size: 12px;
 }
 
-a {
+.a-login {
     font-size: 13px;
     color: #54b8a0;
     font-weight: 700;
@@ -168,11 +168,11 @@ a {
     text-decoration: underline;
 }
 
-.enlaces {
+.a-login {
     text-decoration: none;
 }
 
-.enlaces:hover {
+.a-login:hover {
     text-decoration: underline;
 }
 
