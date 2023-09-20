@@ -20,23 +20,23 @@ export const Login = () => {
 
                     <div class="form-box login">
                         <form>
-                            <h2>Login</h2>
+                            <h2 className="h2-login-reg">Login</h2>
                             <span className="line"></span>
 
                             <div className="inputs">
 
                                 <label for="email">Email</label>
-                                <input class="input-box" type="email" name="email" placeholder="Ingrese su correo electrónico" id="email"></input>
+                                <input className="input-log" type="email" name="email" placeholder="Ingrese su correo electrónico" id="email"></input>
 
                                 <label for="psswd">Contraseña</label>
-                                <input class="input-box" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
+                                <input className="input-log" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
 
                                 <p class="mensaje">
                                     ¿Olvidó su contraseña?
                                     <a class="enlaces" href="#">Recuperar contraseña</a>
                                 </p>
 
-                                <input class="btn btn-depth" type="submit" value="Ingresar"></input>
+                                <input className="btn-login-reg btn-login-depth" type="submit" value="Ingresar"></input>
 
                             </div>
                         </form>
@@ -44,31 +44,31 @@ export const Login = () => {
 
                     <div class="form-box registro" id="registro-box">
                         <form>
-                            <h2>Registro</h2>
+                            <h2 className="h2-login-reg">Registro</h2>
                             <span className="line"></span>
 
                             <div className="inputs">
 
                                 <label for="nombres">Nombres</label>
-                                <input type="text" name="nombres" placeholder="Ingrese sus nombres" id="nombres"></input>
+                                <input className="input-log" type="text" name="nombres" placeholder="Ingrese sus nombres" id="nombres"></input>
 
                                 <label for="apellidos">Apellidos</label>
-                                <input type="text" name="nombres" placeholder="Ingrese sus apellidos" id="nombres"></input>
+                                <input className="input-log" type="text" name="nombres" placeholder="Ingrese sus apellidos" id="nombres"></input>
 
                                 <label for="email">Email</label>
-                                <input class="input-box" type="email" name="email" placeholder="Ingrese su correo electrónico" id="email"></input>
+                                <input className="input-log"  type="email" name="email" placeholder="Ingrese su correo electrónico" id="email"></input>
 
                                 <label for="psswd">Contraseña</label>
-                                <input class="input-box" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
+                                <input className="input-log" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
 
                                 <div class="terminos y cond">
-                                    <input type="checkbox" id="Terminos"></input>
+                                    <input  type="checkbox" id="Terminos"></input>
                                     <label for="Terminos" id="l-terminos">Acepto los
                                         <a id="a-terminos" href="">Términos y condiciones</a>
                                     </label>
                                 </div>
 
-                                <input class="btn btn-depth" type="submit" value="Registrarse"></input>
+                                <input className="btn-login-reg btn-login-depth" type="submit" value="Registrarse"></input>
 
                             </div>
                         </form>

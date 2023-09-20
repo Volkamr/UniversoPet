@@ -72,7 +72,7 @@
     text-align: left;
 }
 
-h2 {
+.h2-login-reg {
     color: #246354;
     font-size: 35px;
     margin: 0;
@@ -93,7 +93,7 @@ label {
     margin-bottom: 10px;
 }
 
-input {
+.input-log {
     padding: 15px 10px;
     width: 270px;
     border-radius: 10px;
@@ -104,8 +104,9 @@ input {
 
 }
 
-.btn {
+.btn-login-reg {
     margin-top: 16px;
+    padding: 10px 10px;
     border-radius: 30px;
     background: linear-gradient(180deg, #42f5ca, #66ccbb);
     color: white;
@@ -116,20 +117,20 @@ input {
     width: 270px;
 }
 
-.btn-depth {
+.btn-login-depth {
     box-shadow: 0px 10px 20px rgba(52, 94, 87, 0.3);
     transition: transform 0.3s, box-shadow 0.3s;
 
 }
 
-.btn-depth:hover {
+.btn-login-depth:hover {
     transform: translateY(2px);
     box-shadow: 0px 8px 25px rgba(52, 94, 87, 0.45);
 }
 
 
 
-input::placeholder {
+.input-log::placeholder {
     color: #C0C0C0;
 }
 

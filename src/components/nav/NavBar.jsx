@@ -22,7 +22,7 @@ export const NavBar = () => {
                         Servicios
                     </p>
                 </Link>
-                <Link to="nosotros" className="nav_link text-cs">
+                <Link to="/UniversoPet/nosotros" className="nav_link text-cs">
                     <p>
                         Nosotros
                     </p>
