@@ -2,7 +2,7 @@
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
-    height: 100vh; 
+    height: 100vh;
     width: 100%;
     display: flex;
     align-items: center;
@@ -10,8 +10,8 @@
     background: #E6E5E0;
 }
 
-.login_container{
-    display:block;
+.login_container {
+    display: block;
     align-items: center;
     justify-content: center;
 }
@@ -101,7 +101,7 @@ input {
     border: 2px solid #EDEDED;
     color: #1B1B1B;
     background-color: rgba(255, 255, 255, 0.534);
-   
+
 }
 
 .btn {
@@ -113,7 +113,7 @@ input {
     font-size: 20px;
     border: 0;
     cursor: pointer;
-    width:270px;
+    width: 270px;
 }
 
 .btn-depth {
@@ -187,23 +187,23 @@ a {
     align-items: center;
 }
 
-#Terminos{
-    width:10px;
+#Terminos {
+    width: 10px;
     margin-bottom: 0;
 }
 
-#l-terminos{
+#l-terminos {
     font-size: 12px;
     font-weight: 100;
     align-self: left;
 }
 
-#a-terminos{
+#a-terminos {
     font-size: 12px;
     font-weight: 400;
     text-decoration: none;
 }
 
-#a-terminos:hover{
+#a-terminos:hover {
     text-decoration: underline;
 }

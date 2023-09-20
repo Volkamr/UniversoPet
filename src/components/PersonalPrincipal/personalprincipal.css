@@ -1,0 +1,35 @@
+.PersonalPrincipal__container {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.PersonalPrincipal__header {
+    position: relative;
+}
+
+.PersonalPrincipal__img {
+    height: 280px;
+    width: 100%;
+    border-radius: 18px;
+    object-fit: cover;
+    margin-bottom: 30px;
+    vertical-align: middle;
+}
+
+.PersonalPrincipal__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 66px;
+    height: 66px;
+    background-color: var(--color-contenedor);
+    border-bottom-right-radius: 18px;
+}
+
+.PersonalPrincipal__icon img {
+    margin-top: 25%;
+    margin-left: 15%;
+}
+
+.PersonalPrincipal__name {
+    font-size: var(--fuente-tamaño-larga);
+}

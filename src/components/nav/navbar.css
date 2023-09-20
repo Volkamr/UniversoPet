@@ -2,7 +2,7 @@
     width: 100%;
     height: 40%;
     display: flex;
-    column-gap: 10%;
+    column-gap: 25%;
     z-index: 1;
     margin-top: -2%;
 }
@@ -45,7 +45,7 @@
     color: var(--color-primario);
 }
 
-.nav_link:hover{
+.nav_link:hover {
     text-decoration: underline;
     color: #42f5ca;
 }

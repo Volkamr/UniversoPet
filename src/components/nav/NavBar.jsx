@@ -17,19 +17,19 @@ export const NavBar = () => {
                 </Link>
             </div>
             <div className="nav__right container">
-                <Link to="registro" className="nav_link text-cs">
-                    <p>
-                        Personal
-                    </p>
-                </Link>
                 <Link to="/servicios" className="nav_link text-cs">
                     <p>
                         Servicios
                     </p>
                 </Link>
-                <Link to="registro" className="nav_link text-cs">
+                <Link to="nosotros" className="nav_link text-cs">
                     <p>
                         Nosotros
+                    </p>
+                </Link>
+                <Link to="/login" className="nav_link text-cs">
+                    <p>
+                        Login
                     </p>
                 </Link>
                 <Link to="/login">

@@ -1,0 +1,36 @@
+.PersonalSwiper__header {
+    position: relative;
+}
+
+.PersonalSwiper__img {
+    height: 180px;
+    width: 100%;
+    border-radius: 18px;
+    object-fit: cover;
+    margin-bottom: 30px;
+    vertical-align: middle;
+}
+
+.PersonalSwiper__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 66px;
+    height: 66px;
+    background-color: var(--color-contenedor);
+    border-bottom-right-radius: 18px;
+}
+
+.PersonalSwiper__icon img {
+    margin-top: 25%;
+    margin-left: 15%;
+}
+
+.PersonalSwiper__description {
+    min-height: 110px;
+}
+
+.PersonalSwiper__name {
+    font-size: var(--fuente-tamaño-larga);
+    margin-top: 7px;
+}

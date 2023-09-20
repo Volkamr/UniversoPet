@@ -3,7 +3,8 @@ import './App.css'
 import Home from "./components/home/Home";
 import Services from './components/services/Services'
 import { Routes, Route } from "react-router-dom";
-import Login from './components/Login_SignUp/Login'
+import Login from './components/Login_SignUp/Login';
+import Nosotros from './components/nosotros/Nosotros';
 
 function App() {
     const [data, setData] = React.useState(null);
@@ -18,10 +19,11 @@ function App() {
         <div>
             <Routes>
                 <Route path="/UniversoPet" element={<Home />} />
-                <Route path="/servicios" element={<Services/>} />
+                <Route path="/servicios" element={<Services />} />
+                <Route path="/UniversoPet/Nosotros" element={<Nosotros />} />
                 <Route path="/login" element={<Login />} />
             </Routes>
-           
+
         </div>
     );
 }
