@@ -9,9 +9,14 @@ import Vacuna from '../../assets/vacunacion.png'
 import Peluqueria from '../../assets/peluqueria.png'
 import Laboratorio from '../../assets/laboratorio.png'
 import Cirugia from '../../assets/cirugia.png'
+import { services } from '../../ServicesMock'
+import {Link} from 'react-router-dom' 
 
 
 export default function Services() {
+
+    console.log(services);
+
     return (
         <section className="services_view">
             <container className="services_container">
@@ -22,61 +27,22 @@ export default function Services() {
 
                 <container className="servicios">
 
+                   {
+                     services.map(service => (
 
-                    <div className="servicios_s" id="consulta">
-                        <p className="servicios-p">Consulta general</p>
-                        <img src={Consulta} alt="" className="services_img" />
+                        <div key={service.id} className="servicios_s" id={service.idName}>
+                        <p className="servicios-p">{service.name}</p>
+                        <img src={service.img_src} alt="" className="services_img" />
                         <div className="div-btn">
-                            <button className="btn-servicios" id="conoce-mas">Conoce más</button>
+                            <Link to ={`/servicios/${service.id}`}>
+                                <button className="btn-servicios" id="conoce-mas">Conoce más</button>
+                            </Link>
                             <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
                         </div>
-                    </div>
-
-                    <div className="servicios_s" id="vacunación">
-                        <p className="servicios-p">Vacunación</p>
-                        <img src={Vacuna} alt="" className="services_img" />
-                        <div className="div-btn">
-                            <button className="btn-servicios" id="conoce-mas">Conoce más</button>
-                            <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
                         </div>
-                    </div>
 
-                    <div className="servicios_s" id="urgencias">
-                        <p className="servicios-p">Rayos-X</p>
-                        <img src={Rayosx} alt="" className="services_img" />
-                        <div className="div-btn">
-                            <button className="btn-servicios" id="conoce-mas">Conoce más</button>
-                            <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
-                        </div>
-                    </div>
-
-                    <div className='servicios_s' id="laboratorio">
-                        <p className="servicios-p">Laboratorio clínico</p>
-                        <img src={Laboratorio} alt="" className="services_img" />
-                        <div className="div-btn">
-                            <button className="btn-servicios" id="conoce-mas">Conoce más</button>
-                            <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
-                        </div>
-                    </div>
-
-                    <div className='servicios_s' id="cirugía">
-                        <p className="servicios-p">Cirugía</p>
-                        <img src={Cirugia} alt="" className="services_img" />
-                        <div className="div-btn">
-                            <button className="btn-servicios" id="conoce-mas">Conoce más</button>
-                            <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
-                        </div>
-                    </div>
-
-                    <div className='servicios_s' id="peluquería">
-                        <p className="servicios-p">Peluquería</p>
-                        <img src={Peluqueria} alt="" className="services_img" />
-                        <div className="div-btn">
-                            <button className="btn-servicios" id="conoce-mas">Conoce más</button>
-                            <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
-                        </div>
-                    </div>
-
+                    ))
+                   }
 
                 </container>
 
