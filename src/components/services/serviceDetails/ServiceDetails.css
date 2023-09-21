@@ -1,0 +1,75 @@
+.serviceDetailsView{
+    background-color: var(--primer-gradiante);
+    min-height: 100vh;
+    margin-top: 2%;
+}
+
+.serviceDetails-container{
+    width: 95%;
+    position: relative;
+    align-items: center;
+    text-align: center;
+    display:grid;
+    grid-template-rows: 2fr 4fr;
+    grid-template-columns: 3fr 3fr;
+}
+
+.titulo-btn{
+    grid-column: span 6;
+    grid-row: 1;
+    display:flex;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+.titulo-servicio{
+    margin-left: 10%;
+    color: var(--color-primario);
+    font-size: 50px;
+    text-shadow: 1.5px 1.5px hsl(0, 0%, 0%),
+        -1.5px 1.5px hsl(0, 0%, 0%),
+        1.5px -1.5px hsl(0, 0%, 0%),
+        -1.5px -1.5px hsl(0, 0%, 0%),
+        3.0px 3.0px hsl(0, 0%, 0%);
+    line-height: 0.5;
+}
+
+.btn-regresar{
+    margin-left: 100%;
+    border-radius: 20px;
+    padding: 10px 10px 10px 10px;
+    background-color: var(--color-primario);
+    text-align: center;
+    padding: 2px 2px 2px 2px;
+    width: 100px;
+    height: 30px;
+    margin-bottom: 5px;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    align-items: center;
+    align-content: center;
+    align-self:center;
+}
+
+.btn-regresar:hover{
+    background-color: rgb(35, 209, 183); 
+    color: var(--color-primario);
+}
+
+.contenido-servicio{
+    grid-column: 1;
+}
+
+.img2-servicio{
+    grid-column: 2;
+    height: 400px;
+}
+
+.container-descripcion{
+    grid-column: span 6;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: 4fr 4fr;
+    align-items: center;
+}

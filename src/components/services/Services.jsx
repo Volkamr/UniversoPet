@@ -32,7 +32,7 @@ export default function Services() {
 
                         <div key={service.id} className="servicios_s" id={service.idName}>
                         <p className="servicios-p">{service.name}</p>
-                        <img src={service.img_src} alt="" className="services_img" />
+                        <img src={service.img1_src} alt="" className="services_img" />
                         <div className="div-btn">
                             <Link to ={`/servicios/${service.id}`}>
                                 <button className="btn-servicios" id="conoce-mas">Conoce más</button>

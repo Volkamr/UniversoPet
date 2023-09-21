@@ -5,7 +5,7 @@ import Services from './components/services/Services';
 import { Routes, Route } from "react-router-dom";
 import Login from './components/Login_SignUp/Login';
 import Nosotros from './components/nosotros/Nosotros';
-import ServiceDetails from './components/services/ServiceDetails';
+import ServiceDetails from './components/services/ServiceDetails/ServiceDetails';
 
 function App() {
     const [data, setData] = React.useState(null);
