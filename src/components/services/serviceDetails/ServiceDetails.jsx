@@ -1,5 +1,5 @@
 import React from 'react'
-import { UseParams, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { services } from '../../../ServicesMock';
 import { NavBar } from '../../nav/NavBar';
@@ -25,7 +25,7 @@ export default function ServiceDetails() {
         </container>
         <container className="container-descripcion">
           <p className="contenido-servicio">{service.description}</p>
-          <img className="img2-servicio" src={service.img2_src}></img>
+          <img className="img2-servicio" alt="" src={service.img2_src}></img>
         </container>
       </container>
     </section>

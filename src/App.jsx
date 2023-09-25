@@ -5,17 +5,11 @@ import Services from './components/services/Services';
 import { Routes, Route } from "react-router-dom";
 import Login from './components/Login_SignUp/Login';
 import Nosotros from './components/nosotros/Nosotros';
-import ServiceDetails from './components/services/ServiceDetails/ServiceDetails';
+import Perfil from "./components/perfil/Perfil";
+import { users } from "./Data";
+import ServiceDetails from "./components/services/serviceDetails/ServiceDetails";
 
 function App() {
-    const [data, setData] = React.useState(null);
-
-    React.useEffect(() => {
-        fetch("/api")
-            .then((res) => res.json())
-            .then((data) => setData(data.message));
-    }, []);
-
     return (
         <div>
             <Routes>
@@ -23,7 +17,8 @@ function App() {
                 <Route path="/servicios" element={<Services />} />
                 <Route path="/UniversoPet/Nosotros" element={<Nosotros />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/servicios/:serviceId" element={<ServiceDetails/>}/>
+                <Route path="/servicios/:serviceId" element={<ServiceDetails />} />
+                <Route path="/perfil/:idUsuario" element={<Perfil users={users} />} />
             </Routes>
 
         </div>

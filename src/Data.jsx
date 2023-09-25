@@ -11,6 +11,9 @@ import Testimonial3 from './assets/testimonial3.jpg';
 import Testimonial4 from './assets/testimonial4.jpg';
 import Testimonial5 from './assets/testimonial5.jpg';
 
+import michael from './assets/user.jpg';
+import lily from './assets/lily.jpg';
+
 export const links = [
   {
     name: 'Home',
@@ -293,3 +296,24 @@ export const testimonials = [
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   },
 ];
+
+export const users = [
+  {
+    avatar: michael,
+    idUsuario: "1",
+    nombres: 'Michael',
+    apellidos: 'Reeves',
+    celular: "123456789",
+    email: 'mi.reeves@gmail.com',
+    password: 'mypassword'
+  },
+  {
+    avatar: lily,
+    idUsuario: "2",
+    nombres: 'Lily',
+    apellidos: 'Pichu',
+    celular: "987654321",
+    email: 'li.pichu@gmail.com',
+    password: 'mypassword'
+  }
+]
