@@ -48,4 +48,32 @@
 .perfil__btn {
     margin-top: 5%;
     width: 25%;
+    cursor: pointer;
+}
+
+.input-editar{
+    width: 95%;
+    height:50px;
+    border-bottom: 2px solid var(--color-primario);
+}
+
+.editar-btn{
+    grid-template-columns: 3fr 3fr;
+    display: grid;
+    align-items: center;
+    align-content: center;
+}
+
+.perfil__btn_editar{
+    margin-top: 5%;
+    width: 45%;
+    cursor: pointer;
+}
+
+#guardar{
+  grid-column: 1;
+}
+
+#cancelar{
+    grid-column: 2;
 }

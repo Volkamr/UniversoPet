@@ -7,7 +7,7 @@ import Login from './components/Login_SignUp/Login';
 import Nosotros from './components/nosotros/Nosotros';
 import Perfil from "./components/perfil/Perfil";
 import { users } from "./Data";
-import ServiceDetails from "./components/services/serviceDetails/ServiceDetails";
+import ServiceDetails from './components/services/ServiceDetails/ServiceDetails';
 import Citas from "./components/citas/Citas";
 
 function App() {

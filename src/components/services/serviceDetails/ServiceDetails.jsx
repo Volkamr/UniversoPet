@@ -7,6 +7,7 @@ import './ServiceDetails.css';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom'
 
+
 export default function ServiceDetails() {
 
   let { serviceId } = useParams();
