@@ -1,0 +1,24 @@
+.citas__section {
+    margin-top: 10%;
+    width: 87%;
+}
+
+.citas__content {
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 7.5rem;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    padding: 1rem 2.5rem;
+}
+
+.citas__info__info {
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2.5rem;
+}
+
+.citas__content__titulo {
+    color: var(--color-primario);
+    font-size: var(--fuente-tamaño-mas-larga);
+}

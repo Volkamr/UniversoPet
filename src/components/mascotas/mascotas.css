@@ -1,0 +1,134 @@
+.mascotas {
+    margin-top: 3%;
+}
+
+.mascotas__container {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.mascotas__fondo {
+    background-color: var(--color-primario);
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    position: relative;
+}
+
+.mascotas__img {
+    position: absolute;
+    bottom: 0px;
+    height: 220px;
+    border-radius: 255px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.mascotas__plus {
+    background-color: var(--color-grande-alt);
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    position: relative;
+    cursor: pointer;
+}
+
+.mascotas__icon {
+    position: absolute;
+    color: var(--color-primario);
+    top: 32%;
+    right: 30%;
+    height: 80px;
+    width: 80px;
+    object-fit: cover;
+}
+
+.mascotas__carta {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s var(--transicion);
+}
+
+.mascotas__cartas__content {
+    border-radius: 1rem;
+    width: 830px;
+    height: 500px;
+    position: relative;
+    background-color: var(--color-grande-alt);
+    padding: 4rem 2.5rem 2.5rem;
+}
+
+.mascota__info {
+    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.mascota__info__content,
+.mascota__diagnostico__content {
+    margin-top: 0.6rem;
+}
+
+.mascota__citas__content {
+    margin-top: 0.6rem;
+    display: inline-block;
+}
+
+.mascota__info__div {
+    margin-right: 3rem;
+}
+
+.mascota__adicional {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1rem 2.5rem;
+}
+
+.mascota__nombre {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.mascota__info__titulo {
+    color: var(--color-primario);
+}
+
+.mascota__diagnostico,
+.mascota__citas {
+    height: 160px;
+    overflow: auto;
+}
+
+.mascotas__carta__close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--color-primario);
+    cursor: pointer;
+}
+
+.active-carta {
+    opacity: 1;
+    visibility: visible;
+}
+
+.link__citas {
+    color: var(--color-primario);
+    width: 20%;
+    display: inline-block;
+}

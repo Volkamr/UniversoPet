@@ -2,6 +2,7 @@ import React from 'react'
 import NavToggle from '../navToggle/NavToggle'
 import { useParams } from 'react-router-dom'
 import "./perfil.css"
+import Mascotas from '../mascotas/Mascotas'
 
 const Perfil = ({ users }) => {
     let { idUsuario } = useParams()
@@ -51,6 +52,7 @@ const Perfil = ({ users }) => {
 
                 </div>
             </div>
+            <Mascotas usuario={idUsuario} ></Mascotas>
         </section>
     )
 }

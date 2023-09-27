@@ -14,6 +14,12 @@ import Testimonial5 from './assets/testimonial5.jpg';
 import michael from './assets/user.jpg';
 import lily from './assets/lily.jpg';
 
+import pet from './assets/temmie-r.png';
+import pet2 from './assets/davinky-r.png';
+import pet3 from './assets/cat.png';
+
+import vet from './assets/veterinario.jpg';
+
 export const links = [
   {
     name: 'Home',
@@ -315,5 +321,93 @@ export const users = [
     celular: "987654321",
     email: 'li.pichu@gmail.com',
     password: 'mypassword'
+  }
+]
+
+export const pets = [
+  {
+    avatar: pet,
+    idMascota: "1",
+    nombre: "Temmie",
+    fechaNac: "25/09/2023",
+    peso: "59",
+    tipoAnimal: "perro",
+    raza: "raza prro",
+    idUsuario: "2",
+    estado: "si"
+  },
+  {
+    avatar: pet2,
+    idMascota: "2",
+    nombre: "Davinky",
+    fechaNac: "21/05/2022",
+    peso: "49",
+    tipoAnimal: "perro",
+    raza: "raza prro",
+    idUsuario: "2",
+    estado: "si"
+  },
+  {
+    avatar: pet3,
+    idMascota: "3",
+    nombre: "Cat",
+    raza: "raza gto",
+    fechaNac: "18/08/2020",
+    peso: "51",
+    tipoAnimal: "gato",
+    idUsuario: "1",
+    estado: "si"
+  }
+]
+
+export const citas = [
+  {
+    idCita: "1",
+    fecha: "20/12/2020",
+    idVeterinario: "1",
+    comentario: "Lorem ipsum dolor sit amet",
+    idMascota: "1",
+    sede: "medellin",
+    estado: "pendiente",
+    diagnostico: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod"
+  },
+  {
+    idCita: "2",
+    fecha: "22/02/2021",
+    idVeterinario: "1",
+    comentario: "Lorem ipsum dolor sit amet",
+    idMascota: "1",
+    sede: "medellin",
+    estado: "pendiente",
+    diagnostico: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod "
+  },
+  {
+    idCita: "4",
+    fecha: "25/03/2021",
+    idVeterinario: "1",
+    comentario: "Lorem ipsum dolor sit amet",
+    idMascota: "1",
+    sede: "medellin",
+    estado: "pendiente",
+    diagnostico: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod "
+  },
+  {
+    idCita: "3",
+    fecha: "10/10/2023",
+    idVeterinario: "1",
+    comentario: "Lorem ipsum dolor sit amet",
+    idMascota: "2",
+    sede: "medellin",
+    estado: "pendiente",
+    diagnostico: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod"
+  }
+]
+
+export const veterinario = [
+  {
+    avatar: vet,
+    idVeterinario: "1",
+    nombre: "Veterinario Crackhead",
+    email: "crackhead.vet@gmail.com"
   }
 ]
