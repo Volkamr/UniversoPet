@@ -51,8 +51,25 @@
     cursor: pointer;
 }
 
+.perfil__info{
+    padding: 5px;
+    width: 100%;
+}
+
+#editar-nombre{
+    grid-column:1;
+}
+
+#editar-email{
+    grid-column:2;
+}
+
+#editar-celular{
+    grid-column: 3;
+}
+
 .input-editar{
-    width: 95%;
+    width: 100%;
     height:50px;
     border-bottom: 2px solid var(--color-primario);
 }

@@ -10,9 +10,25 @@ const Perfil = ({ users }) => {
     let { idUsuario } = useParams();
     let user = users.find(user => user.idUsuario === idUsuario);
     let [action, setAction] = useState("Normal");
+    const[nombres, setNombre] =useState(user.nombres + " " + user.apellidos);
+    const[email, setEmail] = useState(user.email);
+    const[celular, setCelular] = useState(user.celular);
+    const[confirmar, setConfirmar] = useState("Cancelar")
 
+    const nombreChange = (n) => {
+        setNombre(n.target.value)
+    }
+
+    const emailChange = (e) => {
+        setEmail(e.target.value)
+    }
+
+    const celularChange = (c) => {
+        setEmail(c.target.value)
+    }
 
     return (
+        
         <section className="perfil__section section" id="perfil">
             <NavToggle></NavToggle>
             <div className="perfil__container container grid">
@@ -22,7 +38,7 @@ const Perfil = ({ users }) => {
                 <div className="perfil__data container">
 
                     <h1 className="perfil__title text-cs">
-                        {user.nombres} {user.apellidos}
+                        {nombres}
                     </h1>
 
                     <div className='perfil__text container grid'>
@@ -34,14 +50,14 @@ const Perfil = ({ users }) => {
                                 action === "Editar" 
                                 ?
                                 <form className="form-editar">
-                                    <input className="input-editar" type="text" name = "nombres" id="editar-nombre" defaultValue=
-                                    {user.nombres + "" + user.apellidos}>                                       
+                                    <input className="input-editar" type="text" 
+                                    name = "nombres" id="editar-nombre" defaultValue={nombres}
+                                    onChange={nombreChange}>                                       
                                     </input>
+                                   
                                 </form>
                                 :
-                                <p className="perfil__content">
-                                {user.nombres} {user.apellidos}
-                                </p>
+                                <p className="perfil__content"> {nombres} </p>
                             }
 
                         </div>
@@ -52,13 +68,13 @@ const Perfil = ({ users }) => {
                             {
                                 action === "Editar" ?
                                 <form className="form-editar">
-                                    <input className="input-editar" type="email" name="email" id="editar-email" defaultValue=
-                                    {user.email}>                                       
-                                    </input>
-                                </form>
+                                    <input className="input-editar" type="email" name="email" id="editar-email" 
+                                    defaultValue={email} onChange={emailChange}>                                       
+                                    </input>                
+                                             
+                                </form>               
                                 :
-                                <p className="perfil__content">
-                                {user.email}
+                                <p className="perfil__content"> {email}
                                 </p>
                             }
                            
@@ -71,12 +87,13 @@ const Perfil = ({ users }) => {
                                 action === "Editar" ?
                                 <form className="form-editar">
                                     <input className="input-editar" type="number" name="celular" id="editar-celular" defaultValue=
-                                    {user.celular}>                                       
+                                    {celular}>                                       
                                     </input>
+                                   
                                 </form>
                                 :
                                 <p className="perfil__content">
-                                {user.celular}
+                                {celular}
                                 </p> 
                             }
                         </div>
