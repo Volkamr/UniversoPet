@@ -1,14 +1,16 @@
 // server/index.js
-
-const express = require("express");
-
-const PORT = process.env.PORT || 3001;
+import express from "express";
+import cors from "cors";
+import { PORT } from "./config.js";
+import indexRoutes from "./routes/index.routes.js"
+import vetRoutes from './routes/vet.routes.js'
 
 const app = express();
 
-app.get("/api", (req, res) => {
-    res.json({ message: "Hola desde el servidor!" });
-});
+app.use(cors());
+app.use(express.json());
+app.use(indexRoutes);
+app.use(vetRoutes);
 
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto: ${PORT}`);

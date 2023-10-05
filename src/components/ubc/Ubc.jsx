@@ -1,26 +1,34 @@
 import React, { useState } from 'react'
 import Lista from './Lista';
 import Items from './Items';
-import { projects } from '../../Data';
 import './ubc.css';
 import { AnimatePresence } from 'framer-motion';
+import { getSedesRequest } from '../../api/vet';
 
 const allNavList = [
     'all',
-    ...new Set(projects.map((project) => project.category)),
+    ...new Set(((await getSedesRequest()).data).map((project) => project.ciudad)),
 ];
 
+const projects = [
+    ...new Set(((await getSedesRequest()).data))
+]
+
 const Ubc = () => {
-    const [ubcItems, setMenuItems] = useState(projects);
+
+    // eslint-disable-next-line
+    const [ubcItems, setMenuItems] = useState(projects)
+
     // eslint-disable-next-line
     const [navList, setCategories] = useState(allNavList);
 
-    const filterItems = (category) => {
-        if (category === 'all') {
+
+    const filterItems = (ciudad) => {
+        if (ciudad === 'all') {
             setMenuItems(projects);
             return;
         }
-        const newProjectItems = projects.filter((item) => item.category === category);
+        const newProjectItems = projects.filter((item) => item.ciudad === ciudad);
         setMenuItems(newProjectItems);
     }
 

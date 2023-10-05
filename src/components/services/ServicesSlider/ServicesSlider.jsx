@@ -1,8 +1,9 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import './servicesSlider.css'
 import { FaArrowRight } from "react-icons/fa";
-import { services } from "../../../Data";
 import shapeTwo from '../../../assets/shape-2.png'
+import { getServicesRequest } from "../../../api/vet.js";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -10,6 +11,17 @@ import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 
 export const ServicesSlider = () => {
+
+    const [services, setServices] = useState([])
+
+    useEffect(() => {
+        async function loadServices() {
+            const response = await getServicesRequest();
+            setServices(response.data)
+        }
+        loadServices()
+    }, [])
+
     return (
         <section className="services section" id="services">
             <h2 className="section__title"> Nuestros Servicios </h2>
@@ -39,14 +51,14 @@ export const ServicesSlider = () => {
                 className="services__container container"
             >
 
-                {services.map(({ name, title, description }, index) => {
+                {services.map(service => {
                     return (
-                        <SwiperSlide className="services__item card card-one" key={index}>
+                        <SwiperSlide className="services__item card card-one" key={service.idServicio}>
                             <span className="services__subtitle text-cs">
-                                {name}
+                                Universo Pet
                             </span>
 
-                            <h3 className="services__title">{title}</h3>
+                            <h3 className="services__title">{service.nombre}</h3>
                             <a href="https://www.upb.edu.co/es/home" className="link">
                                 Más Información
                                 <FaArrowRight className="link__icon"></FaArrowRight>

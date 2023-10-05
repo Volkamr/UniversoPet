@@ -6,13 +6,13 @@
     color: var(--color-primario);
     font-size: var(--funte-tamaño-mas-pequeño);
     font-weight: 600;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     display: block;
 }
 
 .services__title {
     font-size: var(--fuente-tamaño-h4);
-    margin-bottom: 3px;
+    margin-bottom: 20px;
 }
 
 .services__description {
