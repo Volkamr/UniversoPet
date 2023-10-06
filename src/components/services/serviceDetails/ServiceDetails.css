@@ -1,29 +1,29 @@
-.serviceDetailsView{
+.serviceDetailsView {
     background-color: var(--primer-gradiante);
     min-height: 100vh;
     margin-top: 2%;
 }
 
-.serviceDetails-container{
+.serviceDetails-container {
     width: 95%;
     position: relative;
     align-items: center;
     text-align: center;
-    display:grid;
+    display: grid;
     grid-template-rows: 2fr 4fr;
     grid-template-columns: 3fr 3fr;
 }
 
-.titulo-btn{
+.titulo-btn {
     grid-column: span 6;
     grid-row: 1;
-    display:flex;
+    display: flex;
     text-align: center;
     align-items: center;
     align-content: center;
 }
 
-.titulo-servicio{
+.titulo-servicio {
     margin-left: 10%;
     color: var(--color-primario);
     font-size: 50px;
@@ -35,7 +35,7 @@
     line-height: 0.5;
 }
 
-.btn-regresar{
+.btn-regresar {
     margin-left: 100%;
     border-radius: 20px;
     padding: 10px 10px 10px 10px;
@@ -49,24 +49,24 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     align-items: center;
     align-content: center;
-    align-self:center;
+    align-self: center;
 }
 
-.btn-regresar:hover{
-    background-color: rgb(35, 209, 183); 
+.btn-regresar:hover {
+    background-color: rgb(35, 209, 183);
     color: var(--color-primario);
 }
 
-.contenido-servicio{
+.contenido-servicio {
     grid-column: 1;
 }
 
-.img2-servicio{
+.img2-servicio {
     grid-column: 2;
     height: 400px;
 }
 
-.container-descripcion{
+.container-descripcion {
     grid-column: span 6;
     grid-row: 2;
     display: grid;

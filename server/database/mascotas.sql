@@ -5,7 +5,7 @@ create table Mascotas(
     peso INT NOT NULL,
     idTipoAnimal INT NOT NULL,
     idEstado INT NOT NULL,
-    imagen blob,
+    imagen LONGTEXT,
     FOREIGN KEY (idTipoAnimal) REFERENCES TipoAnimal(idTipoAnimal),
     FOREIGN KEY (idEstado) REFERENCES Estados(idEstado)
 );

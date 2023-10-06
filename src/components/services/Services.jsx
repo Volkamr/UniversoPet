@@ -1,52 +1,53 @@
 import React from 'react'
 import { NavBar } from '../nav/NavBar'
 import './services.css'
-import Consulta from '../../assets/consulta.png'
-import Shape2 from '../../assets/shape-2.png'
-import Paw from '../../assets/paw.png'
-import Rayosx from '../../assets/rayosx.png'
-import Vacuna from '../../assets/vacunacion.png'
-import Peluqueria from '../../assets/peluqueria.png'
-import Laboratorio from '../../assets/laboratorio.png'
-import Cirugia from '../../assets/cirugia.png'
-import { services } from '../../ServicesMock'
-import {Link} from 'react-router-dom' 
+import { Link } from 'react-router-dom'
+import { getServicesRequest } from "../../api/vet.js";
+import { useEffect, useState } from "react";
 
 
 export default function Services() {
 
-    console.log(services);
+    const [services, setServices] = useState([])
+
+    useEffect(() => {
+        async function loadServices() {
+            const response = await getServicesRequest();
+            setServices(response.data)
+        }
+        loadServices()
+    }, [])
 
     return (
-        <section className="services_view">
-            <container className="services_container">
-                <NavBar className="nav_bar"></NavBar>
+        <section className="services_view section">
+            <NavBar></NavBar>
+            <div className="services_container container">
                 <div className="services_title">
                     <h1 class="services_main_title">Nuestros servicios</h1>
                 </div>
 
-                <container className="servicios">
+                <div className="servicios">
 
-                   {
-                     services.map(service => (
+                    {
+                        services.map(service => (
 
-                        <div key={service.id} className="servicios_s" id={service.idName}>
-                        <p className="servicios-p">{service.name}</p>
-                        <img src={service.img1_src} alt="" className="services_img" />
-                        <div className="div-btn">
-                            <Link to ={`/servicios/${service.id}`}>
-                                <button className="btn-servicios" id="conoce-mas">Conoce más</button>
-                            </Link>
-                            <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
-                        </div>
-                        </div>
+                            <div key={service.idServicio} className="servicios_s" id={service.idName}>
+                                <p className="servicios-p">{service.nombre}</p>
+                                <img src={"data:image/png;base64," + service.imgVista} alt="" className="services_img" />
+                                <div className="div-btn">
+                                    <Link to={`/servicios/${service.idServicio}`}>
+                                        <button className="btn-servicios" id="conoce-mas">Conoce más</button>
+                                    </Link>
+                                    <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
+                                </div>
+                            </div>
 
-                    ))
-                   }
+                        ))
+                    }
 
-                </container>
+                </div>
 
-            </container>
+            </div>
         </section>
     )
 }

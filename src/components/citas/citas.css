@@ -1,24 +1,108 @@
 .citas__section {
-    margin-top: 10%;
+    margin-top: 2%;
     width: 87%;
+}
+
+.citas__header {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1.5rem 15rem;
+    height: 200px;
+}
+
+.citas__header__titulo {
+    padding: 2rem 2.5rem;
+    width: 250px;
+    height: 70%;
+}
+
+.citas__info__info {
+    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 2.5rem;
+    width: 410px;
+    height: 70.5%;
+    column-gap: 2.5rem;
 }
 
 .citas__content {
     width: 100%;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: 7.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 3rem;
     display: flex;
     text-align: center;
     align-items: center;
     padding: 1rem 2.5rem;
 }
 
-.citas__info__info {
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: 2.5rem;
-}
-
 .citas__content__titulo {
     color: var(--color-primario);
     font-size: var(--fuente-tamaño-mas-larga);
+    padding: 0.5rem;
+}
+
+.citas__info__info,
+.citas__info__comentario,
+.citas__info__diagnostico {
+    min-height: 120px;
+    max-height: 200px;
+}
+
+.citas__content__mid {
+    margin-top: -3%;
+    width: 100%;
+    height: 160px;
+    padding: 1rem 7rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.citas__info__comentario {
+    border-radius: 1rem;
+    background-color: var(--color-contenedor);
+    text-align: center;
+    padding: 1.5rem 8rem;
+    overflow: auto;
+}
+
+.citas__info__diagnostico {
+    border-radius: 1rem;
+    background-color: var(--color-contenedor);
+    text-align: center;
+    padding: 1rem 5rem;
+    overflow: auto;
+}
+
+.vet__img {
+    width: 200px;
+    height: 200px;
+    border-radius: 1.5rem;
+    justify-self: center;
+}
+
+.citas__vet {
+    text-align: center;
+    padding: 1rem 12rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.citas__content__vet {
+    margin-top: -0.2%;
+    margin-bottom: -10%;
+}
+
+.vet__content {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.vet__info {
+    padding: 2rem 2rem;
+    width: 450px;
+}
+
+.vet__content__titulo {
+    color: var(--color-primario);
+    font-size: var(--fuente-tamaño-mas-larga);
+    padding-top: 2rem;
+    padding-bottom: 0.5rem;
 }

@@ -15,6 +15,18 @@ export const getSedes = async (req, res) => {
     res.json(result);
 }
 
+export const getService = async (req, res) => {
+    const [result] = await pool.query(
+        "SELECT * FROM Servicios where idServicio = ?", [req.params.idServicio]
+    );
+
+    if (result.length == 0) {
+        return res.status(404).json({ message: "Servicio no encontrado" })
+    }
+
+    res.json(result[0]);
+}
+
 export const postServices = (req, res) => {
     const form = formidable({ multiples: true });
     form.parse(req, (error, fields, files) => {

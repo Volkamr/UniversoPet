@@ -4,7 +4,7 @@ create table Usuarios(
     password VARCHAR(100) NOT NULL,
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
-    fotoPerfil text(300000),
+    fotoPerfil LONGTEXT,
     idEstado INT NOT NULL,
     FOREIGN KEY (idEStado) REFERENCES Estados(idEstado) 
 );

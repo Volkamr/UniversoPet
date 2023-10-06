@@ -6,7 +6,7 @@ create table
         apellidos VARCHAR(100) NOT NULL,
         email VARCHAR (200) NOT NULL,
         profesion VARCHAR (600) NOT NULL,
-        fotoPerfil TEXT(300000) NOT NULL,
+        fotoPerfil LONGTEXT NOT NULL,
         idTipoPersonal INT NOT NULL,
         idEstado INT NOT NULL,
         FOREIGN KEY (idTipoPersonal) REFERENCES TipoPersonal(idTipoPersonal),

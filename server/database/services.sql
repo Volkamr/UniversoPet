@@ -4,6 +4,6 @@ create table
         nombre VARCHAR(40) NOT NULL,
         idName VARCHAR(40) NOT NULL,
         descripcion VARCHAR(900) NOT NULL,
-        imgVista TEXT(300000) NOT NULL,
-        imgServicio TEXT(300000) NOT NULL
+        imgVista LONGTEXT NOT NULL,
+        imgServicio LONGTEXT NOT NULL
     );
