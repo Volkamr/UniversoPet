@@ -4,6 +4,7 @@ import './servicesSlider.css'
 import { FaArrowRight } from "react-icons/fa";
 import shapeTwo from '../../../assets/shape-2.png'
 import { getServicesRequest } from "../../../api/vet.js";
+import { Link } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -59,10 +60,11 @@ export const ServicesSlider = () => {
                             </span>
 
                             <h3 className="services__title">{service.nombre}</h3>
-                            <a href="https://www.upb.edu.co/es/home" className="link">
-                                Más Información
+
+                            <Link to={`/servicios/${service.idServicio}`} className="link">
+                                Mas Información
                                 <FaArrowRight className="link__icon"></FaArrowRight>
-                            </a>
+                            </Link>
 
                             <img src={shapeTwo} alt="" className="shape c__shape" />
                         </SwiperSlide>

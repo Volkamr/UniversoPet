@@ -1,5 +1,4 @@
 import React from 'react';
-import { testimonials } from '../../Data';
 import shapeTwo from '../../assets/shape-2.png';
 import icon from '../../assets/testimonials-icon.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -7,6 +6,11 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import './personalswiper.css';
+import { getPersonalRequest } from '../../api/vet';
+
+const Personal = [
+    ...new Set(((await getPersonalRequest()).data))
+]
 
 const PersonalSwiper = () => {
     return (
@@ -38,7 +42,7 @@ const PersonalSwiper = () => {
                 className="PersonalSwiper__container container"
             >
 
-                {testimonials.map(({ img, name, author, description }, index) => {
+                {Personal.map(({ fotoPerfil, nombres, apellidos, tipoPersonal, profesion }, index) => {
                     return (
                         <SwiperSlide className="PersonalSwiper__item card card-one" key={index}>
                             <div className="PersonalSwiper__header">
@@ -46,11 +50,11 @@ const PersonalSwiper = () => {
                                     <img src={icon} alt="" />
                                 </div>
 
-                                <img src={img} alt="" className="PersonalSwiper__img" />
+                                <img src={"data:img/png;base64," + fotoPerfil} alt="" className="PersonalSwiper__img" />
                             </div>
-                            <p className="PersonalSwiper__description">{description}</p>
-                            <h3 className="PersonalSwiper__name">{name}</h3>
-                            <p className="PersonalSwiper__author">{author}</p>
+                            <p className="PersonalSwiper__description">{profesion}</p>
+                            <h3 className="PersonalSwiper__name">{nombres} {apellidos}</h3>
+                            <p className="PersonalSwiper__author">{tipoPersonal}</p>
                             <img src={shapeTwo} alt="" className="shape c__shape" />
                         </SwiperSlide>
                     )

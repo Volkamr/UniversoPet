@@ -11,3 +11,7 @@ export const getSedesRequest = async () => {
 export async function getService(idServicio) {
     return await axios.get(`http://localhost:3001/UniversoPet/Api/Services/${idServicio}`);
 }
+
+export const getPersonalRequest = async () => {
+    return await axios.get("http://localhost:3001/UniversoPet/Api/Personal");
+}
