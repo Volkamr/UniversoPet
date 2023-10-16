@@ -51,46 +51,152 @@
     cursor: pointer;
 }
 
-.perfil__info{
+.perfil__info {
     padding: 5px;
     width: 100%;
 }
 
-#editar-nombre{
-    grid-column:1;
+#editar-nombre {
+    grid-column: 1;
 }
 
-#editar-email{
-    grid-column:2;
+#editar-email {
+    grid-column: 2;
 }
 
-#editar-celular{
+#editar-celular {
     grid-column: 3;
 }
 
-.input-editar{
+.input-editar {
     width: 100%;
-    height:50px;
+    height: 50px;
     border-bottom: 2px solid var(--color-primario);
 }
 
-.editar-btn{
+.editar-btn {
     grid-template-columns: 3fr 3fr;
     display: grid;
     align-items: center;
     align-content: center;
 }
 
-.perfil__btn_editar{
+.perfil__btn_editar {
     margin-top: 5%;
     width: 45%;
     cursor: pointer;
 }
 
-#guardar{
-  grid-column: 1;
+#guardar {
+    grid-column: 1;
 }
 
-#cancelar{
+#cancelar {
     grid-column: 2;
+}
+
+.perfil__btn__cita {
+    display: flex;
+    margin: 3.5rem 4.5rem -4rem 4.5rem;
+    justify-content: center;
+}
+
+.h:hover {
+    transform: scale(1);
+    filter: blur(0);
+    opacity: 1;
+}
+
+.perfil__cita__form {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s var(--transicion);
+}
+
+.perfil__cita__form__c {
+    border-radius: 1rem;
+    width: 700px;
+    height: 475px;
+    position: relative;
+    background-color: var(--color-grande-alt);
+    padding: 1.5rem 2.5rem 2.5rem;
+}
+
+.active-perfil__cita__form {
+    opacity: 1;
+    visibility: visible;
+}
+
+.perfil__cita__close {
+    position: absolute;
+    color: var(--color-primario);
+    top: 4%;
+    right: 3%;
+    height: 22px;
+    width: 22px;
+    object-fit: cover
+}
+
+.perfil__cform__content {
+    padding: 2rem 2.5rem 1rem 2.5rem;
+}
+
+.perfil__formL {
+    display: block;
+    text-align: center;
+    color: var(--color-primario);
+}
+
+.perfil__form__pri {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.perfil__form__sec {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.form__input__perfiL {
+    border: 2px solid var(--color-primario);
+    font-size: 16px;
+    font-family: var(--fuente-cuerpo);
+    width: 175px;
+    text-align: center;
+    padding: 0.5rem 0rem 0.5rem 0rem;
+    border-radius: 1.5rem;
+    color: var(--color-titulo);
+}
+
+.form__input__perfil {
+    border: 2px solid var(--color-primario);
+    width: 175px;
+    text-align: center;
+    padding: 0.5rem 1.5rem;
+    border-radius: 1.5rem;
+    color: var(--color-titulo);
+}
+
+.perfil__form__sep {
+    margin: 0px 25px 0px 25px;
+}
+
+.form__titulo {
+    text-align: center;
+    font-size: 25px;
 }
