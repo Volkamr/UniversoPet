@@ -29,7 +29,7 @@ export const Login = () => {
                                 <input className="input-log" type="email" name="email" placeholder="Ingrese su correo electrónico" id="email"></input>
 
                                 <label for="psswd">Contraseña</label>
-                                <input className="input-log" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
+                                <input className="input-log" type="password" name="password" placeholder="Ingrese su contraseña" id="psswd"></input>
 
                                 <p className="mensaje">
                                     ¿Olvidó su contraseña?
@@ -43,7 +43,7 @@ export const Login = () => {
                     </div>
 
                     <div class="form-box registro" id="registro-box">
-                        <form>
+                        <form action="http://localhost:3001/UniversoPet/Api/RegistrarUsuario" method="post"> 
                             <h2 className="h2-login-reg">Registro</h2>
                             <span className="line"></span>
 
@@ -53,13 +53,13 @@ export const Login = () => {
                                 <input className="input-log" type="text" name="nombres" placeholder="Ingrese sus nombres" id="nombres"></input>
 
                                 <label for="apellidos">Apellidos</label>
-                                <input className="input-log" type="text" name="nombres" placeholder="Ingrese sus apellidos" id="nombres"></input>
+                                <input className="input-log" type="text" name="apellidos" placeholder="Ingrese sus apellidos" id="nombres"></input>
 
                                 <label for="email">Email</label>
                                 <input className="input-log"  type="email" name="email" placeholder="Ingrese su correo electrónico" id="email"></input>
 
                                 <label for="psswd">Contraseña</label>
-                                <input className="input-log" type="password" name="pasword" placeholder="Ingrese su contraseña" id="psswd"></input>
+                                <input className="input-log" type="password" name="password" placeholder="Ingrese su contraseña" id="psswd"></input>
 
                                 <div class="terminos y cond">
                                     <input  type="checkbox" id="Terminos"></input>

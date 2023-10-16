@@ -37,13 +37,52 @@ export const getPersonal = async (req, res) => {
     res.json(result);
 }
 
+export const getUsers = async (req, res) => {
+    const [result] = await pool.query(
+        "SELECT * from Usuarios"
+    );
+    res.json(result);
+}
+
 //---------------------------------------------------------------------------> POST
 
+export const postRegistro = async (req, res) => {
+    
+    const form = formidable({ multiples: true });
+    form.parse(req, (error, fields) => {
+        if (error) throw error;
+           const estado = 1;
+        const data = { ...fields, estado}
+        
+    
+        pool.query("INSERT INTO Usuarios set ? ",
+            {
+                email: data.email,
+                password: data.password,
+                nombres: data.nombres,
+                apellidos: data.apellidos,
+                idEstado: estado
+            },
+        )
+
+        if(error){
+            throw error;
+        }else{
+            res.send("Usuario registrado")
+        }
+    }
+    )
+
+}
+
 export const postServices = (req, res) => {
+
+
     const form = formidable({ multiples: true });
     form.parse(req, (error, fields, files) => {
         if (error) throw error;
         const data = { ...fields, ...files }
+
 
         pool.query("INSERT INTO Servicios set ?",
             {
@@ -146,4 +185,5 @@ export const postPersonal = (req, res) => {
 
         res.send("DATA SAVE!")
     })
+
 }
