@@ -19,7 +19,7 @@ export const Login = () => {
                 <div className={`wrapper_login ${action === 'Registrarse' ? 'active' : ''}`}>
 
                     <div class="form-box login">
-                        <form>
+                        <form action="http://localhost:3001/UniversoPet/Api/Login" method="POST">
                             <h2 className="h2-login-reg">Login</h2>
                             <span className="line"></span>
 
@@ -40,6 +40,11 @@ export const Login = () => {
 
                             </div>
                         </form>
+
+
+                      
+                    
+
                     </div>
 
                     <div class="form-box registro" id="registro-box">

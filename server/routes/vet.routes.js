@@ -5,6 +5,7 @@ import {
     postSedes,
     postServices,
     postRegistro,
+    postLogin,
     getService,
     postPersonal,
     getPersonal,
@@ -23,6 +24,7 @@ router.post('/UniversoPet/Api/CreateServices', postServices)
 router.post('/UniversoPet/Api/CreateSedes', postSedes)
 router.post('/UniversoPet/Api/CreatePersonal', postPersonal)
 router.post('/UniversoPet/Api/RegistrarUsuario', postRegistro)
+router.post('/UniversoPet/Api/Login', postLogin)
 
 
 export default router
