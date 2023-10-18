@@ -7,11 +7,20 @@ import vetRoutes from './routes/vet.routes.js'
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+    optionsSuccessStatus: 204,
+}));
 app.use(express.json());
 app.use(indexRoutes);
 app.use(vetRoutes);
 
+
+app.options('/UniversoPet/Api/Login', cors());
+
 app.listen(PORT, () => {
+    app.timeout = 60000;
     console.log(`Servidor escuchando en el puerto: ${PORT}`);
 });

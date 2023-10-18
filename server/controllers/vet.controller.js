@@ -47,25 +47,36 @@ export const getUsers = async (req, res) => {
 //---------------------------------------------------------------------------> POST
 
 export const postLogin = async (req, res) => {
+    const data = req.body;  
 
-
-    const form = formidable({ multiples: true });
-    form.parse(req, async (error, fields) => {
-        if (error) throw error;
-        const data = { ...fields }
-
+    try {
         const [result] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
-        if (result.length == 0) {
-            return res.status(404).json({ message: "USUARIO NO ENCONTRADO" })
-        } else if (result[0].password != data.password) {
-            return res.status(404).json({ message: "CONTRASEÑA INCORRECTA" })
+
+        if (result.length === 0) {
+            return res.status(200).json({
+                message: "USUARIO NO ENCONTRADO",
+                success: false
+            });
+        } else if (result[0].password !== data.password) {
+            return res.status(200).json({
+                message: "CONTRASEÑA INCORRECTA",
+                success: false
+            });
         } else {
-            return res.status(200).json({message:"Sesión iniciada"})
+            return res.status(200).json({
+                message: "Sesión iniciada",
+                success: true,
+                idUsuario: result[0].idUsuario  
+            });
         }
-    })
-
-
-}
+    } catch (error) {
+        console.error('Error en la función postLogin:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+};
 
 export const postRegistro = async (req, res) => {
 
