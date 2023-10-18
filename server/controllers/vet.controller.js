@@ -47,7 +47,7 @@ export const getUsers = async (req, res) => {
 //---------------------------------------------------------------------------> POST
 
 export const postLogin = async (req, res) => {
-    const data = req.body;  
+    const data = req.body;
 
     try {
         const [result] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
@@ -66,7 +66,7 @@ export const postLogin = async (req, res) => {
             return res.status(200).json({
                 message: "Sesión iniciada",
                 success: true,
-                idUsuario: result[0].idUsuario  
+                idUsuario: result[0].idUsuario
             });
         }
     } catch (error) {
@@ -80,31 +80,49 @@ export const postLogin = async (req, res) => {
 
 export const postRegistro = async (req, res) => {
 
-    const form = formidable({ multiples: true });
-    form.parse(req, (error, fields) => {
-        if (error) throw error;
-        const estado = 1;
-        const data = { ...fields, estado }
+    try {
+        const data = req.body;
+        const [result] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
 
-
-        pool.query("INSERT INTO Usuarios set ? ",
-            {
-                email: data.email,
-                password: data.password,
-                nombres: data.nombres,
-                apellidos: data.apellidos,
-                idEstado: estado
-            },
-        )
-
-        if (error) {
-            throw error;
+        if (result.length != 0) {
+            return res.status(200).json({
+                success: false,
+                message: "El usuario ya existe"
+            })
+        } else if (data.password.length < 6) {
+            return res.status(200).json({
+                success: false,
+                message: "La contraseña debe tener al menos 6 caracteres"
+            })
+        } else if (data.nombres == null || data.apellidos == null || data.password == null || data.email == null) {
+            return res.status(200).json({
+                success: false,
+                message: "No debe haber campos vacíos"
+            })
         } else {
-            res.send("Usuario registrado")
-        }
-    }
-    )
+            const estado = 1;
+            pool.query("INSERT INTO Usuarios set ? ",
+                {
+                    email: data.email,
+                    password: data.password,
+                    nombres: data.nombres,
+                    apellidos: data.apellidos,
+                    idEstado: estado
+                },
+            )
 
+            return res.status(200).json({
+                success: true,
+                message: "Usuario registrado"
+            })
+        }
+    } catch (error) {
+        console.error('Error en la función postLogin:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
 }
 
 export const postServices = (req, res) => {
