@@ -1,6 +1,6 @@
 import formidable from "formidable"
 import { pool } from '../db.js'
-
+import bcrypt from 'bcrypt';
 //---------------------------------------------------------------------------> GET
 
 export const getServices = async (req, res) => {
@@ -47,28 +47,39 @@ export const getUsers = async (req, res) => {
 //---------------------------------------------------------------------------> POST
 
 export const postLogin = async (req, res) => {
-    const data = req.body;
+
 
     try {
-        const [result] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
+        const data = req.body;
+        if (data.email != null && data.password != null) {
 
-        if (result.length === 0) {
+            let passwordHaash = await (bcrypt.hash(data.password, 8))
+            const [result] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
+
+            if (result.length === 0) {
+                return res.status(200).json({
+                    message: "USUARIO NO ENCONTRADO",
+                    success: false
+                });
+            } else if (!(await bcrypt.compare(data.password, result[0].password))) {
+                return res.status(200).json({
+                    message: "CONTRASEÑA INCORRECTA",
+                    success: false
+                });
+            } else {
+                return res.status(200).json({
+                    message: "Sesión iniciada",
+                    success: true,
+                    idUsuario: result[0].idUsuario
+                });
+            }
+        }else{
             return res.status(200).json({
-                message: "USUARIO NO ENCONTRADO",
+                message: "No deben haber campos vacíos",
                 success: false
-            });
-        } else if (result[0].password !== data.password) {
-            return res.status(200).json({
-                message: "CONTRASEÑA INCORRECTA",
-                success: false
-            });
-        } else {
-            return res.status(200).json({
-                message: "Sesión iniciada",
-                success: true,
-                idUsuario: result[0].idUsuario
             });
         }
+
     } catch (error) {
         console.error('Error en la función postLogin:', error);
         return res.status(500).json({
@@ -101,10 +112,11 @@ export const postRegistro = async (req, res) => {
             })
         } else {
             const estado = 1;
+            let passwordHaash = await bcrypt.hash(data.password, 8);
             pool.query("INSERT INTO Usuarios set ? ",
                 {
                     email: data.email,
-                    password: data.password,
+                    password: passwordHaash,
                     nombres: data.nombres,
                     apellidos: data.apellidos,
                     idEstado: estado
