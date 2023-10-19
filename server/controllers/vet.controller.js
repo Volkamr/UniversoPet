@@ -44,6 +44,24 @@ export const getUsers = async (req, res) => {
     res.json(result);
 }
 
+export const getUser = async(req, res) =>{
+    const id = req.params.idUsuario;
+    const [result] = await pool.query("SELECT * From Usuarios WHERE idUsuario = ?", [id]);
+    res.json(result[0])
+}
+
+/*
+export const getUserPets = async(req, res) =>{
+    const idUser = req.params.idUsuario;
+    const [result] = await pool.query(
+        "SELECT idMascota, nombre, fechaNac, peso, idTipoAnimal, Mascotas.idEstado, imagen FROM Mascotas "+
+        "INNER JOIN MascotasxUsuario ON MascotasxUsuario.idMascota = Mascotas.idMascota"+
+        " INNER JOIN Usuarios ON Usuarios.idUsuario = MascotasxUsuario.idUsuario"+
+        " WHERE idUsuario = ? ", [idUser]);
+    return result;
+}
+*/
+
 //---------------------------------------------------------------------------> POST
 
 export const postLogin = async (req, res) => {

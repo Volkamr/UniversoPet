@@ -67,7 +67,11 @@ export const Login = () => {
                     text: "Será redireccionado",
                     showConfirmButton: false,
                     timer: 1500  
-                });
+                })
+
+                .then(() => {
+                    window.location.href = `/perfil/${data.idUsuario}`;
+                  });
     
             } else {
                 
@@ -132,6 +136,8 @@ export const Login = () => {
         }
         
     }
+
+
 
     return (
 
