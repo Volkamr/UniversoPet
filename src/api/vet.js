@@ -18,10 +18,14 @@ export const getPersonalRequest = async () => {
     return await axios.get("http://localhost:3001/UniversoPet/Api/Personal");
 }
 
-export const getUserRequest = async (idUsuario) =>{
+export const getUserRequest = async (idUsuario) => {
     return await axios.get(`http://localhost:3001/UniversoPet/Api/Usuario/${idUsuario}`);
 }
 
-export const getUserPetsRequest = async(idUsuario) =>{
+export const getUserPetsRequest = async (idUsuario) => {
     return await axios.get(`http://localhost:3001/UniversoPet/Api/MascotasUser/${idUsuario}`)
+}
+
+export const getPersonalPRequest = async () => {
+    return await axios.get("http://localhost:3001/UniversoPet/Api/PersonalP");
 }

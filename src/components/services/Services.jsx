@@ -23,7 +23,7 @@ export default function Services() {
             <NavBar></NavBar>
             <div className="services_container container">
                 <div className="services_title">
-                    <h1 class="services_main_title">Nuestros servicios</h1>
+                    <h1 class="services_main_title text-cs">Nuestros servicios</h1>
                 </div>
 
                 <div className="servicios">

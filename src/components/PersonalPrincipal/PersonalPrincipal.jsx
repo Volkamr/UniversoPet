@@ -3,13 +3,11 @@ import './personalprincipal.css';
 import icon from '../../assets/testimonials-icon.svg';
 import shapeTwo from '../../assets/shape-2.png';
 
-import { getPersonalRequest } from '../../api/vet';
+import { getPersonalPRequest } from '../../api/vet';
 
-const Personal = [
-    ...new Set(((await getPersonalRequest()).data))
+const PersonalP = [
+    ...new Set(((await getPersonalPRequest()).data))
 ]
-
-var i = 0
 
 const PersonalPrincipal = () => {
     return (
@@ -22,22 +20,18 @@ const PersonalPrincipal = () => {
             <div className="PersonalPrincipal__container container grid">
 
                 {
-                    Personal.map(persona => {
-                        if (i < 3) {
-                            return <div className="PersonalPrincipal__item card card-one">
-                                <div className="PersonalPrincipal__header">
-                                    <div className="PersonalPrincipal__icon">
-                                        <img src={icon} alt="" />
-                                    </div>
+                    PersonalP.map(persona => {
+                        return <div className="PersonalPrincipal__item card card-one">
+                            <div className="PersonalPrincipal__header">
+                                <div className="PersonalPrincipal__icon">
+                                    <img src={icon} alt="" />
                                 </div>
-                                <img src={"data:image/png;base64," + persona.fotoPerfil} alt="" className='PersonalPrincipal__img' />
-                                <h3 className='PersonalPrincipal__name'> {persona.nombres} {persona.apellidos} </h3>
-                                <p className="PersonalPrincipal_author"> {persona.tipoPersonal} </p>
-                                <img src={shapeTwo} alt="" className='shape c__shape' />
                             </div>
-                        }
-                        i = i + 1
-                        return <div></div>
+                            <img src={"data:image/png;base64," + persona.fotoPerfil} alt="" className='PersonalPrincipal__img' />
+                            <h3 className='PersonalPrincipal__name'> {persona.nombres} {persona.apellidos} </h3>
+                            <p className="PersonalPrincipal_author"> {persona.tipoPersonal} </p>
+                            <img src={shapeTwo} alt="" className='shape c__shape' />
+                        </div>
                     })
                 }
 

@@ -92,7 +92,8 @@
 }
 
 .btn-servicios:hover {
-    background-color: rgb(35, 209, 183);
+    background-color: var(--color-contenedor);
+    border: 1.5px solid var(--color-primario);
     color: var(--color-primario);
 }
 

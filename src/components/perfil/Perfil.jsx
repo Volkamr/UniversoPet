@@ -8,11 +8,44 @@ import Calendario from '../calendario/Calendario'
 import { AiOutlineClose } from 'react-icons/ai'
 import { Form, Formik } from 'formik'
 import { pets } from '../../Data'
-import { getServicesRequest, getUserRequest } from '../../api/vet'
+import { getServicesRequest } from '../../api/vet'
 
 
-const Perfil = () => {
+const Perfil = ({ users }) => {
 
+    let { idUsuario } = useParams();
+    let user = users.find(user => user.idUsuario === idUsuario);
+    let [action, setAction] = useState("Normal");
+    const [nombres, setNombre] = useState(user.nombres + " " + user.apellidos);
+    const [email, setEmail] = useState(user.email);
+    const [celular, setCelular] = useState(user.celular);
+    const [confirmar, setConfirmar] = useState("Cancelar")
+
+    var mascotas = pets.map(pet => {
+        var mascotasUs
+
+        if (pet.idUsuario === idUsuario) {
+            mascotasUs = pet
+        }
+
+        return mascotasUs
+    })
+
+    var filtrado = mascotas.filter(x => {
+        return x !== undefined
+    })
+
+    const nombreChange = (n) => {
+        setNombre(n.target.value)
+    }
+
+    const emailChange = (e) => {
+        setEmail(e.target.value)
+    }
+
+    const celularChange = (c) => {
+        setEmail(c.target.value)
+    }
 
     const [toggleState, setToggleState] = useState(0)
     const toggleTab = (index) => {
@@ -29,75 +62,18 @@ const Perfil = () => {
         loadServices()
     }, [])
 
-    //Obtener el usuario 
-
-    let { idUsuario } = useParams();
-    const [user, setUser] = useState([])
-
-    useEffect(() => {
-        async function loadUser(idUsuario) {
-            const response = await getUserRequest(idUsuario);
-            setUser(response.data)
-        }
-        loadUser(idUsuario)
-    }, [])
-
-    //Obtener las mascotas del usuarios
-
-
-   
-    let [action, setAction] = useState("Normal");
-    
-    //Para la funcionalidad de editar perfil. Lo dejaré comentado mientras todo lo de
-    //Login y Registro queda listo
-
-    /*
-    const [nombres, setNombre] = useState(user.nombres + " " + user.apellidos);
-    const [email, setEmail] = useState(user.email);
-    const [celular, setCelular] = useState(user.celular);
-    const [confirmar, setConfirmar] = useState("Cancelar")
-
-    var mascotas = pets.map(pet => {
-        var mascotasUs
- 
-        if (pet.idUsuario === idUsuario) {
-            mascotasUs = pet
-        }
- 
-        return mascotasUs
-    })
- 
-    var filtrado = mascotas.filter(x => {
-        return x !== undefined
-    })
-
-
-    const nombreChange = (n) => {
-        setNombre(n.target.value)
-    }
-
-    const emailChange = (e) => {
-        setEmail(e.target.value)
-    }
-
-    const celularChange = (c) => {
-        setEmail(c.target.value)
-    }
-
-    */
-
     return (
 
         <section className="perfil__section section" id="perfil">
             <NavToggle></NavToggle>
             <div className="perfil__container container grid">
 
-                <img src={user.fotoPerfil} alt="" className="perfil__img" />
+                <img src={user.avatar} alt="" className="perfil__img" />
 
                 <div className="perfil__data container">
 
                     <h1 className="perfil__title text-cs">
-                        {user.nombres}
+                        {nombres}
                     </h1>
 
                     <div className='perfil__text container grid'>
@@ -110,13 +86,13 @@ const Perfil = () => {
                                     ?
                                     <form className="form-editar">
                                         <input className="input-editar" type="text"
-                                            name="nombres" id="editar-nombre" defaultValue={user.nombre}
-                                            >
+                                            name="nombres" id="editar-nombre" defaultValue={nombres}
+                                            onChange={nombreChange}>
                                         </input>
 
                                     </form>
                                     :
-                                    <p className="perfil__content"> {user.nombres} </p>
+                                    <p className="perfil__content"> {nombres} </p>
                             }
 
                         </div>
@@ -128,12 +104,12 @@ const Perfil = () => {
                                 action === "Editar" ?
                                     <form className="form-editar">
                                         <input className="input-editar" type="email" name="email" id="editar-email"
-                                            defaultValue={user.email} >
+                                            defaultValue={email} onChange={emailChange}>
                                         </input>
 
                                     </form>
                                     :
-                                    <p className="perfil__content"> {user.email}
+                                    <p className="perfil__content"> {email}
                                     </p>
                             }
 
@@ -146,13 +122,13 @@ const Perfil = () => {
                                 action === "Editar" ?
                                     <form className="form-editar">
                                         <input className="input-editar" type="number" name="celular" id="editar-celular" defaultValue=
-                                            {user.celular}>
+                                            {celular}>
                                         </input>
 
                                     </form>
                                     :
                                     <p className="perfil__content">
-                                        {user.celular}
+                                        {celular}
                                     </p>
                             }
                         </div>
@@ -183,7 +159,7 @@ const Perfil = () => {
 
                 </div>
             </div>
-            <Mascotas usuario={user}></Mascotas>
+            <Mascotas usuario={idUsuario}></Mascotas>
             <Calendario></Calendario>
             <div className='perfil__btn__cita'>
                 <button className='btn text-cs h' onClick={() => toggleTab(1)}> Agendar Cita </button>
@@ -200,7 +176,11 @@ const Perfil = () => {
                                         <div className='perfil__form__sep'>
                                             <label for="mascotas" className='perfil__formL text-cs'>Mascota</label>
                                             <select name="mascotas" id="mascotas" className='form__input__perfiL'>
-
+                                                {
+                                                    filtrado.map(({ nombre }, index) => {
+                                                        return <option value={nombre} key={index} className='o'>{nombre}</option>
+                                                    })
+                                                }
                                             </select>
                                         </div>
                                         <div className='perfil__form__sep'>

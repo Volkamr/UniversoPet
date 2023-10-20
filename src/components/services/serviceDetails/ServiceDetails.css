@@ -1,75 +1,51 @@
 .serviceDetailsView {
-    background-color: var(--primer-gradiante);
-    min-height: 100vh;
-    margin-top: 2%;
-}
-
-.serviceDetails-container {
-    width: 95%;
-    position: relative;
     align-items: center;
-    text-align: center;
-    display: grid;
-    grid-template-rows: 2fr 4fr;
-    grid-template-columns: 3fr 3fr;
+    padding-top: 3rem;
+    margin-left: 0rem;
+    margin-right: 1rem;
+    margin-bottom: 0;
 }
 
 .titulo-btn {
-    grid-column: span 6;
-    grid-row: 1;
     display: flex;
-    text-align: center;
     align-items: center;
-    align-content: center;
+    justify-content: center;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
 .titulo-servicio {
-    margin-left: 10%;
     color: var(--color-primario);
-    font-size: 50px;
+    font-size: 40px;
     text-shadow: 1.5px 1.5px hsl(0, 0%, 0%),
         -1.5px 1.5px hsl(0, 0%, 0%),
         1.5px -1.5px hsl(0, 0%, 0%),
         -1.5px -1.5px hsl(0, 0%, 0%),
         3.0px 3.0px hsl(0, 0%, 0%);
-    line-height: 0.5;
-}
-
-.btn-regresar {
-    margin-left: 100%;
-    border-radius: 20px;
-    padding: 10px 10px 10px 10px;
-    background-color: var(--color-primario);
-    text-align: center;
-    padding: 2px 2px 2px 2px;
-    width: 100px;
-    height: 30px;
-    margin-bottom: 5px;
-    color: white;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    align-items: center;
-    align-content: center;
-    align-self: center;
-}
-
-.btn-regresar:hover {
-    background-color: rgb(35, 209, 183);
-    color: var(--color-primario);
-}
-
-.contenido-servicio {
-    grid-column: 1;
-}
-
-.img2-servicio {
-    grid-column: 2;
-    height: 400px;
 }
 
 .container-descripcion {
-    grid-column: span 6;
-    grid-row: 2;
-    display: grid;
-    grid-template-columns: 4fr 4fr;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1.5rem 9rem 1.5rem 9rem;
+}
+
+.img2-servicio {
+    width: 600px;
+    border-radius: 1.5rem;
+    justify-self: center;
+    margin-top: 1.5rem;
+}
+
+.contenido-servicio {
+    padding: 4rem 2.5rem 1rem 2.5rem;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    font-size: var(--fuente-tamaño-normal);
+}
+
+.btn__servicio {
+    display: flex;
+    justify-content: center;
+    padding: 1.2rem 2.5rem;
 }

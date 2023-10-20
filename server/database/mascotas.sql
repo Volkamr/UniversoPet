@@ -6,6 +6,8 @@ create table Mascotas(
     idTipoAnimal INT NOT NULL,
     idEstado INT NOT NULL,
     imagen LONGTEXT,
+    idUsuario INT NOT NULL,
     FOREIGN KEY (idTipoAnimal) REFERENCES TipoAnimal(idTipoAnimal),
-    FOREIGN KEY (idEstado) REFERENCES Estados(idEstado)
+    FOREIGN KEY (idEstado) REFERENCES Estados(idEstado),
+    FOREIGN KEY (idUsuario) REFERENCES Usuarios (idUsuario)
 );

@@ -6,7 +6,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { citas } from '../../Data'
 import { Link } from 'react-router-dom'
 import { Form, Formik } from 'formik'
-import img from '../../assets/temmie-r.png'
+import img from '../../assets/default.png'
 import { CgSoftwareUpload } from 'react-icons/cg'
 
 const Mascotas = ({ usuario }) => {
@@ -30,6 +30,9 @@ const Mascotas = ({ usuario }) => {
     }
 
     const [carta, setCarta] = useState({})
+    const [image, setImage] = useState(null)
+    const [fileName, setFileName] = useState("Imagen sin seleccionar")
+
     return (
         <section className="mascotas section" id='mascotas'>
             <h2 className='section__title text-cs'>
@@ -118,8 +121,10 @@ const Mascotas = ({ usuario }) => {
                                         </div>
                                     </div>
                                     <div className='carta__btn'>
-                                        <button onClick={() =>
+                                        <button onClick={() => {
                                             toggleTab(-2)
+                                            setImage(carta.avatar)
+                                        }
                                         } className='btn text-cs h'> Editar Mascota </button>
                                     </div>
                                 </div>
@@ -129,14 +134,26 @@ const Mascotas = ({ usuario }) => {
                 })}
                 <div className={toggleState === -2 ? "mascotas__edt active-mascotas__edt" : "mascotas__edt"}>
                     <div className='mascotas__edt__content'>
-                        <AiOutlineClose onClick={() => toggleTab(carta.idMascota)} className='mascotas__carta__close'> </AiOutlineClose>
+                        <AiOutlineClose onClick={() => {
+                            toggleTab(carta.idMascota)
+                            setImage(img)
+                        }} className='mascotas__carta__close'> </AiOutlineClose>
                         <h1 className='mascota__nombre text-cs'> Editar Mascota </h1>
                         <Formik>
                             <Form >
                                 <div className='form__mas grid'>
                                     <div className='form__img'>
-                                        <img src={carta.avatar} alt="" className='img__form' />
-                                        <button> <CgSoftwareUpload className='mascotas__icon__form' /> </button>
+                                        <button type='button' onClick={() => { document.querySelector(".input-field").click() }}> <CgSoftwareUpload className='mascotas__icon__form' /> </button>
+                                        <input type="file" accept='image/*' className='input-field' hidden onChange={({ target: { files } }) => {
+                                            files[0] && setFileName(files[0].name)
+                                            if (files) {
+                                                setImage(URL.createObjectURL(files[0]));
+                                            }
+                                        }} />
+                                        {
+                                            image !== null ?
+                                                <img src={image} alt={fileName} className='img__form' /> : <img src={carta.avatar} alt="" className='img__form' />
+                                        }
                                     </div>
 
                                     <div className='form__content'>
@@ -180,14 +197,26 @@ const Mascotas = ({ usuario }) => {
                     <button onClick={() => toggleTab(-1)}> <HiPlus className='mascotas__icon' /> </button>
                     <div className={toggleState === -1 ? "mascotas__plus__content active-mascotas__plus" : "mascotas__plus__content "}>
                         <div className='mascotas__plus__form'>
-                            <AiOutlineClose onClick={() => toggleTab(0)} className='mascotas__carta__close'> </AiOutlineClose>
+                            <AiOutlineClose onClick={() => {
+                                toggleTab(0)
+                                setImage(img)
+                            }} className='mascotas__carta__close'> </AiOutlineClose>
                             <h1 className='mascota__nombre text-cs'> Agregar Mascota </h1>
                             <Formik>
                                 <Form >
                                     <div className='form__mas grid'>
                                         <div className='form__img'>
-                                            <img src={img} alt="" className='img__form' />
-                                            <button> <CgSoftwareUpload className='mascotas__icon__form' /> </button>
+                                            <button type='button' onClick={() => { document.querySelector(".input-field").click() }}> <CgSoftwareUpload className='mascotas__icon__form' /> </button>
+                                            <input type="file" accept='image/*' className='input-field' hidden onChange={({ target: { files } }) => {
+                                                files[0] && setFileName(files[0].name)
+                                                if (files) {
+                                                    setImage(URL.createObjectURL(files[0]));
+                                                }
+                                            }} />
+                                            {
+                                                image !== null ?
+                                                    <img src={image} alt={fileName} className='img__form' /> : <img src={img} alt="" className='img__form' />
+                                            }
                                         </div>
 
                                         <div className='form__content'>

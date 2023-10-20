@@ -32,7 +32,7 @@ export const getService = async (req, res) => {
 
 export const getPersonal = async (req, res) => {
     const [result] = await pool.query(
-        "SELECT cedula, password, nombres, apellidos, email, profesion, fotoPerfil, estado, tipoPersonal FROM ((Personal inner join TipoPersonal on Personal.idTipoPersonal = TipoPersonal.idTipoPersonal) inner join Estados on Personal.idEstado = Estados.idEstado)"
+        "SELECT cedula, password, nombres, apellidos, email, profesion, fotoPerfil, estado, tipoPersonal FROM ((Personal inner join TipoPersonal on Personal.idTipoPersonal = TipoPersonal.idTipoPersonal) inner join Estados on Personal.idEstado = Estados.idEstado) ORDER BY nombres ASC"
     );
     res.json(result);
 }
@@ -44,19 +44,26 @@ export const getUsers = async (req, res) => {
     res.json(result);
 }
 
-export const getUser = async(req, res) =>{
+export const getUser = async (req, res) => {
     const id = req.params.idUsuario;
     const [result] = await pool.query("SELECT * From Usuarios WHERE idUsuario = ?", [id]);
     res.json(result[0])
 }
 
 //Mascotas por usuarios
-export const getUserPets = async(req, res) =>{
+export const getUserPets = async (req, res) => {
     const idUser = req.params.idUsuario;
-    const [result] = await pool.query("SELECT idMascota, nombre, fechaNac, peso, Mascotas.idUsuario, idTipoAnimal, "+
-    "Mascotas.idEstado, imagen FROM Mascotas INNER JOIN Usuarios ON Mascotas.idUsuario = Usuarios.idUsuario"+
-    " WHERE Mascotas.idUsuario = ?", [idUser]);
-      
+    const [result] = await pool.query("SELECT idMascota, nombre, fechaNac, peso, Mascotas.idUsuario, idTipoAnimal, " +
+        "Mascotas.idEstado, imagen FROM Mascotas INNER JOIN Usuarios ON Mascotas.idUsuario = Usuarios.idUsuario" +
+        " WHERE Mascotas.idUsuario = ?", [idUser]);
+
+    res.json(result);
+}
+
+export const getPersonalP = async (req, res) => {
+    const [result] = await pool.query(
+        "SELECT cedula, password, nombres, apellidos, email, profesion, fotoPerfil, estado, tipoPersonal FROM ((Personal inner join TipoPersonal on Personal.idTipoPersonal = TipoPersonal.idTipoPersonal) inner join Estados on Personal.idEstado = Estados.idEstado) limit 3"
+    );
     res.json(result);
 }
 
@@ -90,7 +97,7 @@ export const postLogin = async (req, res) => {
                     idUsuario: result[0].idUsuario
                 });
             }
-        }else{
+        } else {
             return res.status(200).json({
                 message: "No deben haber campos vacíos",
                 success: false
@@ -118,12 +125,12 @@ export const postRegistro = async (req, res) => {
                 success: false,
                 message: "El correo ya está en uso"
             })
-        } else if(result_celular.length != 0){
+        } else if (result_celular.length != 0) {
             return res.status(200).json({
                 success: false,
                 message: "El celular ya está en uso"
             })
-        }else if (data.celular.length!=10){
+        } else if (data.celular.length != 10) {
             return res.status(200).json({
                 success: false,
                 message: "El celular debe tener 10 caracteres"
@@ -139,13 +146,13 @@ export const postRegistro = async (req, res) => {
                 success: false,
                 message: "No debe haber campos vacíos"
             })
-        } else if(data.edad<18){
+        } else if (data.edad < 18) {
             return res.status(200).json({
                 success: false,
                 message: "Debe ser menor de edad para crear una cuenta"
             })
         }
-        
+
         else {
             const estado = 1;
             let passwordHaash = await bcrypt.hash(data.password, 8);
@@ -158,7 +165,7 @@ export const postRegistro = async (req, res) => {
                     idEstado: estado,
                     celular: data.celular,
                     edad: data.edad,
-                    fotoPerfil:null //No debería ser null
+                    fotoPerfil: null //No debería ser null
                 },
             )
 
