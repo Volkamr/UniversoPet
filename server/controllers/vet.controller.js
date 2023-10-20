@@ -50,17 +50,16 @@ export const getUser = async(req, res) =>{
     res.json(result[0])
 }
 
-/*
+//Mascotas por usuarios
 export const getUserPets = async(req, res) =>{
     const idUser = req.params.idUsuario;
-    const [result] = await pool.query(
-        "SELECT idMascota, nombre, fechaNac, peso, idTipoAnimal, Mascotas.idEstado, imagen FROM Mascotas "+
-        "INNER JOIN MascotasxUsuario ON MascotasxUsuario.idMascota = Mascotas.idMascota"+
-        " INNER JOIN Usuarios ON Usuarios.idUsuario = MascotasxUsuario.idUsuario"+
-        " WHERE idUsuario = ? ", [idUser]);
-    return result;
+    const [result] = await pool.query("SELECT idMascota, nombre, fechaNac, peso, Mascotas.idUsuario, idTipoAnimal, "+
+    "Mascotas.idEstado, imagen FROM Mascotas INNER JOIN Usuarios ON Mascotas.idUsuario = Usuarios.idUsuario"+
+    " WHERE Mascotas.idUsuario = ?", [idUser]);
+      
+    res.json(result);
 }
-*/
+
 
 //---------------------------------------------------------------------------> POST
 
@@ -111,14 +110,26 @@ export const postRegistro = async (req, res) => {
 
     try {
         const data = req.body;
-        const [result] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
-
-        if (result.length != 0) {
+        const [result_email] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
+        const [result_celular] = await pool.query("SELECT * FROM Usuarios WHERE celular = ?", [data.celular]);
+        console.log(result_celular)
+        if (result_email.length != 0) {
             return res.status(200).json({
                 success: false,
-                message: "El usuario ya existe"
+                message: "El correo ya está en uso"
             })
-        } else if (data.password.length < 6) {
+        } else if(result_celular.length != 0){
+            return res.status(200).json({
+                success: false,
+                message: "El celular ya está en uso"
+            })
+        }else if (data.celular.length!=10){
+            return res.status(200).json({
+                success: false,
+                message: "El celular debe tener 10 caracteres"
+            })
+        }
+        else if (data.password.length < 6) {
             return res.status(200).json({
                 success: false,
                 message: "La contraseña debe tener al menos 6 caracteres"
@@ -128,7 +139,14 @@ export const postRegistro = async (req, res) => {
                 success: false,
                 message: "No debe haber campos vacíos"
             })
-        } else {
+        } else if(data.edad<18){
+            return res.status(200).json({
+                success: false,
+                message: "Debe ser menor de edad para crear una cuenta"
+            })
+        }
+        
+        else {
             const estado = 1;
             let passwordHaash = await bcrypt.hash(data.password, 8);
             pool.query("INSERT INTO Usuarios set ? ",
@@ -137,7 +155,10 @@ export const postRegistro = async (req, res) => {
                     password: passwordHaash,
                     nombres: data.nombres,
                     apellidos: data.apellidos,
-                    idEstado: estado
+                    idEstado: estado,
+                    celular: data.celular,
+                    edad: data.edad,
+                    fotoPerfil:null //No debería ser null
                 },
             )
 

@@ -6,5 +6,7 @@ create table Usuarios(
     apellidos VARCHAR(100) NOT NULL,
     fotoPerfil LONGTEXT,
     idEstado INT NOT NULL,
+    celular BIGINT NOT NULL,
+    edad INT NOT NULL,
     FOREIGN KEY (idEStado) REFERENCES Estados(idEstado) 
 );

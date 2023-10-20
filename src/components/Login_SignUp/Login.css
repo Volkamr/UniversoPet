@@ -19,18 +19,20 @@
 .wrapper_login {
     background-color: rgba(255, 255, 255, 0.534);
     backdrop-filter: blur(20px);
-    padding: 60px 50px 50px 40px;
+    padding: 30px 50px 50px 40px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     border-radius: 25px;
     text-align: center;
     justify-content: center;
     align-items: center;
-    display: flex;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    grid-template-rows: 1fr 4fr;
     width: 340px;
     height: 400px;
     transition: height 0.5s ease;
+    transition: width 0.5s ease;
     overflow: hidden;
-
 }
 
 .wrapper_login .form-box.registro {
@@ -38,14 +40,14 @@
 }
 
 .wrapper_login.active {
-    height: 600px;
-    width: 340px;
+    height: 480px;
+    width: 570px;
     overflow: hidden;
 }
 
 .wrapper_login.active .form-box.login {
     transition: none;
-    transform: translateX(-400px);
+    transform: translateX(-500px);
 }
 
 .wrapper_login .form-box.login {
@@ -63,6 +65,120 @@
 .wrapper_login.active .form-box.registro {
     transition: transform .3s ease;
     transform: translateX(0);
+}
+
+#req-title{
+    grid-row: 1;
+    align-self: center;
+}
+
+#inp-reg{
+    grid-column: span 2;
+    grid-row: 2;
+    padding: 15px;
+    display: grid;
+    text-align: left;
+    align-content: center;
+    justify-content: center;
+    grid-template-columns: repeat(2, 2fr);
+    grid-template-rows: 3fr 3fr 3fr 1f 2fr;
+}
+
+#l-n{
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#nombres-reg{
+    grid-column: 1;
+    grid-row: 1;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+#l-e{
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#email-reg{
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 20px;
+}
+
+#l-a{
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#apell-reg{
+    grid-column: 2;
+    grid-row: 1;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+#l-p{
+    grid-column:2;
+    grid-row:3;
+}
+
+#psswd-reg{
+    grid-column:2;
+    grid-row:3;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.terminos-cond{
+    grid-column: span 2;
+    grid-row:4;
+    text-align: center;
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+#btn-reg{
+    grid-column: span 2;
+    grid-row:5;
+    margin:auto;
+    text-align: center;
+    align-self: center;
+}
+
+#cel-reg{
+    grid-column: 1;
+    grid-row: 3;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+#l-c{
+    margin-bottom: 30px;
+    grid-column: 1;
+    grid-row: 3;
+}
+
+#l-ed{
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#edad-reg{
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 20px;
+}
+
+
+#cambio-reg{
+    align-self: center;
+    height: 40px;
+    width: 570px;
+    transition: width 0.5s ease;
+
+    
 }
 
 .inputs {

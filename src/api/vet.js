@@ -21,3 +21,7 @@ export const getPersonalRequest = async () => {
 export const getUserRequest = async (idUsuario) =>{
     return await axios.get(`http://localhost:3001/UniversoPet/Api/Usuario/${idUsuario}`);
 }
+
+export const getUserPetsRequest = async(idUsuario) =>{
+    return await axios.get(`http://localhost:3001/UniversoPet/Api/MascotasUser/${idUsuario}`)
+}

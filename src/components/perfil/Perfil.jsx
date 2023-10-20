@@ -44,7 +44,7 @@ const Perfil = () => {
 
     //Obtener las mascotas del usuarios
 
-    
+
    
     let [action, setAction] = useState("Normal");
     
@@ -146,13 +146,13 @@ const Perfil = () => {
                                 action === "Editar" ?
                                     <form className="form-editar">
                                         <input className="input-editar" type="number" name="celular" id="editar-celular" defaultValue=
-                                            {123}>
+                                            {user.celular}>
                                         </input>
 
                                     </form>
                                     :
                                     <p className="perfil__content">
-                                        {123}
+                                        {user.celular}
                                     </p>
                             }
                         </div>
@@ -183,7 +183,7 @@ const Perfil = () => {
 
                 </div>
             </div>
-            <Mascotas usuario={user.idUsuario}></Mascotas>
+            <Mascotas usuario={user}></Mascotas>
             <Calendario></Calendario>
             <div className='perfil__btn__cita'>
                 <button className='btn text-cs h' onClick={() => toggleTab(1)}> Agendar Cita </button>

@@ -28,6 +28,8 @@ export const Login = () => {
     const[email_reg, setEmailReg] = useState('');
     const[pass_reg, setPassReg] = useState('');
     const[nombres, setNombres] = useState('');
+    const[celular, setCelular] = useState('');
+    const[edad, setEdad] = useState('');
 
     const emailRegChange = (e) => {
         setEmailReg(e.target.value)
@@ -43,6 +45,14 @@ export const Login = () => {
 
     const apellidosChange = (a) =>{
         setAPellidos(a.target.value)
+    }
+
+    const celularCahnge = (c) =>{
+        setCelular(c.target.value)
+    }
+
+    const edadChange = (ed) =>{
+        setEdad(ed.target.value)
     }
 
     const handleLogin = async (event) => {
@@ -99,7 +109,13 @@ export const Login = () => {
         try{
         
             const response = await axios.post("http://localhost:3001/UniversoPet/Api/RegistrarUsuario",
-                {email:email_reg, password:pass_reg, nombres:nombres, apellidos:apellidos},
+                {email:email_reg, 
+                password:pass_reg, 
+                nombres:nombres, 
+                apellidos:apellidos,
+                celular: celular,
+                edad:edad
+            },
                 {headers:{
                     'Content-Type': 'application/json',
                 }}
@@ -180,35 +196,43 @@ export const Login = () => {
 
                     <div class="form-box registro" id="registro-box">
                         <form onSubmit={handleRegistro}>
-                            <h2 className="h2-login-reg">Registro</h2>
+                            <h2 className="h2-login-reg" id="req-title">Registro</h2>
                             <span className="line"></span>
 
-                            <div className="inputs">
+                            <div className="inputs" id="inp-reg">
 
-                                <label for="nombres">Nombres</label>
+                                <label for="nombres-reg" id="l-n">Nombres</label>
                                 <input className="input-log" type="text" name="nombres" value = {nombres} required
-                                placeholder="Ingrese sus nombres" id="nombres" onChange={nombresChange}></input>
+                                placeholder="Ingrese sus nombres" id="nombres-reg" onChange={nombresChange}></input>
 
-                                <label for="apellidos">Apellidos</label>
+                                <label for="apell-reg" id="l-a">Apellidos</label>
                                 <input className="input-log" type="text" name="apellidos" value={apellidos} required
-                                placeholder="Ingrese sus apellidos" id="nombres" onChange={apellidosChange}></input>
+                                placeholder="Ingrese sus apellidos" id="apell-reg" onChange={apellidosChange}></input>
 
-                                <label for="email">Email</label>
+                                <label for="email-reg" id="l-e">Email</label>
                                 <input className="input-log" type="email" name="email" value={email_reg} required
-                                placeholder="Ingrese su correo electrónico" id="email" onChange={emailRegChange}></input>
+                                placeholder="Ingrese su correo electrónico" id="email-reg" onChange={emailRegChange}></input>
 
-                                <label for="psswd">Contraseña</label>
+                                <label for="psswd-reg" id="l-p">Contraseña</label>
                                 <input className="input-log" type="password" name="password" value={pass_reg} required
-                                placeholder="Ingrese su contraseña" id="psswd" onChange={passRegChange}></input>
+                                placeholder="Ingrese su contraseña" id="psswd-reg" onChange={passRegChange}></input>
 
-                                <div class="terminos y cond">
+                                <label for="celular" id="l-c">Celular</label>
+                                <input className="input-log" type="number" name="celular" pattern="[0-9]+" value={celular} required
+                                placeholder="Ingrese su celular" id="cel-reg" onChange={celularCahnge}></input>
+
+                                <label for="edad" id="l-ed">Edad</label>
+                                <input className="input-log" type="number" name="edad" pattern="[0-9]+" value={edad} required
+                                placeholder="Ingrese su edad" id="edad-reg" onChange={edadChange}></input>
+
+                                <div class="terminos-cond">
                                     <input type="checkbox" id="Terminos"></input>
                                     <label for="Terminos" id="l-terminos">Acepto los
                                         <a className="a-login" id="a-terminos" href="">Términos y condiciones</a>
                                     </label>
                                 </div>
 
-                                <input className="btn-login-reg btn-login-depth" type="submit" value="Registrarse"></input>
+                                <input className="btn-login-reg btn-login-depth" type="submit" value="Registrarse" id="btn-reg"></input>
 
                             </div>
                         </form>
@@ -230,7 +254,7 @@ export const Login = () => {
                             </p>
                         </div>
                         :
-                        <div class="cambio">
+                        <div class="cambio" id="cambio-reg">
                             <p className="mensaje">
                                 ¿Ya tiene una cuenta? <a className="login-l a-login" href="#"
                                     onClick={() => {
