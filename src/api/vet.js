@@ -18,8 +18,15 @@ export const getPersonalRequest = async () => {
     return await axios.get("http://localhost:3001/UniversoPet/Api/Personal");
 }
 
-export const getUserRequest = async (idUsuario) => {
-    return await axios.get(`http://localhost:3001/UniversoPet/Api/Usuario/${idUsuario}`);
+export const getUserRequest = async (authToken) =>{
+
+    const response = await axios.get(`http://localhost:3001/UniversoPet/Api/Usuario/${authToken}`,
+    {headers:{
+        'Authorization': `Bearer ${authToken}`,
+    }}
+    );
+    console.log(response)
+    return response;
 }
 
 export const getUserPetsRequest = async (idUsuario) => {

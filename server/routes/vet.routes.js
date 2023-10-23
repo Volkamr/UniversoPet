@@ -22,7 +22,7 @@ router.get('/UniversoPet/Api/Sedes', getSedes)
 router.get('/UniversoPet/Api/Services/:idServicio', getService)
 router.get('/UniversoPet/Api/Personal', getPersonal)
 router.get('/UniversoPet/Api/Usuarios', getUsers)
-router.get('/UniversoPet/Api/Usuario/:idUsuario', getUser)
+router.get('/UniversoPet/Api/Usuario/:accessToken', getUser)
 router.get('/UniversoPet/Api/MascotasUser/:idUsuario', getUserPets)
 router.get('/UniversoPet/Api/PersonalP', getPersonalP)
 

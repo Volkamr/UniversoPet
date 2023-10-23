@@ -1,6 +1,8 @@
 import formidable from "formidable"
 import { pool } from '../db.js'
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
+
 //---------------------------------------------------------------------------> GET
 
 export const getServices = async (req, res) => {
@@ -44,11 +46,28 @@ export const getUsers = async (req, res) => {
     res.json(result);
 }
 
-export const getUser = async (req, res) => {
-    const id = req.params.idUsuario;
+export const getUser = async(req, res) =>{
+
+    const token = req.params.accessToken;
+    console.log("token: "+token)
+    const key = process.env.SECRET_KEY;
+
+    if (token){
+        jwt.verify(token, key, (err, decoded) =>{
+            if (err){
+                return res.status(403).json({message: "Token inválido"})
+            }else{
+                req.idUsuario = decoded.idUsuario;
+            }
+        }) 
+    }
+
+    const id = req.idUsuario;
+    console.log("idUser: "+id)
     const [result] = await pool.query("SELECT * From Usuarios WHERE idUsuario = ?", [id]);
-    res.json(result[0])
+    return res.status(200).json(result[0])
 }
+
 
 //Mascotas por usuarios
 export const getUserPets = async (req, res) => {
@@ -91,13 +110,23 @@ export const postLogin = async (req, res) => {
                     success: false
                 });
             } else {
-                return res.status(200).json({
+                const secretKey = process.env.SECRET_KEY;
+                const accessToken = jwt.sign({idUsuario: result[0].idUsuario}, secretKey,{
+                    expiresIn: process.env.JWT_TIEMPO_EXPIRA 
+                })
+                /*
+                res.status(200).json({
                     message: "Sesión iniciada",
                     success: true,
                     idUsuario: result[0].idUsuario
                 });
+                */
+               res.status(200).json({
+                accessToken:accessToken,
+                success: true
+            })
             }
-        } else {
+        }else{
             return res.status(200).json({
                 message: "No deben haber campos vacíos",
                 success: false
@@ -112,6 +141,7 @@ export const postLogin = async (req, res) => {
         });
     }
 };
+
 
 export const postRegistro = async (req, res) => {
 

@@ -71,16 +71,21 @@ export const Login = () => {
             const data =  response.data; 
     
             if (data.success) {
+                const accessToken = data.accessToken;
+                //const decodedToken = jwtDecode(token);
+                //const idUsuario = decodedToken.idUsuario;
+                localStorage.setItem('token', data.asccessToken)
                 Swal.fire({
                     icon: 'success',
-                    title: data.message,
+                    title: "Login exitoso",
                     text: "Será redireccionado",
                     showConfirmButton: false,
                     timer: 1500  
                 })
-
+                
                 .then(() => {
-                    window.location.href = `/perfil/${data.idUsuario}`;
+
+                    window.location.href = `http://localhost:3000/perfil/${accessToken}?`;
                   });
     
             } else {

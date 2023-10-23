@@ -4,6 +4,8 @@ import cors from "cors";
 import { PORT } from "./config.js";
 import indexRoutes from "./routes/index.routes.js"
 import vetRoutes from './routes/vet.routes.js'
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 const app = express();
 
@@ -13,6 +15,7 @@ app.use(cors({
     credentials: true,
     optionsSuccessStatus: 204,
 }));
+dotenv.config()
 app.use(express.json());
 app.use(indexRoutes);
 app.use(vetRoutes);
