@@ -7,28 +7,27 @@ import { useEffect, useState } from "react";
 import Calendario from '../calendario/Calendario'
 import { AiOutlineClose } from 'react-icons/ai'
 import { Form, Formik } from 'formik'
-import { pets } from '../../Data'
 import { getServicesRequest } from '../../api/vet'
 import { getUserRequest } from '../../api/vet'
-
+import { BiSolidUser } from 'react-icons/bi'
 
 const Perfil = () => {
 
-   //Obtener el usuario 
-   let token = useParams().accessToken;
-   //const decodedToken = jwtDecode(token);
-   //const idUsuario = decodedToken.idUsuario;
-   const [user, setUser] = useState([]);
+    //Obtener el usuario 
+    let token = useParams().accessToken;
+    //const decodedToken = jwtDecode(token);
+    //const idUsuario = decodedToken.idUsuario;
+    const [user, setUser] = useState([]);
 
-   useEffect(() => {
-       async function loadUser(token) {
-           const response = await getUserRequest(token);
-           setUser(response.data)
-           console.log(user)
-       }
-       loadUser(token)
-   }, [])
-    
+    useEffect(() => {
+        async function loadUser(token) {
+            const response = await getUserRequest(token);
+            setUser(response.data)
+            console.log(user)
+        }
+        loadUser(token)
+    }, [])
+
 
     let [action, setAction] = useState("Normal");
     const [nombres, setNombre] = useState(user.nombres + " " + user.apellidos);
@@ -36,19 +35,6 @@ const Perfil = () => {
     const [celular, setCelular] = useState(user.celular);
     const [confirmar, setConfirmar] = useState("Cancelar")
     /*
-    var mascotas = pets.map(pet => {
-        var mascotasUs
-
-        if (pet.idUsuario === idUsuario) {
-            mascotasUs = pet
-        }
-
-        return mascotasUs
-    })
-
-    var filtrado = mascotas.filter(x => {
-        return x !== undefined
-    })
     
     const nombreChange = (n) => {
         setNombre(n.target.value)
@@ -66,7 +52,7 @@ const Perfil = () => {
     const toggleTab = (index) => {
         setToggleState(index)
     }
-    
+
     const [services, setServices] = useState([])
 
     useEffect(() => {
@@ -83,7 +69,10 @@ const Perfil = () => {
             <NavToggle></NavToggle>
             <div className="perfil__container container grid">
 
-                <img src={user.avatar} alt="" className="perfil__img" />
+                {
+                    user.avatar != null ? <img src={user.avatar} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
+                }
+
 
                 <div className="perfil__data container">
 
@@ -102,7 +91,7 @@ const Perfil = () => {
                                     <form className="form-editar">
                                         <input className="input-editar" type="text"
                                             name="nombres" id="editar-nombre" defaultValue={user.nombres}
-                                            >
+                                        >
                                         </input>
 
                                     </form>
@@ -174,7 +163,7 @@ const Perfil = () => {
 
                 </div>
             </div>
-            <Mascotas usuario={user.idUsuario}></Mascotas>
+            <Mascotas token={token}></Mascotas>
             <Calendario></Calendario>
             <div className='perfil__btn__cita'>
                 <button className='btn text-cs h' onClick={() => toggleTab(1)}> Agendar Cita </button>

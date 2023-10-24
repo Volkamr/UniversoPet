@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./mascotas.css";
-import { pets } from '../../Data'
 import { HiPlus } from 'react-icons/hi'
 import { AiOutlineClose } from 'react-icons/ai'
 import { citas } from '../../Data'
@@ -8,21 +7,24 @@ import { Link } from 'react-router-dom'
 import { Form, Formik } from 'formik'
 import img from '../../assets/default.png'
 import { CgSoftwareUpload } from 'react-icons/cg'
+import { getUserPetsRequest } from '../../api/vet';
+import { createMascota } from '../../api/vet';
+import { updateMascota } from '../../api/vet';
+import { eliMascota } from '../../api/vet';
+import Swal from "sweetalert2";
 
-const Mascotas = ({ usuario }) => {
-    var mascotas = pets.map(pet => {
-        var mascotasUs
+const Mascotas = ({ token }) => {
 
-        if (pet.idUsuario === usuario) {
-            mascotasUs = pet
+    const [UserPets, setUserPets] = useState([])
+
+    useEffect(() => {
+        async function loadUserPets() {
+            const response = await getUserPetsRequest(token);
+            setUserPets(response.data)
         }
+        loadUserPets()
+    }, [token])
 
-        return mascotasUs
-    })
-
-    var filtrado = mascotas.filter(x => {
-        return x !== undefined
-    })
 
     const [toggleState, setToggleState] = useState(0)
     const toggleTab = (index) => {
@@ -32,6 +34,21 @@ const Mascotas = ({ usuario }) => {
     const [carta, setCarta] = useState({})
     const [image, setImage] = useState(null)
     const [fileName, setFileName] = useState("Imagen sin seleccionar")
+    const [imgForm, setImgForm] = useState("")
+
+    const blobToBase64 = (blob) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                resolve(reader.result.split(',')[1]);
+            };
+        });
+    };
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     return (
         <section className="mascotas section" id='mascotas'>
@@ -42,24 +59,24 @@ const Mascotas = ({ usuario }) => {
                 Tus <span> Mascotas </span>
             </p>
             <div className="mascotas__container container grid">
-                {filtrado.map(({ avatar, nombre, fechaNac, peso, tipoAnimal, raza, idMascota }, index) => {
+                {UserPets.map(pet => {
                     return (
-                        < div className="mascotas__fondo" key={index} >
-                            <img src={avatar} onClick={() => {
-                                setCarta({ avatar, nombre, fechaNac, peso, tipoAnimal, raza, idMascota })
-                                toggleTab(idMascota)
+                        < div className="mascotas__fondo" key={pet.idMascota} >
+                            <img src={"data:image/png;base64," + pet.imagen} onClick={() => {
+                                setCarta({ avatar: "data:image/png;base64," + pet.imagen, imagen: pet.imagen, nombre: pet.nombre, fechaNac: pet.fechaNac, peso: pet.peso, tipoAnimal: pet.tipoAnimal, raza: pet.raza, idMascota: pet.idMascota })
+                                toggleTab(pet.idMascota)
                             }} className="mascotas__img" alt="" />
-                            <div className={toggleState === idMascota ? "mascotas__carta active-carta" : "mascotas__carta"}>
+                            <div className={toggleState === pet.idMascota ? "mascotas__carta active-carta" : "mascotas__carta"}>
                                 <div className='mascotas__cartas__content'>
                                     <AiOutlineClose onClick={() => toggleTab(0)} className='mascotas__carta__close'> </AiOutlineClose>
-                                    <h1 className='mascota__nombre text-cs'> {nombre} </h1>
+                                    <h1 className='mascota__nombre text-cs'> {pet.nombre} </h1>
                                     <div className='mascota__info container grid'>
                                         <div className='mascota__info__div'>
                                             <h1 className='mascota__info__titulo text-cs'>
                                                 FECHA DE NAC.
                                             </h1>
                                             <p className='mascota__info__content'>
-                                                {fechaNac}
+                                                {pet.fechaNac.substring(0, 10)}
                                             </p>
                                         </div>
                                         <div className='mascota__info__div'>
@@ -67,7 +84,7 @@ const Mascotas = ({ usuario }) => {
                                                 TIPO ANIMAL
                                             </h1>
                                             <p className='mascota__info__content'>
-                                                {tipoAnimal}
+                                                {pet.tipoAnimal}
                                             </p>
                                         </div>
                                         <div className='mascota__info__div'>
@@ -75,7 +92,7 @@ const Mascotas = ({ usuario }) => {
                                                 RAZA
                                             </h1>
                                             <p className='mascota__info__content '>
-                                                {raza}
+                                                {pet.raza}
                                             </p>
                                         </div>
                                         <div className='mascota__info__div'>
@@ -83,7 +100,7 @@ const Mascotas = ({ usuario }) => {
                                                 PESO
                                             </h1>
                                             <p className='mascota__info__content'>
-                                                {peso}
+                                                {pet.peso}
                                             </p>
                                         </div>
 
@@ -94,12 +111,12 @@ const Mascotas = ({ usuario }) => {
                                             {citas.map(cita => {
                                                 var citasMas = []
                                                 var link = '/citas/'
-                                                if (cita.idMascota === idMascota) {
+                                                if (cita.idMascota === pet.idMascota) {
                                                     citasMas.push(cita)
                                                 }
                                                 citasMas.filter(x => x !== undefined)
                                                 return citasMas.map(x => {
-                                                    return <div className="" key={idMascota}>
+                                                    return <div className="" key={pet.idMascota}>
                                                         <Link to={link + x.idCita} className='link__citas link'> Cita {x.idCita} </Link>
                                                         <p className='mascota__citas__content'> {x.comentario} </p>
                                                     </div>
@@ -110,12 +127,12 @@ const Mascotas = ({ usuario }) => {
                                             <h1 className='text-cs'>Diagnosticos</h1>
                                             {citas.map(cita => {
                                                 var citasMas = []
-                                                if (cita.idMascota === idMascota) {
+                                                if (cita.idMascota === pet.idMascota) {
                                                     citasMas.push(cita.diagnostico)
                                                 }
                                                 citasMas.filter(x => x !== undefined)
                                                 return citasMas.map(x => {
-                                                    return <p className='mascota__diagnostico__content' key={idMascota}> {x} </p>
+                                                    return <p className='mascota__diagnostico__content' key={pet.idMascota}> {x} </p>
                                                 })
                                             })}
                                         </div>
@@ -139,15 +156,66 @@ const Mascotas = ({ usuario }) => {
                             setImage(img)
                         }} className='mascotas__carta__close'> </AiOutlineClose>
                         <h1 className='mascota__nombre text-cs'> Editar Mascota </h1>
-                        <Formik>
+                        <Formik
+                            initialValues={{
+                                imagen: null,
+                                nombre: null,
+                                peso: null,
+                                fechaNac: null,
+                                tipoAnimal: null,
+                                raza: null,
+                                idMascota: null,
+                                estado: null
+                            }}
+                            onSubmit={async (values) => {
+                                values.imagen = imgForm
+                                values.estado = "activo"
+                                values.idMascota = carta.idMascota
+
+                                try {
+                                    const response = await updateMascota(values)
+
+                                    if (response.status < 200 || response.status >= 300) {
+                                        throw new Error(`Error - ${response.status}`);
+                                    }
+
+                                    const data = response.data
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: data.message,
+                                            text: "Mascota Actualizada Exitosamente",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        })
+                                        await sleep(1000);
+                                        window.location.reload()
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Actualizacion de mascota fallido',
+                                            text: data.message
+                                        });
+                                    }
+
+                                    console.log(response)
+                                } catch (error) {
+                                    console.log(error)
+                                }
+                            }}
+                        >{({ handleSubmit, handleChange }) => (
                             <Form >
                                 <div className='form__mas grid'>
                                     <div className='form__img'>
                                         <button type='button' onClick={() => { document.querySelector(".input-field").click() }}> <CgSoftwareUpload className='mascotas__icon__form' /> </button>
-                                        <input type="file" accept='image/*' className='input-field' hidden onChange={({ target: { files } }) => {
+                                        <input type="file" accept='image/*' name='imagen' className='input-field' value={null} hidden onSubmit={handleSubmit} onChange={async ({ target: { files } }) => {
                                             files[0] && setFileName(files[0].name)
                                             if (files) {
                                                 setImage(URL.createObjectURL(files[0]));
+                                                const fileInput = document.querySelector('.input-field')
+                                                const myblob = fileInput.files[0]
+                                                const B64 = await blobToBase64(myblob)
+                                                setImgForm(B64)
                                             }
                                         }} />
                                         {
@@ -160,26 +228,26 @@ const Mascotas = ({ usuario }) => {
                                         <div className='form__pri grid'>
                                             <div className='form__sep'>
                                                 <label htmlFor="nombre" className='label__form__mas text-cs'> Nombre </label>
-                                                <input type="text" name='nombre' className='form__input' placeholder={carta.nombre} />
+                                                <input type="text" name='nombre' className='form__input' onChange={handleChange} onSubmit={handleSubmit} placeholder={carta.nombre} />
                                             </div>
                                             <div className='form__sep'>
                                                 <label htmlFor="peso" className='label__form__mas text-cs'> Peso </label>
-                                                <input type="number" name='peso' className='form__input' placeholder={carta.peso} />
+                                                <input type="number" name='peso' className='form__input' onChange={handleChange} onSubmit={handleSubmit} placeholder={carta.peso} />
                                             </div>
                                             <div className='form__sep'>
                                                 <label htmlFor="fechaNac" className='label__form__mas text-cs'> Fecha de Nacimiento </label>
-                                                <input type="date" name='fechaNac' className='form__input' placeholder={carta.fechaNac} />
+                                                <input type="date" name='fechaNac' className='form__input' onChange={handleChange} onSubmit={handleSubmit} placeholder={carta.fechaNac} />
                                             </div>
                                         </div>
 
                                         <div className='form__sec grid'>
                                             <div className='form__sep'>
                                                 <label htmlFor="tipoAnimal" className='label__form__mas text-cs'> Tipo de Animal </label>
-                                                <input type="text" name='tipoAnimal' className='form__input' placeholder={carta.tipoAnimal} />
+                                                <input type="text" name='tipoAnimal' className='form__input' onChange={handleChange} onSubmit={handleSubmit} placeholder={carta.tipoAnimal} />
                                             </div>
                                             <div className='form__sep'>
                                                 <label htmlFor="raza" className='label__form__mas text-cs'> Raza </label>
-                                                <input type="text" name='raza' className='form__input' placeholder={carta.raza} />
+                                                <input type="text" name='raza' className='form__input' onChange={handleChange} onSubmit={handleSubmit} placeholder={carta.raza} />
                                             </div>
 
                                         </div>
@@ -187,9 +255,38 @@ const Mascotas = ({ usuario }) => {
                                 </div>
 
                                 <div className='form__btn'>
-                                    <button className="btn text-cs h"> Actualizar </button>
+                                    <button type='submit' className="btn text-cs h"> Actualizar </button>
+                                    <button type='button' onClick={async () => {
+                                        const values = {
+                                            idMascota: carta.idMascota
+                                        }
+                                        const response = await eliMascota(values)
+                                        if (response.status < 200 || response.status >= 300) {
+                                            throw new Error(`Error - ${response.status}`);
+                                        }
+
+                                        const data = response.data
+                                        if (data.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: data.message,
+                                                text: "Mascota Actualizada Exitosamente",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            })
+                                            await sleep(1000);
+                                            window.location.reload()
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Actualizacion de mascota fallido',
+                                                text: data.message
+                                            });
+                                        }
+                                    }} className="btn text-cs h"> Eliminar </button>
                                 </div>
                             </Form>
+                        )}
                         </Formik>
                     </div>
                 </div>
@@ -202,57 +299,109 @@ const Mascotas = ({ usuario }) => {
                                 setImage(img)
                             }} className='mascotas__carta__close'> </AiOutlineClose>
                             <h1 className='mascota__nombre text-cs'> Agregar Mascota </h1>
-                            <Formik>
-                                <Form >
-                                    <div className='form__mas grid'>
-                                        <div className='form__img'>
-                                            <button type='button' onClick={() => { document.querySelector(".input-field").click() }}> <CgSoftwareUpload className='mascotas__icon__form' /> </button>
-                                            <input type="file" accept='image/*' className='input-field' hidden onChange={({ target: { files } }) => {
-                                                files[0] && setFileName(files[0].name)
-                                                if (files) {
-                                                    setImage(URL.createObjectURL(files[0]));
+                            <Formik
+                                initialValues={{
+                                    imagen: imgForm,
+                                    nombre: null,
+                                    peso: null,
+                                    fechaNac: null,
+                                    tipoAnimal: null,
+                                    raza: null,
+                                    estado: null,
+                                    token: null,
+                                }}
+                                onSubmit={async (values) => {
+                                    values.imagen = imgForm
+                                    values.estado = "activo"
+                                    values.token = token
+
+                                    try {
+                                        const response = await createMascota(values)
+
+                                        if (response.status < 200 || response.status >= 300) {
+                                            throw new Error(`Error - ${response.status}`);
+                                        }
+
+                                        const data = response.data
+                                        if (data.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: data.message,
+                                                text: "Mascota Agregada Exitosamente",
+                                                showConfirmButton: false,
+                                                timer: 1500
+                                            })
+                                            await sleep(1000);
+                                            window.location.reload()
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Agregamiento de mascota fallido',
+                                                text: data.message
+                                            });
+                                        }
+
+                                        console.log(response)
+                                    } catch (error) {
+                                        console.log(error)
+                                    }
+                                }}
+                            >
+                                {({ handleChange, handleSubmit }) => (
+                                    <Form >
+                                        <div className='form__mas grid'>
+                                            <div className='form__img'>
+                                                <button type='button' onClick={() => { document.querySelector(".input-field").click() }}> <CgSoftwareUpload className='mascotas__icon__form' /> </button>
+                                                <input type="file" accept='image/*' name="imagen" className='input-field' hidden onSubmit={handleSubmit} onChange={async ({ target: { files } }) => {
+                                                    files[0] && setFileName(files[0].name)
+                                                    if (files) {
+                                                        setImage(URL.createObjectURL(files[0]));
+                                                        const fileInput = document.querySelector('.input-field')
+                                                        const myblob = fileInput.files[0]
+                                                        const B64 = await blobToBase64(myblob)
+                                                        setImgForm(B64)
+                                                    }
+                                                }} />
+                                                {
+                                                    image !== null ?
+                                                        <img src={image} alt={fileName} className='img__form' /> : <img src={img} alt="" className='img__form' />
                                                 }
-                                            }} />
-                                            {
-                                                image !== null ?
-                                                    <img src={image} alt={fileName} className='img__form' /> : <img src={img} alt="" className='img__form' />
-                                            }
-                                        </div>
-
-                                        <div className='form__content'>
-                                            <div className='form__pri grid'>
-                                                <div className='form__sep'>
-                                                    <label htmlFor="nombre" className='label__form__mas text-cs'> Nombre </label>
-                                                    <input type="text" name='nombre' className='form__input' />
-                                                </div>
-                                                <div className='form__sep'>
-                                                    <label htmlFor="peso" className='label__form__mas text-cs'> Peso </label>
-                                                    <input type="number" name='peso' className='form__input' />
-                                                </div>
-                                                <div className='form__sep'>
-                                                    <label htmlFor="fechaNac" className='label__form__mas text-cs'> Fecha de Nacimiento </label>
-                                                    <input type="date" name='fechaNac' className='form__input' />
-                                                </div>
                                             </div>
 
-                                            <div className='form__sec grid'>
-                                                <div className='form__sep'>
-                                                    <label htmlFor="tipoAnimal" className='label__form__mas text-cs'> Tipo de Animal </label>
-                                                    <input type="text" name='tipoAnimal' className='form__input' />
-                                                </div>
-                                                <div className='form__sep'>
-                                                    <label htmlFor="raza" className='label__form__mas text-cs'> Raza </label>
-                                                    <input type="text" name='raza' className='form__input' />
+                                            <div className='form__content'>
+                                                <div className='form__pri grid'>
+                                                    <div className='form__sep'>
+                                                        <label htmlFor="nombre" className='label__form__mas text-cs'> Nombre </label>
+                                                        <input type="text" name='nombre' onSubmit={handleSubmit} onChange={handleChange} className='form__input' />
+                                                    </div>
+                                                    <div className='form__sep'>
+                                                        <label htmlFor="peso" className='label__form__mas text-cs'> Peso </label>
+                                                        <input type="number" name='peso' onSubmit={handleSubmit} onChange={handleChange} className='form__input' />
+                                                    </div>
+                                                    <div className='form__sep'>
+                                                        <label htmlFor="fechaNac" className='label__form__mas text-cs'> Fecha de Nacimiento </label>
+                                                        <input type="date" name='fechaNac' onSubmit={handleSubmit} onChange={handleChange} className='form__input' />
+                                                    </div>
                                                 </div>
 
+                                                <div className='form__sec grid'>
+                                                    <div className='form__sep'>
+                                                        <label htmlFor="tipoAnimal" className='label__form__mas text-cs'> Tipo de Animal </label>
+                                                        <input type="text" name='tipoAnimal' onSubmit={handleSubmit} onChange={handleChange} className='form__input' />
+                                                    </div>
+                                                    <div className='form__sep'>
+                                                        <label htmlFor="raza" className='label__form__mas text-cs'> Raza </label>
+                                                        <input type="text" name='raza' onSubmit={handleSubmit} onChange={handleChange} className='form__input' />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className='form__btn'>
-                                        <button className="btn text-cs h"> Agregar Mascota </button>
-                                    </div>
-                                </Form>
+                                        <div className='form__btn'>
+                                            <button type='submit' className="btn text-cs h"> Agregar Mascota </button>
+                                        </div>
+                                    </Form>
+                                )}
                             </Formik>
                         </div>
                     </div>
