@@ -52,3 +52,12 @@ export const createMascota = async (mascota) => await axios.post('http://localho
 export const updateMascota = async (mascota) => await axios.post('http://localhost:3001/UniversoPet/Api/UpdateMascota', mascota);
 
 export const eliMascota = async (idMascota) => await axios.post('http://localhost:3001/UniversoPet/Api/eliMascota', idMascota);
+
+export const postCambioInfoRequest = async (idUsuario, email, celular, nombres) =>{
+    return await axios.post("http://localhost:3001/UniversoPet/Api/cambiarInfo",{
+        email: email,
+        idUsuario: idUsuario,
+        celular: celular,
+        nombres: nombres
+    })
+}

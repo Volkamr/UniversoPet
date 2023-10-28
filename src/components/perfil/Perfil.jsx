@@ -10,6 +10,9 @@ import { Form, Formik } from 'formik'
 import { getServicesRequest } from '../../api/vet'
 import { getUserRequest } from '../../api/vet'
 import { BiSolidUser } from 'react-icons/bi'
+import Swal from "sweetalert2";
+import { postCambioInfoRequest } from "../../api/vet";
+
 
 const Perfil = () => {
 
@@ -30,11 +33,23 @@ const Perfil = () => {
 
 
     let [action, setAction] = useState("Normal");
-    const [nombres, setNombre] = useState(user.nombres + " " + user.apellidos);
+    const [nombres, setNombre] = useState(user.nombres);
     const [email, setEmail] = useState(user.email);
     const [celular, setCelular] = useState(user.celular);
     const [confirmar, setConfirmar] = useState("Cancelar")
-    /*
+
+
+    useEffect(() => {
+        setNombre(user.nombres);
+      }, [user]);
+    
+      useEffect(() => {
+        setCelular(user.celular);
+      }, [user]);
+      useEffect(() => {
+        setEmail(user.email);
+      }, [user]);
+    
     
     const nombreChange = (n) => {
         setNombre(n.target.value)
@@ -45,9 +60,9 @@ const Perfil = () => {
     }
 
     const celularChange = (c) => {
-        setEmail(c.target.value)
+        setCelular(c.target.value)
     }
-    */
+    
     const [toggleState, setToggleState] = useState(0)
     const toggleTab = (index) => {
         setToggleState(index)
@@ -63,6 +78,43 @@ const Perfil = () => {
         loadServices()
     }, [])
 
+    const cambioInfo = async (event) => {
+        event.preventDefault();
+        try {
+
+            const response = await postCambioInfoRequest(user.idUsuario, email, celular, nombres);
+
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(`Error - ${response.status}`);
+            }
+
+            const data = response.data;
+
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: "Datos cambiados",
+                    text: data.message,
+                    showConfirmButton: true,
+                })
+
+                setAction("Normal");
+                window.location.reload();
+
+            } else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: '',
+                    text: data.message
+                });
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
 
         <section className="perfil__section section" id="perfil">
@@ -73,95 +125,98 @@ const Perfil = () => {
                     user.avatar != null ? <img src={user.avatar} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
                 }
 
+                {
+                    action === "Editar" ?
 
-                <div className="perfil__data container">
+                        <div className="perfil__data container">
 
-                    <h1 className="perfil__title text-cs">
-                        {user.nombres}
-                    </h1>
-
-                    <div className='perfil__text container grid'>
-                        <div className='perfil__info'>
-                            <p className='perfil_subtitle'>
-                                NOMBRE COMPLETO
-                            </p>
-                            {
-                                action === "Editar"
-                                    ?
-                                    <form className="form-editar">
+                            <h1 className="perfil__title text-cs">
+                                {user.nombres} 
+                            </h1>
+                            <form onSubmit={cambioInfo}>
+                                <div className='perfil__text container grid'>
+                                    <div className='perfil__info'>
+                                        <p className='perfil_subtitle'>
+                                            NOMBRE COMPLETO
+                                        </p>
                                         <input className="input-editar" type="text"
-                                            name="nombres" id="editar-nombre" defaultValue={user.nombres}
+                                            name="nombres" id="editar-nombre" defaultValue={nombres} onChange={nombreChange}
                                         >
                                         </input>
-
-                                    </form>
-                                    :
-                                    <p className="perfil__content"> {user.nombres} </p>
-                            }
-
-                        </div>
-                        <div className='perfil__info'>
-                            <p className='perfil_subtitle'>
-                                CORREO
-                            </p>
-                            {
-                                action === "Editar" ?
-                                    <form className="form-editar">
+                                    </div>
+                                    <div className='perfil__info'>
+                                        <p className='perfil_subtitle'>
+                                            CORREO
+                                        </p>
                                         <input className="input-editar" type="email" name="email" id="editar-email"
-                                            defaultValue={user.email} >
+                                            defaultValue={email} onChange={emailChange}>
                                         </input>
-
-                                    </form>
-                                    :
-                                    <p className="perfil__content"> {user.email}
-                                    </p>
-                            }
-
-                        </div>
-                        <div className='perfil__info'>
-                            <p className='perfil_subtitle'>
-                                CELULAR
-                            </p>
-                            {
-                                action === "Editar" ?
-                                    <form className="form-editar">
+                                    </div>
+                                    <div className='perfil__info'>
+                                        <p className='perfil_subtitle'>
+                                            CELULAR
+                                        </p>
                                         <input className="input-editar" type="number" name="celular" id="editar-celular" defaultValue=
-                                            {user.celular}>
+                                            {celular} onChange={celularChange}>
                                         </input>
+                                    </div>
+                                </div>
 
-                                    </form>
-                                    :
-                                    <p className="perfil__content">
-                                        {user.celular}
-                                    </p>
-                            }
-                        </div>
-
-                    </div>
-
-                    {
-                        action === "Editar"
-                            ?
-                            <form className="form-editar">
                                 <container className="editar-btn">
                                     <input className="perfil__btn_editar btn text-cs" type="submit" id="guardar" value="Guardar"
-                                        onClick={() => {
-                                            setAction("Normal");
-                                        }}>
+                                       >
                                     </input>
                                     <div className="perfil__btn_editar">
                                         <p className="btn text-cs" id="cancelar" onClick={() => { setAction("Normal") }}> Cancelar </p>
                                     </div>
                                 </container>
-
                             </form>
-                            :
+
+                        </div>
+
+                        :
+
+
+                        <div className="perfil__data container">
+
+                            <h1 className="perfil__title text-cs">
+                                {user.nombres} 
+                            </h1>
+
+                            <div className='perfil__text container grid'>
+                                <div className='perfil__info'>
+                                    <p className='perfil_subtitle'>
+                                        NOMBRE COMPLETO
+                                    </p>
+                                    <p className="perfil__content">
+                                        {user.nombres} {user.apellidos}
+                                    </p>
+                                </div>
+                                <div className='perfil__info'>
+                                    <p className='perfil_subtitle'>
+                                        CORREO
+                                    </p>
+                                    <p className="perfil__content">
+                                        {user.email}
+                                    </p>
+                                </div>
+                                <div className='perfil__info'>
+                                    <p className='perfil_subtitle'>
+                                        CELULAR
+                                    </p>
+                                    <p className="perfil__content">
+                                        {user.celular}
+                                    </p>
+                                </div>
+                            </div>
+
                             <div className='perfil__btn'>
                                 <p className="btn text-cs" onClick={() => { setAction("Editar") }}> Editar </p>
                             </div>
-                    }
 
-                </div>
+                        </div>
+
+                }
             </div>
             <Mascotas token={token}></Mascotas>
             <Calendario></Calendario>
