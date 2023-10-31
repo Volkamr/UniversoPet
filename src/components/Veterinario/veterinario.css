@@ -1,0 +1,105 @@
+.vet__info {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    margin-top: 10%;
+    padding: 1rem 5rem;
+    width: 100%;
+}
+
+.vet__foto img {
+    width: 300px;
+    height: 300px;
+    border-radius: 1.5rem;
+    justify-self: center;
+}
+
+.vet__tittle {
+    padding: 1rem 0;
+    font-size: 60px;
+    text-shadow: 2px 2px hsl(0, 0%, 0%),
+        -2px 2px hsl(0, 0%, 0%),
+        2px -2px hsl(0, 0%, 0%),
+        -2px -2px hsl(0, 0%, 0%),
+        5px 5px hsl(0, 0%, 0%);
+    line-height: 1.2;
+    margin-top: 8px;
+    color: var(--color-primario);
+}
+
+.vet__subtitle {
+    padding: 1rem 0rem;
+    color: var(--color-primario);
+    font-size: var(--funte-tamaño-mas-pequeño);
+    font-weight: 600;
+    display: block;
+    width: 100%;
+}
+
+.vet__all__info {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.vet__info__content {
+    margin-top: -2rem;
+    margin-left: -5rem;
+}
+
+.vet__description {
+    padding-top: 1.5rem;
+}
+
+.btn__info {
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8%;
+}
+
+.vet__btn__info {
+    width: 20%;
+}
+
+.vet__finder__form {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8%;
+    position: relative;
+}
+
+.vet__finder__icon {
+    position: absolute;
+    color: var(--color-primario);
+    top: 30px;
+    left: 75px;
+    width: 30px;
+    height: 30px;
+}
+
+.vet__bar {
+    background-color: var(--color-contenedor);
+    border: 2px solid var(--color-borde);
+    text-align: center;
+    width: 800px;
+    height: 60px;
+    border-radius: 5rem;
+}
+
+.vet__btn__finder {
+    width: 45%;
+}
+
+.vet__btn__finder:hover {
+    transform: scale(1);
+    filter: blur(0);
+    opacity: 1;
+}
+
+.calendario__vet {
+    width: 93%;
+    margin: 1.5rem 2.5rem -2rem 2.5rem;
+    padding: 2rem 2.5rem;
+    border-radius: 1rem;
+    background-color: var(--color-contenedor);
+}

@@ -1,0 +1,104 @@
+.citasVet__top {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 1rem 10rem;
+    margin-top: 8%;
+    text-align: center;
+}
+
+.citasVet__top__info {
+    padding: 1rem 2.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    line-height: 8px;
+    margin-left: -20%;
+}
+
+.citasVet__num {
+    font-size: 3rem;
+    padding: 0.2rem;
+}
+
+.citasVet__title__m {
+    font-size: 2rem;
+}
+
+.citasVet__subtitle {
+    padding: 1rem 0rem;
+    color: var(--color-primario);
+    font-size: var(--funte-tamaño-mas-pequeño);
+    font-weight: 600;
+    display: block;
+    width: 100%;
+}
+
+.citasVet__mascota {
+    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    justify-content: center;
+}
+
+.citasVet__fondo {
+    background-color: var(--color-primario);
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    position: relative;
+    margin: 2.5rem 10rem;
+}
+
+.citasVet__img {
+    position: absolute;
+    bottom: 0px;
+    height: 220px;
+    border-radius: 255px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.citasVet__mascota__content {
+    padding: 1rem 2.5rem;
+    margin-left: -7rem;
+    width: 50%;
+}
+
+.citasVet__mascota__top {
+    padding: 1rem 2.5rem;
+}
+
+.citasVet__subtitle {
+    margin-top: -1rem;
+}
+
+.citasVet__mascota__info {
+    grid-template-columns: repeat(2, 32%);
+    padding: 0.1rem 2.5rem;
+}
+
+.citasVet__info__cita {
+    text-align: center;
+    padding: 2rem 2.5rem;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.citasVet__comentario {
+    border-radius: 1rem;
+    background-color: var(--color-contenedor);
+    text-align: center;
+    padding: 1.5rem 5rem;
+    overflow: auto;
+}
+
+.citasVet__diagnostico {
+    border-radius: 1rem;
+    background-color: var(--color-contenedor);
+    text-align: center;
+    padding: 1rem 5rem;
+    overflow: auto;
+}
+
+.citasVet__btn {
+    width: 100%;
+    margin-top: 2rem;
+    margin-bottom: -3rem;
+    display: flex;
+    justify-content: center;
+}

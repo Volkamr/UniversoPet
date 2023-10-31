@@ -6,9 +6,11 @@ import { Routes, Route } from "react-router-dom";
 import Login from './components/Login_SignUp/Login';
 import Nosotros from './components/nosotros/Nosotros';
 import Perfil from "./components/perfil/Perfil";
-import { users } from "./Data";
 import ServiceDetails from './components/services/serviceDetails/ServiceDetails';
 import Citas from "./components/citas/Citas";
+import Veterinario from "./components/Veterinario/Veterinario";
+import CitasVet from "./components/CitasVet/CitasVet";
+
 
 function App() {
     return (
@@ -19,8 +21,10 @@ function App() {
                 <Route path="/UniversoPet/Nosotros" element={<Nosotros />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/servicios/:idServicio" element={<ServiceDetails />} />
-                <Route path="/perfil/:accessToken" element={<Perfil/>} />
+                <Route path="/perfil/:accessToken" element={<Perfil />} />
                 <Route path="/citas/:idCita" element={<Citas />} >  </Route>
+                <Route path="/Veterinario" element={<Veterinario />}></Route>
+                <Route path="/CitasVet" element={<CitasVet />}></Route>
             </Routes>
 
         </div>
