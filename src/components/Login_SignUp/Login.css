@@ -29,11 +29,12 @@
     grid-template-columns: 2fr 2fr;
     grid-template-rows: 1fr 4fr;
     width: 340px;
-    height: 400px;
+    height: 450px;
     transition: height 0.5s ease;
     transition: width 0.5s ease;
     overflow: hidden;
 }
+
 
 .wrapper_login .form-box.registro {
     transform: translateX(400px);
@@ -301,6 +302,10 @@ label {
     border-radius: 25px;
     text-align: center;
     align-items: center;
+}
+
+#mensaje{
+    margin-top: 10px;
 }
 
 #Terminos {

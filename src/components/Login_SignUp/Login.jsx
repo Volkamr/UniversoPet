@@ -3,6 +3,7 @@ import './Login.css';
 import axios from "axios";
 import Swal from "sweetalert2";
 import { postLoginRequest } from "../../api/vet";
+import Select from "react-select";
 
 export const Login = () => {
 
@@ -15,7 +16,6 @@ export const Login = () => {
     const [email_log, setEmail] = useState('');
     const [password_log, setPassword] = useState('');
 
-
     const emailLoginChange = (e) => {
         setEmail(e.target.value)
     }
@@ -24,140 +24,156 @@ export const Login = () => {
     }
 
 
-    const[apellidos, setAPellidos] = useState('');
-    const[email_reg, setEmailReg] = useState('');
-    const[pass_reg, setPassReg] = useState('');
-    const[nombres, setNombres] = useState('');
-    const[celular, setCelular] = useState('');
-    const[edad, setEdad] = useState('');
+    const [apellidos, setAPellidos] = useState('');
+    const [email_reg, setEmailReg] = useState('');
+    const [pass_reg, setPassReg] = useState('');
+    const [nombres, setNombres] = useState('');
+    const [celular, setCelular] = useState('');
+    const [edad, setEdad] = useState('');
 
     const emailRegChange = (e) => {
         setEmailReg(e.target.value)
     }
 
-    const passRegChange = (p) =>{
+    const passRegChange = (p) => {
         setPassReg(p.target.value)
     }
 
-    const nombresChange = (n) =>{
+    const nombresChange = (n) => {
         setNombres(n.target.value)
     }
 
-    const apellidosChange = (a) =>{
+    const apellidosChange = (a) => {
         setAPellidos(a.target.value)
     }
 
-    const celularCahnge = (c) =>{
+    const celularCahnge = (c) => {
         setCelular(c.target.value)
     }
 
-    const edadChange = (ed) =>{
+    const edadChange = (ed) => {
         setEdad(ed.target.value)
     }
 
+    const roles = [
+        { label: "Usuario", value: 'Usuario' },
+        { label: 'Administrador', value: 'Administrador' },
+        { label: 'Veterinario', value: 'Veterinario' }
+    ]
+
+    const [rol, setRol] = useState(roles[0]);
+
+    const opcionesFiltradas = roles.filter((rol_s) => rol_s.value !== rol.value);
+
+    const handleSelectItem = (event) => {
+        setRol(event);
+    }
+
     const handleLogin = async (event) => {
-        event.preventDefault();  
+        event.preventDefault();
 
         try {
-            
-            const response = await axios.post("http://localhost:3001/UniversoPet/Api/Login", {email:email_log, password:password_log}, {headers: {
-                'Content-Type': 'application/json',
-              }})
 
-            if (response.status<200 || response.status>=300) {
+            const response = await axios.post("http://localhost:3001/UniversoPet/Api/Login", { email: email_log, password: password_log }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+
+            if (response.status < 200 || response.status >= 300) {
                 throw new Error(`Error - ${response.status}`);
             }
-    
-            const data =  response.data; 
-    
+
+            const data = response.data;
+
             if (data.success) {
                 const accessToken = data.accessToken;
-                //const decodedToken = jwtDecode(token);
-                //const idUsuario = decodedToken.idUsuario;
                 localStorage.setItem('token', data.asccessToken)
                 Swal.fire({
                     icon: 'success',
                     title: "Login exitoso",
                     text: "Será redireccionado",
                     showConfirmButton: false,
-                    timer: 1500  
+                    timer: 1500
                 })
-                
-                .then(() => {
 
-                    window.location.href = `http://localhost:3000/perfil/${accessToken}?`;
-                  });
-    
+                    .then(() => {
+
+                        window.location.href = `http://localhost:3000/perfil/${accessToken}?`;
+                    });
+
             } else {
-                
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Login fallido',
-                    text: data.message 
+                    text: data.message
                 });
             }
         } catch (error) {
             console.error('Login error:', error);
-    
+
             Swal.fire({
                 icon: 'error',
                 title: 'Login Fallido',
                 text: 'Error'
             });
         }
-    
+
     }
 
-    const handleRegistro = async(event) =>{
+    const handleRegistro = async (event) => {
         event.preventDefault();
 
-        try{
-        
+        try {
+
             const response = await axios.post("http://localhost:3001/UniversoPet/Api/RegistrarUsuario",
-                {email:email_reg, 
-                password:pass_reg, 
-                nombres:nombres, 
-                apellidos:apellidos,
-                celular: celular,
-                edad:edad
-            },
-                {headers:{
-                    'Content-Type': 'application/json',
-                }}
+                {
+                    email: email_reg,
+                    password: pass_reg,
+                    nombres: nombres,
+                    apellidos: apellidos,
+                    celular: celular,
+                    edad: edad
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }
             );
 
-            if (response.status<200 || response.status>=300) {
+            if (response.status < 200 || response.status >= 300) {
                 throw new Error(`Error - ${response.status}`);
             }
 
             const data = response.data;
 
-            if (data.success){
+            if (data.success) {
                 Swal.fire({
                     icon: 'success',
                     title: data.message,
                     text: "Debe iniciar sesión",
                 });
-            }else{
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Registro fallido',
-                    text: data.message 
+                    text: data.message
                 });
             }
 
-        }catch(error){
+        } catch (error) {
             console.error('Login error:', error);
-    
+
             Swal.fire({
                 icon: 'error',
                 title: 'Falló el registro',
                 text: 'Error'
             });
         }
-        
-    }
 
+    }
 
 
     return (
@@ -175,13 +191,44 @@ export const Login = () => {
 
                             <div className="inputs">
 
-                                <label for="email">Email</label>
-                                <input className="input-log" type="email" name="email" value={email_log} required
-                                    placeholder="Ingrese su correo electrónico" id="email" onChange = {emailLoginChange}></input>
+                                {
+                                    rol.value === "Usuario" ? (
+                                        <div>
+                                            <label for="email">Email</label>
+                                            <input className="input-log" type="email" name="email" value={email_log} required
+                                                placeholder="Ingrese su correo electrónico" id="email" onChange={emailLoginChange}></input>
+                                        </div>
+                                    )
+
+                                        : rol.value === "Veterinario" ? (
+                                            <div>
+                                                <label for="cedula">Cédula</label>
+                                                <input className="input-log" type="number" name="cedula" value={email_log} required
+                                                    placeholder="Ingrese su cédula" id="email" onChange={emailLoginChange}></input>
+                                            </div>
+                                        )
+
+                                            :  (
+                                                <div>
+                                                    <label for="admin_user">Usuario Admin</label>
+                                                    <input className="input-log" type="email" name="admin_user" value={email_log} required
+                                                        placeholder="Ingrese su usuario de admin" id="email" onChange={emailLoginChange}></input>
+                                                </div>
+                                            )
+
+                                          
+                                }
 
                                 <label for="psswd">Contraseña</label>
-                                <input className="input-log" type="password" name="password" value = {password_log} required
-                                    placeholder="Ingrese su contraseña" id="psswd" onChange = {passLoginChange}></input>
+                                <input className="input-log" type="password" name="password" value={password_log} required
+                                    placeholder="Ingrese su contraseña" id="psswd" onChange={passLoginChange}></input>
+
+                                <Select
+                                    value={rol}
+                                    options={opcionesFiltradas}
+                                    onChange={handleSelectItem}
+                                >
+                                </Select>
 
                                 <p className="mensaje">
                                     ¿Olvidó su contraseña?
@@ -193,10 +240,6 @@ export const Login = () => {
                             </div>
                         </form>
 
-
-
-
-
                     </div>
 
                     <div class="form-box registro" id="registro-box">
@@ -207,28 +250,28 @@ export const Login = () => {
                             <div className="inputs" id="inp-reg">
 
                                 <label for="nombres-reg" id="l-n">Nombres</label>
-                                <input className="input-log" type="text" name="nombres" value = {nombres} required
-                                placeholder="Ingrese sus nombres" id="nombres-reg" onChange={nombresChange}></input>
+                                <input className="input-log" type="text" name="nombres" value={nombres} required
+                                    placeholder="Ingrese sus nombres" id="nombres-reg" onChange={nombresChange}></input>
 
                                 <label for="apell-reg" id="l-a">Apellidos</label>
                                 <input className="input-log" type="text" name="apellidos" value={apellidos} required
-                                placeholder="Ingrese sus apellidos" id="apell-reg" onChange={apellidosChange}></input>
+                                    placeholder="Ingrese sus apellidos" id="apell-reg" onChange={apellidosChange}></input>
 
                                 <label for="email-reg" id="l-e">Email</label>
                                 <input className="input-log" type="email" name="email" value={email_reg} required
-                                placeholder="Ingrese su correo electrónico" id="email-reg" onChange={emailRegChange}></input>
+                                    placeholder="Ingrese su correo electrónico" id="email-reg" onChange={emailRegChange}></input>
 
                                 <label for="psswd-reg" id="l-p">Contraseña</label>
                                 <input className="input-log" type="password" name="password" value={pass_reg} required
-                                placeholder="Ingrese su contraseña" id="psswd-reg" onChange={passRegChange}></input>
+                                    placeholder="Ingrese su contraseña" id="psswd-reg" onChange={passRegChange}></input>
 
                                 <label for="celular" id="l-c">Celular</label>
                                 <input className="input-log" type="number" name="celular" pattern="[0-9]+" value={celular} required
-                                placeholder="Ingrese su celular" id="cel-reg" onChange={celularCahnge}></input>
+                                    placeholder="Ingrese su celular" id="cel-reg" onChange={celularCahnge}></input>
 
                                 <label for="edad" id="l-ed">Edad</label>
                                 <input className="input-log" type="number" name="edad" pattern="[0-9]+" value={edad} required
-                                placeholder="Ingrese su edad" id="edad-reg" onChange={edadChange}></input>
+                                    placeholder="Ingrese su edad" id="edad-reg" onChange={edadChange}></input>
 
                                 <div class="terminos-cond">
                                     <input type="checkbox" id="Terminos"></input>
