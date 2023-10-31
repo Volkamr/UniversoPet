@@ -1,0 +1,179 @@
+.Cartasad__container {
+    margin-top: 3%;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+}
+
+.tarjeta1 {
+    background-color: white;
+    width: 47%;
+    border-radius: 20px;
+
+}
+
+.tarjeta2 {
+    background-color: white;
+    width: 47%;
+    border-radius: 30px;
+
+}
+
+.Cartas__subtitle {
+    color: var(--color-primario);
+    font-size: var(--funte-tamaño-mas-pequeño);
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.Cartas__title {
+    font-size: var(--fuente-tamaño-h4);
+    text-align: center;
+    margin-top: 20px;
+}
+
+.texto_carta {
+    position: relative;
+    margin-left: 10px;
+    width: 60%;
+    margin-top: 15px;
+}
+
+.texto_carta input {
+    width: 100%;
+    border: 1px solid gray;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    color: rgb(0, 0, 0);
+    transition: 0.5s;
+}
+
+.texto_carta input:hover {
+    border-color: var(--color-primario);
+}
+
+.texto_carta input:focus {
+    border-color: green;
+}
+
+.text_a {
+    font-size: 15px;
+    padding-bottom: 2%;
+}
+
+.texto_carta span {
+    position: absolute;
+    width: 200px;
+    top: 9px;
+    left: 8px;
+    padding: 2px;
+    pointer-events: none;
+    font-size: 15px;
+    color: #000;
+    cursor: text;
+    transition: top 50ms ease-in,
+        left 50ms ease-in, font-size 50ms ease-in;
+
+}
+
+.texto_carta input:focus~span,
+.texto_carta input:valid+span {
+    top: -12px;
+    font-size: 12px;
+    left: 8px;
+    width: auto;
+    height: auto;
+    background-color: white;
+    color: green;
+    text-transform: uppercase;
+}
+
+
+.contenido_carta {
+    display: flex;
+    height: 100%;
+    margin-top: 10px;
+    margin-bottom: 30px;
+
+}
+
+.imagen_carta {
+
+    width: 150px;
+    height: 150px;
+    margin-left: 20px;
+
+}
+
+.img_buscar {
+    background-color: brown;
+    width: 100%;
+    height: 100%;
+}
+
+.img_añadir {
+    text-align: left;
+    height: 50%;
+}
+
+.div_btn_busc {
+    padding-top: 8%;
+    width: 100%;
+    text-align: center;
+}
+
+.btn_buscar {
+
+    overflow: hidden;
+    border: 1px solid green;
+    width: 50%;
+    padding: 10px;
+    color: green;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.4s ease-in;
+}
+
+.btn_buscar:hover {
+    background-color: rgb(1, 153, 1);
+    color: white;
+}
+
+.dec {
+    width: 50%;
+    height: 20%;
+    margin-left: 55%;
+    margin-top: 0%;
+    position: relative;
+    overflow: hidden;
+}
+
+.s {
+    position: absolute;
+    width: 80%;
+    top: -5%;
+    left: 35%;
+}
+
+/* 
+.btn_buscar::before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    left: 0;
+    top: -20%;
+    background-color: green;
+    border-radius: 50%;
+    transition: all 0.4s ease-in;
+    z-index: 1;
+}
+
+.btn_buscar:hover::before {
+    top: 16%;
+    border-radius: 0;
+} */

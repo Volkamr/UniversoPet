@@ -1,0 +1,34 @@
+.PersonalSwiper__header {
+    position: relative;
+}
+
+.PersonalSwiper__img {
+    height: 180px;
+    width: 100%;
+    border-radius: 18px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    vertical-align: middle;
+}
+
+.PersonalSwiper__name {
+    font-size: var(--fuente-tamaño-larga);
+    margin-top: 7px;
+}
+
+.btn_administrar {
+    margin-top: 20px;
+    overflow: hidden;
+    border: 1px solid green;
+    width: 70%;
+    padding: 10px;
+    color: green;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.4s ease-in;
+}
+
+.btn_administrar:hover {
+    background-color: rgb(1, 153, 1);
+    color: white;
+}
