@@ -87,7 +87,6 @@ export const getUserPets = async (req, res) => {
 
     const id = req.idUsuario;
     const [result] = await pool.query("select idMascota, nombre, peso, fechaNac, tipoAnimal, raza, imagen, estado from ((Mascotas inner join Razas on Mascotas.idRaza = Razas.idRaza) inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal) inner join Estados on Mascotas.idEstado = Estados.idEstado where idUsuario=? and estado=?", [id, "activo"]);
-
     res.json(result);
 }
 
@@ -223,6 +222,68 @@ export const postRegistro = async (req, res) => {
             message: "Error en el servidor",
             success: false
         });
+    }
+}
+
+export const postCambiarInfo = async (req, res) => {
+    try {
+        const data = req.body;
+        const [user] = await pool.query("SELECT * FROM Usuarios where idUsuario = ?", [data.idUsuario]);
+        const [result_email] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
+        const [result_celular] = await pool.query("SELECT * FROM Usuarios WHERE celular = ?", [data.celular])
+
+        if (data.email == null || data.celular == null || data.nombres == null) {
+            return res.status(200).json({
+                success: false,
+                message: "No puede enviar campos vacíos"
+            })
+        } else if (result_email.length != 0 && user[0].email != data.email) {
+            return res.status(200).json({
+                success: false,
+                message: "El correo electrónico ya está registrado"
+            })
+        } else if (result_celular.length != 0 && user[0].celular != data.celular) {
+            return res.status(200).json({
+                success: false,
+                message: "El celular ingresado ya está en uso"
+            })
+        } else if (user[0].celular == data.celular && user[0].email == data.email && user[0].nombres == data.nombres) {
+            return res.status(200).json({
+                success: false,
+                message: "No realizó ningún cambio"
+            })
+        } else if (user[0].celular != data.celular && user[0].email == data.email && user[0].nombres == data.nombres) {
+            pool.query("UPDATE Usuarios SET ? ", { celular: data.celular }, "WHERE idUsuario = ?", [data.idUsuario])
+            return res.status(200).json({ success: true, message: "Cambió su celular exitosamente" })
+        } else if (user[0].celular != data.celular && user[0].email != data.email && user[0].nombres == data.nombres) {
+            pool.query("UPDATE Usuarios SET ? ",
+                { celular: data.celular, email: data.email }, "WHERE idUsuario = ?", [data.idUsuario])
+            return res.status(200).json({ success: true, message: "Cambió su celular y email exitosamente" })
+        } else if (user[0].celular == data.celular && user[0].email != data.email && user[0].nombres == data.nombres) {
+            pool.query("UPDATE Usuarios SET ? ", { email: data.email }, "WHERE idUsuario = ?", [data.idUsuario])
+            return res.status(200).json({ success: true, message: "Cambió su email exitosamente" })
+        } else if (user[0].celular == data.celular && user[0].email == data.email && user[0].nombres != data.nombres) {
+            pool.query("UPDATE Usuarios SET ? ", { nombres: data.nombres }, "WHERE idUsuario = ?", [data.idUsuario])
+            return res.status(200).json({ success: true, message: "Cambió sus nombres exitosamente" })
+        } else if (user[0].celular != data.celular && user[0].email == data.email && user[0].nombres != data.nombres) {
+            pool.query("UPDATE Usuarios SET ? ",
+                { celular: data.celular, nombres: data.nombres }, "WHERE idUsuario = ?", [data.idUsuario])
+            return res.status(200).json({ success: true, message: "Cambió su celular y nombres exitosamente" })
+        } else if (user[0].celular == data.celular && user[0].email != data.email && user[0].nombres != data.nombres) {
+            pool.query("UPDATE Usuarios SET ? ",
+                { email: data.email, nombres: data.nombres }, "WHERE idUsuario = ?", [data.idUsuario])
+            return res.status(200).json({ success: true, message: "Cambió su correo y nombres exitosamente" })
+        } else {
+            pool.query("UPDATE Usuarios SET ? ",
+                {
+                    celular: data.celular,
+                    nombres: data.nombres,
+                    email: data.email
+                }, "WHERE idUsuario = ?", [data.idUsuario])
+            return res.status(200).json({ success: true, message: "Cambió sus datos exitosamente" })
+        }
+    } catch (error) {
+        console.log("Error al cambiar la información del usuario: " + error)
     }
 }
 

@@ -9,6 +9,7 @@ import {
     getService,
     postPersonal,
     getPersonal,
+    postCambiarInfo,
     getUsers,
     getUser,
     getUserPets,
@@ -37,6 +38,8 @@ router.post('/UniversoPet/Api/Login', postLogin)
 router.post('/UniversoPet/Api/CreateMascota', postMascota)
 router.post('/UniversoPet/Api/UpdateMascota', updateMascota)
 router.post('/UniversoPet/Api/eliMascota', eliMascota)
+router.post('/UniversoPet/Api/cambiarInfo', postCambiarInfo)
+
 
 
 export default router
