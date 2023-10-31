@@ -6,6 +6,8 @@ import {
     postServices,
     postRegistro,
     postLogin,
+    postLoginVet,
+    postLoginAdmin,
     getService,
     postPersonal,
     getPersonal,
@@ -16,7 +18,7 @@ import {
     getPersonalP,
     postMascota,
     updateMascota,
-    eliMascota
+    eliMascota,
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -35,6 +37,8 @@ router.post('/UniversoPet/Api/CreateSedes', postSedes)
 router.post('/UniversoPet/Api/CreatePersonal', postPersonal)
 router.post('/UniversoPet/Api/RegistrarUsuario', postRegistro)
 router.post('/UniversoPet/Api/Login', postLogin)
+router.post('/UniversoPet/Api/LoginVet', postLoginVet)
+router.post('/UniversoPet/Api/LoginAdmin', postLoginAdmin)
 router.post('/UniversoPet/Api/CreateMascota', postMascota)
 router.post('/UniversoPet/Api/UpdateMascota', updateMascota)
 router.post('/UniversoPet/Api/eliMascota', eliMascota)

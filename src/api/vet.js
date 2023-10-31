@@ -61,3 +61,24 @@ export const postCambioInfoRequest = async (idUsuario, email, celular, nombres) 
         nombres: nombres
     })
 }
+
+export const postLoginRequest = async (email, password) =>{
+    return await axios.post("http://localhost:3001/UniversoPet/Api/Login", {
+        email: email,
+        password: password
+    })
+}
+
+export const postLoginVetRequest = async (cedula, password) =>{
+    return await axios.post("http://localhost:3001/UniversoPet/Api/LoginVet",{
+        cedula: cedula,
+        password: password
+    }) 
+}
+
+export const postLoginAdminRequest = async (adminusr, password) =>{
+    return await axios.post("http://localhost:3001/UniversoPet/Api/LoginAdmin", {
+        admin: adminusr,
+        password: password
+    })
+}

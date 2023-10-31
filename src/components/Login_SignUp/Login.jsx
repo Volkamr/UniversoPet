@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './Login.css';
 import axios from "axios";
 import Swal from "sweetalert2";
-import { postLoginRequest } from "../../api/vet";
+import { postLoginAdminRequest, postLoginRequest, postLoginVetRequest } from "../../api/vet";
 import Select from "react-select";
 
 export const Login = () => {
@@ -23,7 +23,8 @@ export const Login = () => {
         setPassword(p.target.value)
     }
 
-
+    const [cedula, setCedula] = useState('');
+    const [adminusr, setAdminUsr] = useState('');
     const [apellidos, setAPellidos] = useState('');
     const [email_reg, setEmailReg] = useState('');
     const [pass_reg, setPassReg] = useState('');
@@ -31,6 +32,12 @@ export const Login = () => {
     const [celular, setCelular] = useState('');
     const [edad, setEdad] = useState('');
 
+    const cedulaChange = (e) => {
+        setCedula(e.target.value)
+    }
+    const AdminUSrChange = (e) => {
+        setAdminUsr(e.target.value)
+    }
     const emailRegChange = (e) => {
         setEmailReg(e.target.value)
     }
@@ -69,16 +76,54 @@ export const Login = () => {
         setRol(event);
     }
 
-    const handleLogin = async (event) => {
+    const handleLoginUsuario = async (event) => {
         event.preventDefault();
 
         try {
+            const response = await postLoginRequest(email_log, password_log)
+            
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(`Error - ${response.status}`);
+            }
 
-            const response = await axios.post("http://localhost:3001/UniversoPet/Api/Login", { email: email_log, password: password_log }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
+            const data = response.data;
+
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: data.message,
+                    text: "Será redireccionado",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                    .then(() => {
+                        window.location.href = `/perfil/${data.idUsuario}`;
+                    });
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login fallido',
+                    text: data.message
+                });
+            }
+
+        } catch (error) {
+            console.error('Login error:', error);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Fallido',
+                text: 'Error'
+            });
+        }
+
+    }
+
+    const handleLoginVeterinario = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await postLoginVetRequest(cedula, password_log);
 
             if (response.status < 200 || response.status >= 300) {
                 throw new Error(`Error - ${response.status}`);
@@ -87,19 +132,17 @@ export const Login = () => {
             const data = response.data;
 
             if (data.success) {
-                const accessToken = data.accessToken;
-                localStorage.setItem('token', data.asccessToken)
                 Swal.fire({
                     icon: 'success',
                     title: "Login exitoso",
                     text: "Será redireccionado",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 2000
                 })
 
                     .then(() => {
-
-                        window.location.href = `http://localhost:3000/perfil/${accessToken}?`;
+                        //Redirigir a la página de veterinario
+                        console.log("Inició sesión como veterinario")
                     });
 
             } else {
@@ -111,15 +154,48 @@ export const Login = () => {
                 });
             }
         } catch (error) {
-            console.error('Login error:', error);
 
-            Swal.fire({
-                icon: 'error',
-                title: 'Login Fallido',
-                text: 'Error'
-            });
         }
 
+    }
+
+    const handleLoginAdmin = async (event) =>{
+        event.preventDefault();
+        try{
+            const response = await postLoginAdminRequest(adminusr, password_log);
+
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(`Error - ${response.status}`);
+            }
+
+            const data = response.data;
+
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: "Login exitoso",
+                    text: "Será redireccionado",
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+
+                    .then(() => {
+                        //Redirigir a la página de Administrador
+                        console.log("Inició sesión como administrador")
+                    });
+
+            } else {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login fallido',
+                    text: data.message
+                });
+            }
+
+        }catch(error){
+
+        }
     }
 
     const handleRegistro = async (event) => {
@@ -185,39 +261,23 @@ export const Login = () => {
                 <div className={`wrapper_login ${action === 'Registrarse' ? 'active' : ''}`}>
 
                     <div class="form-box login">
-                        <form onSubmit={handleLogin}>
+                        <form onSubmit={rol.value === "Veterinario" ? (handleLoginVeterinario) : rol.value==="Usuario" ? (handleLoginUsuario) : handleLoginAdmin}>
                             <h2 className="h2-login-reg">Login</h2>
                             <span className="line"></span>
 
                             <div className="inputs">
 
-                                {
-                                    rol.value === "Usuario" ? (
-                                        <div>
-                                            <label for="email">Email</label>
-                                            <input className="input-log" type="email" name="email" value={email_log} required
-                                                placeholder="Ingrese su correo electrónico" id="email" onChange={emailLoginChange}></input>
-                                        </div>
-                                    )
+                                <label for={rol.value === 'Usuario' ? ("email") : rol.value === 'Veterinario' ? ("cedula") : ("admin_user")}>
+                                    {rol.value === 'Usuario' ? ('Email') : rol.value === "Veterinario" ? ('Cedula') : ('Admin user')}
+                                </label>
 
-                                        : rol.value === "Veterinario" ? (
-                                            <div>
-                                                <label for="cedula">Cédula</label>
-                                                <input className="input-log" type="number" name="cedula" value={email_log} required
-                                                    placeholder="Ingrese su cédula" id="email" onChange={emailLoginChange}></input>
-                                            </div>
-                                        )
+                                <input className="input-log" type={rol.value === 'Usuario' ? ("email") : rol.value === 'Veterinario' ? ("number") : ("text")}
+                                    name={rol.value === 'Usuario' ? ("email") : rol.value === 'Veterinario' ? ("cedula") : ("admin_user")}
+                                    value={rol.value === 'Usuario' ? (email_log) : rol.value === 'Veterinario' ? (cedula) : (adminusr)} required
+                                    placeholder={rol.value === 'Usuario' ? ("Ingrese su correo electrónico") : rol.value === "Veterinario" ? ("Ingrese su cédula"):
+                                    ("Ingrese su usuario de Administrador")} id="email"
+                                    onChange={rol.value === 'Usuario' ? (emailLoginChange) : rol.value === 'Veterinario' ? (cedulaChange) : (AdminUSrChange)}></input>
 
-                                            :  (
-                                                <div>
-                                                    <label for="admin_user">Usuario Admin</label>
-                                                    <input className="input-log" type="email" name="admin_user" value={email_log} required
-                                                        placeholder="Ingrese su usuario de admin" id="email" onChange={emailLoginChange}></input>
-                                                </div>
-                                            )
-
-                                          
-                                }
 
                                 <label for="psswd">Contraseña</label>
                                 <input className="input-log" type="password" name="password" value={password_log} required

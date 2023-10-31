@@ -12,3 +12,5 @@ create table
         FOREIGN KEY (idTipoPersonal) REFERENCES TipoPersonal(idTipoPersonal),
         FOREIGN KEY (idEstado) REFERENCES Estados(idEstado)
     );
+
+ALTER TABLE Personal MODIFY fotoPerfil LONGTEXT NULL;

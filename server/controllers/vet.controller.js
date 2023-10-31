@@ -126,13 +126,6 @@ export const postLogin = async (req, res) => {
                 const accessToken = jwt.sign({ idUsuario: result[0].idUsuario }, secretKey, {
                     expiresIn: process.env.JWT_TIEMPO_EXPIRA
                 })
-                /*
-                res.status(200).json({
-                    message: "Sesión iniciada",
-                    success: true,
-                    idUsuario: result[0].idUsuario
-                });
-                */
                 res.status(200).json({
                     accessToken: accessToken,
                     success: true
@@ -154,6 +147,86 @@ export const postLogin = async (req, res) => {
     }
 };
 
+//Login Paraveterinarios
+
+export const postLoginVet = async (req, res) => {
+    try {
+        const data = req.body;
+        if (data.cedula != null && data.password != null) {
+            const [result] = await pool.query("SELECT * FROM Personal WHERE cedula = ?", [data.cedula]);
+            if (result[0].length === 0) {
+                return res.status(200).json({
+                    message: "USUARIO NO ENCONTRADO",
+                    success: false
+                });
+            } else if (data.password != result[0].password) {
+                return res.status(200).json({
+                    message: "Contraseña incorrecta",
+                    success: false
+                });
+            } else {
+                const secretKey = process.env.SECRET_KEY;
+                const accessToken = jwt.sign({ cedula: result[0].cedula }, secretKey, {
+                    expiresIn: process.env.JWT_TIEMPO_EXPIRA
+                })
+                res.status(200).json({
+                    accessToken: accessToken,
+                    success: true
+                })
+            }
+        } else {
+            return res.status(200).json({
+                message: "No deben haber campos vacíos",
+                success: false
+            });
+        }
+
+    } catch (error) {
+        console.error('Error en la función postLoginVet:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+}
+
+export const postLoginAdmin = async (req, res) => {
+   try{
+    const data = req.body;
+    if (data.admin != null && data.password != null) {
+        const [result] = await pool.query("SELECT * FROM admins WHERE admin = ?", [data.admin]);
+        if (result[0].length === 0) {
+            return res.status(200).json({
+                message: "ADMINISTRADOR NO ENCONTRADO",
+                success: false
+            });
+        } else if (data.password != result[0].password) {
+            return res.status(200).json({
+                message: "Contraseña incorrecta",
+                success: false
+            });
+        } else {
+            const secretKey = process.env.SECRET_KEY;
+            const accessToken = jwt.sign({ cedula: result[0].cedula }, secretKey, {
+                expiresIn: process.env.JWT_TIEMPO_EXPIRA
+            })
+            res.status(200).json({
+                accessToken: accessToken,
+                success: true
+            })
+        }
+    } else {
+        return res.status(200).json({
+            message: "No deben haber campos vacíos",
+            success: false
+        });
+    }
+
+   }catch(error){
+
+   }
+
+}
 
 export const postRegistro = async (req, res) => {
 
