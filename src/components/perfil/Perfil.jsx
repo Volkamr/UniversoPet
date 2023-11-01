@@ -41,16 +41,16 @@ const Perfil = () => {
 
     useEffect(() => {
         setNombre(user.nombres);
-      }, [user]);
-    
-      useEffect(() => {
+    }, [user]);
+
+    useEffect(() => {
         setCelular(user.celular);
-      }, [user]);
-      useEffect(() => {
+    }, [user]);
+    useEffect(() => {
         setEmail(user.email);
-      }, [user]);
-    
-    
+    }, [user]);
+
+
     const nombreChange = (n) => {
         setNombre(n.target.value)
     }
@@ -62,7 +62,7 @@ const Perfil = () => {
     const celularChange = (c) => {
         setCelular(c.target.value)
     }
-    
+
     const [toggleState, setToggleState] = useState(0)
     const toggleTab = (index) => {
         setToggleState(index)
@@ -98,8 +98,9 @@ const Perfil = () => {
                     showConfirmButton: true,
                 })
 
-                setAction("Normal");
-                window.location.reload();
+                    .then(() => {
+                       setAction("Normal");
+                    });
 
             } else {
 
@@ -131,13 +132,13 @@ const Perfil = () => {
                         <div className="perfil__data container">
 
                             <h1 className="perfil__title text-cs">
-                                {user.nombres} 
+                                {nombres}
                             </h1>
                             <form onSubmit={cambioInfo}>
                                 <div className='perfil__text container grid'>
                                     <div className='perfil__info'>
                                         <p className='perfil_subtitle'>
-                                            NOMBRE COMPLETO
+                                            NOMBRES
                                         </p>
                                         <input className="input-editar" type="text"
                                             name="nombres" id="editar-nombre" defaultValue={nombres} onChange={nombreChange}
@@ -164,10 +165,15 @@ const Perfil = () => {
 
                                 <container className="editar-btn">
                                     <input className="perfil__btn_editar btn text-cs" type="submit" id="guardar" value="Guardar"
-                                       >
+                                    >
                                     </input>
                                     <div className="perfil__btn_editar">
-                                        <p className="btn text-cs" id="cancelar" onClick={() => { setAction("Normal") }}> Cancelar </p>
+                                        <p className="btn text-cs" id="cancelar" onClick={() => 
+                                            { setAction("Normal");
+                                                setNombre(user.nombres);
+                                                setEmail(user.email);
+                                                setCelular(user.celular);
+                                            }}> Cancelar </p>
                                     </div>
                                 </container>
                             </form>
@@ -180,16 +186,16 @@ const Perfil = () => {
                         <div className="perfil__data container">
 
                             <h1 className="perfil__title text-cs">
-                                {user.nombres} 
+                                {nombres}
                             </h1>
 
                             <div className='perfil__text container grid'>
                                 <div className='perfil__info'>
                                     <p className='perfil_subtitle'>
-                                        NOMBRE COMPLETO
+                                        NOMBRES
                                     </p>
                                     <p className="perfil__content">
-                                        {user.nombres} {user.apellidos}
+                                        {nombres}
                                     </p>
                                 </div>
                                 <div className='perfil__info'>
@@ -197,7 +203,7 @@ const Perfil = () => {
                                         CORREO
                                     </p>
                                     <p className="perfil__content">
-                                        {user.email}
+                                        {email}
                                     </p>
                                 </div>
                                 <div className='perfil__info'>
@@ -205,7 +211,7 @@ const Perfil = () => {
                                         CELULAR
                                     </p>
                                     <p className="perfil__content">
-                                        {user.celular}
+                                        {celular}
                                     </p>
                                 </div>
                             </div>
