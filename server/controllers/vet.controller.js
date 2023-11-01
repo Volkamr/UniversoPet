@@ -66,41 +66,41 @@ export const getUser = async (req, res) => {
     return res.status(200).json(result[0])
 }
 
-export const getVeterinario = async (req, res) =>{
+export const getVeterinario = async (req, res) => {
     const token = req.params.vetToken;
     const key = process.env.SECRET_KEY;
 
-    if (token){
-        jwt.verify(token, key, (err, decoded) =>{
-            if(err){
-                return res.status(403).json({messaje: "Token inváido"})
-            }else{
+    if (token) {
+        jwt.verify(token, key, (err, decoded) => {
+            if (err) {
+                return res.status(403).json({ messaje: "Token inváido" })
+            } else {
                 req.cedula = decoded.cedula;
             }
         })
     }
 
     const cedula = req.cedula;
-    const[result] = await pool.query("SELECT * FROM Personal WHERE cedula = ? ", [cedula]);
+    const [result] = await pool.query("SELECT * FROM Personal WHERE cedula = ? ", [cedula]);
     return res.status(200).json(result[0])
 }
 
-export const getAdministrador = async (req, res) =>{
+export const getAdministrador = async (req, res) => {
     const token = req.params.adminToken;
     const key = process.env.SECRET_KEY;
 
-    if (token){
-        jwt.verify(token, key, (err, decoded) =>{
-            if(err){
-                return res.status(403).json({messaje: "Token inváido"})
-            }else{
+    if (token) {
+        jwt.verify(token, key, (err, decoded) => {
+            if (err) {
+                return res.status(403).json({ messaje: "Token inváido" })
+            } else {
                 req.adminusr = decoded.adminusr;
             }
         })
     }
 
     const adminusr = req.adminusr;
-    const[result] = await pool.query("SELECT * FROM admins WHERE admin = ? ", [adminusr]);
+    const [result] = await pool.query("SELECT * FROM admins WHERE admin = ? ", [adminusr]);
     return res.status(200).json(result[0])
 }
 
@@ -122,7 +122,7 @@ export const getUserPets = async (req, res) => {
     }
 
     const id = req.idUsuario;
-    const [result] = await pool.query("select idMascota, nombre, peso, fechaNac, tipoAnimal, raza, imagen, estado from ((Mascotas inner join TipoAnimal on Mascotas.idTipoAnimal = TipoAnimal.idTipoAnimal) inner join Razas on Razas.idTipoAnimal = TipoAnimal.idTipoAnimal) inner join Estados on Mascotas.idEstado = Estados.idEstado where idUsuario=? and estado=?", [id, "activo"]);
+    const [result] = await pool.query("select idMascota, nombre, peso, fechaNac, tipoAnimal, raza, imagen, estado from ((Mascotas inner join Razas on Mascotas.idRaza = Razas.idRaza) inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal) inner join Estados on Mascotas.idEstado = Estados.idEstado where idUsuario=? and estado=?", [id, "activo"]);
     res.json(result);
 }
 
@@ -227,40 +227,40 @@ export const postLoginVet = async (req, res) => {
 }
 
 export const postLoginAdmin = async (req, res) => {
-   try{
-    const data = req.body;
-    if (data.admin != null && data.password != null) {
-        const [result] = await pool.query("SELECT * FROM admins WHERE admin = ?", [data.admin]);
-        if (result[0].length === 0) {
-            return res.status(200).json({
-                message: "ADMINISTRADOR NO ENCONTRADO",
-                success: false
-            });
-        } else if (data.password != result[0].password) {
-            return res.status(200).json({
-                message: "Contraseña incorrecta",
-                success: false
-            });
+    try {
+        const data = req.body;
+        if (data.admin != null && data.password != null) {
+            const [result] = await pool.query("SELECT * FROM admins WHERE admin = ?", [data.admin]);
+            if (result[0].length === 0) {
+                return res.status(200).json({
+                    message: "ADMINISTRADOR NO ENCONTRADO",
+                    success: false
+                });
+            } else if (data.password != result[0].password) {
+                return res.status(200).json({
+                    message: "Contraseña incorrecta",
+                    success: false
+                });
+            } else {
+                const secretKey = process.env.SECRET_KEY;
+                const accessToken = jwt.sign({ adminusr: result[0].admin }, secretKey, {
+                    expiresIn: process.env.JWT_TIEMPO_EXPIRA
+                })
+                res.status(200).json({
+                    accessToken: accessToken,
+                    success: true
+                })
+            }
         } else {
-            const secretKey = process.env.SECRET_KEY;
-            const accessToken = jwt.sign({ adminusr: result[0].admin }, secretKey, {
-                expiresIn: process.env.JWT_TIEMPO_EXPIRA
-            })
-            res.status(200).json({
-                accessToken: accessToken,
-                success: true
-            })
+            return res.status(200).json({
+                message: "No deben haber campos vacíos",
+                success: false
+            });
         }
-    } else {
-        return res.status(200).json({
-            message: "No deben haber campos vacíos",
-            success: false
-        });
+
+    } catch (error) {
+
     }
-
-   }catch(error){
-
-   }
 
 }
 
@@ -375,14 +375,14 @@ export const postCambiarInfo = async (req, res) => {
             pool.query("UPDATE Usuarios SET nombres = ? WHERE idUsuario = ?", [data.nombres, data.idUsuario])
             return res.status(200).json({ success: true, message: "Cambió sus nombres exitosamente" })
         } else if (user[0].celular != data.celular && user[0].email == data.email && user[0].nombres != data.nombres) {
-            pool.query("UPDATE Usuarios SET celular = ?, nombres = ? WHERE idUsuario = ? ",[data.celular, data.nombres, data.idUsuario])
+            pool.query("UPDATE Usuarios SET celular = ?, nombres = ? WHERE idUsuario = ? ", [data.celular, data.nombres, data.idUsuario])
             return res.status(200).json({ success: true, message: "Cambió su celular y nombres exitosamente" })
         } else if (user[0].celular == data.celular && user[0].email != data.email && user[0].nombres != data.nombres) {
             pool.query("UPDATE Usuarios SET email = ?, nombres = ? WHERE idUsuario = ?", [data.email, data.nombres, data.idUsuario])
             return res.status(200).json({ success: true, message: "Cambió su correo y nombres exitosamente" })
         } else {
             pool.query("UPDATE Usuarios SET celular = ?, email = ?, nombres = ? WHERE idUsuario = ?",
-            [data.celular, data.email, data.nombres, data.idUsuario])
+                [data.celular, data.email, data.nombres, data.idUsuario])
             return res.status(200).json({ success: true, message: "Cambió sus datos exitosamente" })
         }
     } catch (error) {

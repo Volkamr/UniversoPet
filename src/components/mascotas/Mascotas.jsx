@@ -62,10 +62,16 @@ const Mascotas = ({ token }) => {
                 {UserPets.map(pet => {
                     return (
                         < div className="mascotas__fondo" key={pet.idMascota} >
-                            <img src={"data:image/png;base64," + pet.imagen} onClick={() => {
-                                setCarta({ avatar: "data:image/png;base64," + pet.imagen, imagen: pet.imagen, nombre: pet.nombre, fechaNac: pet.fechaNac, peso: pet.peso, tipoAnimal: pet.tipoAnimal, raza: pet.raza, idMascota: pet.idMascota })
-                                toggleTab(pet.idMascota)
-                            }} className="mascotas__img" alt="" />
+                            {
+                                pet.imagen ? <img src={"data:image/png;base64," + pet.imagen} onClick={() => {
+                                    setCarta({ avatar: "data:image/png;base64," + pet.imagen, imagen: pet.imagen, nombre: pet.nombre, fechaNac: pet.fechaNac, peso: pet.peso, tipoAnimal: pet.tipoAnimal, raza: pet.raza, idMascota: pet.idMascota })
+                                    toggleTab(pet.idMascota)
+                                }} className="mascotas__img" alt="" /> : <img src={img} onClick={() => {
+                                    setCarta({ avatar: null, nombre: pet.nombre, fechaNac: pet.fechaNac, peso: pet.peso, tipoAnimal: pet.tipoAnimal, raza: pet.raza, idMascota: pet.idMascota })
+                                    toggleTab(pet.idMascota)
+                                }} className="mascotas__img" alt="" />
+                            }
+
                             <div className={toggleState === pet.idMascota ? "mascotas__carta active-carta" : "mascotas__carta"}>
                                 <div className='mascotas__cartas__content'>
                                     <AiOutlineClose onClick={() => toggleTab(0)} className='mascotas__carta__close'> </AiOutlineClose>
@@ -220,7 +226,7 @@ const Mascotas = ({ token }) => {
                                         }} />
                                         {
                                             image !== null ?
-                                                <img src={image} alt={fileName} className='img__form' /> : <img src={carta.avatar} alt="" className='img__form' />
+                                                <img src={image} alt={fileName} className='img__form' /> : <img src={carta.avatar ? carta.avatar : img} alt="" className='img__form' />
                                         }
                                     </div>
 
