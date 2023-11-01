@@ -43,6 +43,14 @@ export const getUserPetsRequest = async (authToken) => {
     return response;
 }
 
+export const getVetRequest = async (vetToken) =>{
+    return await axios.get(`http://localhost:3001/UniversoPet/Api/Veterinario/${vetToken}`,{
+        headers: {
+            'Authorization': `Bearer ${vetToken}`,
+        }
+    })
+}
+
 export const getPersonalPRequest = async () => {
     return await axios.get("http://localhost:3001/UniversoPet/Api/PersonalP");
 }

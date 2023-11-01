@@ -122,7 +122,7 @@ const Perfil = () => {
             <div className="perfil__container container grid">
 
                 {
-                    user.avatar != null ? <img src={user.avatar} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
+                    user.fotoPerfil != null ? <img src={user.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
                 }
 
                 {

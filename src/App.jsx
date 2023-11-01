@@ -23,7 +23,7 @@ function App() {
                 <Route path="/servicios/:idServicio" element={<ServiceDetails />} />
                 <Route path="/perfil/:accessToken" element={<Perfil />} />
                 <Route path="/citas/:idCita" element={<Citas />} >  </Route>
-                <Route path="/Veterinario" element={<Veterinario />}></Route>
+                <Route path="/Veterinario/:vetToken" element={<Veterinario />}></Route>
                 <Route path="/CitasVet" element={<CitasVet />}></Route>
             </Routes>
 

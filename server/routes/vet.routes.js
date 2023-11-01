@@ -19,6 +19,7 @@ import {
     postMascota,
     updateMascota,
     eliMascota,
+    getVeterinario,
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -31,6 +32,7 @@ router.get('/UniversoPet/Api/Usuarios', getUsers)
 router.get('/UniversoPet/Api/Usuario/:accessToken', getUser)
 router.get('/UniversoPet/Api/MascotasUser/:accessToken', getUserPets)
 router.get('/UniversoPet/Api/PersonalP', getPersonalP)
+router.get('/UniversoPet/Api/Veterinario/:vetToken', getVeterinario)
 
 router.post('/UniversoPet/Api/CreateServices', postServices)
 router.post('/UniversoPet/Api/CreateSedes', postSedes)

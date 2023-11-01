@@ -68,6 +68,25 @@ export const getUser = async (req, res) => {
     return res.status(200).json(result[0])
 }
 
+export const getVeterinario = async (req, res) =>{
+    const token = req.params.vetToken;
+    const key = process.env.SECRET_KEY;
+
+    if (token){
+        jwt.verify(token, key, (err, decoded) =>{
+            if(err){
+                return res.status(403).json({messaje: "Token inváido"})
+            }else{
+                req.cedula = decoded.cedula;
+            }
+        })
+    }
+
+    const cedula = req.cedula;
+    const[result] = await pool.query("SELECT * FROM Personal WHERE cedula = ? ", [cedula]);
+    return res.status(200).json(result[0])
+}
+
 
 //Mascotas por usuarios
 export const getUserPets = async (req, res) => {
@@ -86,7 +105,7 @@ export const getUserPets = async (req, res) => {
     }
 
     const id = req.idUsuario;
-    const [result] = await pool.query("select idMascota, nombre, peso, fechaNac, tipoAnimal, raza, imagen, estado from ((Mascotas inner join Razas on Mascotas.idRaza = Razas.idRaza) inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal) inner join Estados on Mascotas.idEstado = Estados.idEstado where idUsuario=? and estado=?", [id, "activo"]);
+    const [result] = await pool.query("select idMascota, nombre, peso, fechaNac, tipoAnimal, raza, imagen, estado from ((Mascotas inner join TipoAnimal on Mascotas.idTipoAnimal = TipoAnimal.idTipoAnimal) inner join Razas on Razas.idTipoAnimal = TipoAnimal.idTipoAnimal) inner join Estados on Mascotas.idEstado = Estados.idEstado where idUsuario=? and estado=?", [id, "activo"]);
     res.json(result);
 }
 
@@ -147,16 +166,16 @@ export const postLogin = async (req, res) => {
     }
 };
 
-//Login Paraveterinarios
+//Login para veterinarios
 
 export const postLoginVet = async (req, res) => {
     try {
         const data = req.body;
         if (data.cedula != null && data.password != null) {
             const [result] = await pool.query("SELECT * FROM Personal WHERE cedula = ?", [data.cedula]);
-            if (result[0].length === 0) {
+            if (result.length === 0) {
                 return res.status(200).json({
-                    message: "USUARIO NO ENCONTRADO",
+                    message: "VETERINARIO NO ENCONTRADO",
                     success: false
                 });
             } else if (data.password != result[0].password) {
@@ -207,7 +226,7 @@ export const postLoginAdmin = async (req, res) => {
             });
         } else {
             const secretKey = process.env.SECRET_KEY;
-            const accessToken = jwt.sign({ cedula: result[0].cedula }, secretKey, {
+            const accessToken = jwt.sign({ adminusr: result[0].admin }, secretKey, {
                 expiresIn: process.env.JWT_TIEMPO_EXPIRA
             })
             res.status(200).json({
@@ -300,6 +319,7 @@ export const postRegistro = async (req, res) => {
 
 export const postCambiarInfo = async (req, res) => {
     try {
+        //MODIFICAR
         const data = req.body;
         const [user] = await pool.query("SELECT * FROM Usuarios where idUsuario = ?", [data.idUsuario]);
         const [result_email] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);

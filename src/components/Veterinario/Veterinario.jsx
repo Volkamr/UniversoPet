@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import NavToggle from '../navToggle/NavToggle'
 import vet from '../../assets/veterinario.jpg'
 import { Form, Formik } from 'formik'
@@ -6,25 +6,46 @@ import { BsSearchHeart } from 'react-icons/bs'
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import './veterinario.css'
+import { useParams } from 'react-router-dom'
+import { useEffect } from "react";
+import { getVetRequest } from '../../api/vet'
+import { BiSolidUser } from 'react-icons/bi'
+
 
 const Veterinario = () => {
+
+    let token = useParams().vetToken;
+
+    const [veterinario, setVeterinario] = useState('')
+
+    useEffect(() => {
+        async function loadVet(token) {
+            const response = await getVetRequest(token);
+            setVeterinario(response.data)
+        }
+        loadVet(token)
+    }, [])
+
+
     return (
         <section className='veterinario__section section'>
             <NavToggle></NavToggle>
             <div className="veterinario__container container">
                 <div className="vet__info grid">
                     <div className='vet__foto'>
-                        <img src={vet} alt="" />
+                    {
+                    veterinario.fotoPerfil != null ? <img src={veterinario.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
+                }
                     </div>
                     <div className="vet__info__content">
-                        <h1 className='vet__tittle text-cs'> Nombre vet </h1>
+                        <h1 className='vet__tittle text-cs'> {"Dr. " + veterinario.nombres} </h1>
                         <div className='vet__all__info grid'>
                             <div className='vet__cedula'>
                                 <p className='vet__subtitle text-cs'>
                                     cedula
                                 </p>
                                 <p className='vet__p'>
-                                    cedula
+                                    {veterinario.cedula}
                                 </p>
                             </div>
                             <div className='vet__nombre'>
@@ -32,7 +53,7 @@ const Veterinario = () => {
                                     nombre
                                 </p>
                                 <p className='vet__p'>
-                                    nombre completo
+                                    {veterinario.nombres + " " + veterinario.apellidos}
                                 </p>
                             </div>
                             <div className='vet__email'>
@@ -40,12 +61,12 @@ const Veterinario = () => {
                                     Correo
                                 </p>
                                 <p className='vet__p'>
-                                    correo@gmail.com
+                                    {veterinario.email}
                                 </p>
                             </div>
                         </div>
                         <p className='vet__description'>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
+                            {veterinario.profesion}
                         </p>
                     </div>
                 </div>

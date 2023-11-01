@@ -91,13 +91,13 @@ export const Login = () => {
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: data.message,
+                    title: "Login exitoso",
                     text: "Será redireccionado",
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 2000 
                 })
                     .then(() => {
-                        window.location.href = `/perfil/${data.idUsuario}`;
+                        window.location.href = `/perfil/${data.accessToken}`;
                     });
 
             } else {
@@ -130,20 +130,19 @@ export const Login = () => {
             }
 
             const data = response.data;
+            console.log(data)
 
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
                     title: "Login exitoso",
                     text: "Será redireccionado",
-                    showConfirmButton: false,
-                    timer: 2000
+                    showConfirmButton: true
                 })
 
-                    .then(() => {
-                        //Redirigir a la página de veterinario
-                        console.log("Inició sesión como veterinario")
-                    });
+                .then(() => {
+                    window.location.href = `/Veterinario/${data.accessToken}`;
+                });
 
             } else {
 
