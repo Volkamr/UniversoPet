@@ -7,8 +7,25 @@ import Cartas from "./Cartas_administrador/cartas_admin";
 import PersonalSwiper from "./swiper_administrador/s_administrador";
 import estado from '../../assets/estado_pagina_ad.png';
 import mascotas from '../../assets/mascotas_ad.png';
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import  {useEffect }   from 'react'
+import { getAdminRequest } from "../../api/vet";
 
-const admin = () => {
+const Administrador = () => {
+
+    let token = useParams().adminToken;
+
+    const [admin, setAdmin] = useState('')
+
+    useEffect(() => {
+        async function loadAdmin(token) {
+            const response = await getAdminRequest(token);
+            setAdmin(response.data)
+        }
+        loadAdmin(token)
+    }, [])
+
     return (
         <section className="nosotros" id="nosotros">
             <NavBar></NavBar>
@@ -69,4 +86,4 @@ const admin = () => {
     )
 }
 
-export default admin
+export default Administrador

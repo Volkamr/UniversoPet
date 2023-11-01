@@ -51,6 +51,14 @@ export const getVetRequest = async (vetToken) =>{
     })
 }
 
+export const getAdminRequest = async (adminToken) =>{
+    return await axios.get(`http://localhost:3001/UniversoPet/Api/Administrador/${adminToken}`,{
+        headers: {
+            'Authorization': `Bearer ${adminToken}`,
+        }
+    })
+}
+
 export const getPersonalPRequest = async () => {
     return await axios.get("http://localhost:3001/UniversoPet/Api/PersonalP");
 }

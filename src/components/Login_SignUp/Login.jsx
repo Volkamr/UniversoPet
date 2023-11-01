@@ -178,10 +178,9 @@ export const Login = () => {
                     timer: 2000
                 })
 
-                    .then(() => {
-                        //Redirigir a la página de Administrador
-                        console.log("Inició sesión como administrador")
-                    });
+                .then(() => {
+                    window.location.href = `/Administrador/${data.accessToken}`;
+                });
 
             } else {
 

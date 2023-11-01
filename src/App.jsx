@@ -10,6 +10,7 @@ import ServiceDetails from './components/services/serviceDetails/ServiceDetails'
 import Citas from "./components/citas/Citas";
 import Veterinario from "./components/Veterinario/Veterinario";
 import CitasVet from "./components/CitasVet/CitasVet";
+import Administrador from "./components/administrador/Administrador";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/citas/:idCita" element={<Citas />} >  </Route>
                 <Route path="/Veterinario/:vetToken" element={<Veterinario />}></Route>
                 <Route path="/CitasVet" element={<CitasVet />}></Route>
+                <Route path="/Administrador/:adminToken" element={<Administrador/>}></Route>
             </Routes>
 
         </div>

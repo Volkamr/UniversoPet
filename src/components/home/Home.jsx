@@ -1,5 +1,5 @@
 import React from "react";
-import ProfilerImg from '../../assets/profile-img.png'
+import ProfilerImg from '../../assets/candy.png'
 import shapeOne from '../../assets/shape-1.png'
 import shapeTwo from '../../assets/shape-2.png'
 import { FaTwitter, FaDribbble, FaBehance } from 'react-icons/fa'

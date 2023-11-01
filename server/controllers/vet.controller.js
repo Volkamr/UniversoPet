@@ -85,6 +85,25 @@ export const getVeterinario = async (req, res) =>{
     return res.status(200).json(result[0])
 }
 
+export const getAdministrador = async (req, res) =>{
+    const token = req.params.adminToken;
+    const key = process.env.SECRET_KEY;
+
+    if (token){
+        jwt.verify(token, key, (err, decoded) =>{
+            if(err){
+                return res.status(403).json({messaje: "Token inváido"})
+            }else{
+                req.adminusr = decoded.adminusr;
+            }
+        })
+    }
+
+    const adminusr = req.adminusr;
+    const[result] = await pool.query("SELECT * FROM admins WHERE admin = ? ", [adminusr]);
+    return res.status(200).json(result[0])
+}
+
 
 //Mascotas por usuarios
 export const getUserPets = async (req, res) => {
