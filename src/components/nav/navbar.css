@@ -7,6 +7,10 @@
     margin-top: -2%;
 }
 
+.nav-active {
+    column-gap: 30%;
+}
+
 .nav__left {
     display: flex;
     column-gap: 15px;

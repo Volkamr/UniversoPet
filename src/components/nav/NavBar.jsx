@@ -25,7 +25,7 @@ export const NavBar = () => {
 
     return (
 
-        <section className="nav" id="nav">
+        <section className={estado === 'Loggeado' ? "nav nav-active" : "nav"} id="nav">
             <div className="nav__left container">
                 <Link to="/UniversoPet" className="nav_link text-cs">
                     <GiDogHouse className="nav_iconL"></GiDogHouse>

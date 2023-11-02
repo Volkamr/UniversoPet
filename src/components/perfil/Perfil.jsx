@@ -34,6 +34,7 @@ const Perfil = () => {
     const [image, setImage] = useState(null)
     const [fileName, setFileName] = useState("Imagen sin seleccionar")
     const [imgForm, setImgForm] = useState("")
+    const [imgAct, setImgActual] = useState(null)
 
     const blobToBase64 = (blob) => {
         return new Promise((resolve, reject) => {
@@ -128,8 +129,7 @@ const Perfil = () => {
                         setAction("Normal");
                     });
 
-                await sleep(1000);
-                window.location.reload()
+                setImgActual(imgForm)
             } else {
 
                 Swal.fire({
@@ -166,7 +166,7 @@ const Perfil = () => {
                             }} />
                             {
                                 image !== null ?
-                                    <img src={image} alt={fileName} className='perfil__img__form' /> : <img src={user.fotoPerfil ? "data:image/png;base64," + user.fotoPerfil : img} alt="" className='perfil__img__form' />
+                                    <img src={image} alt={fileName} className='perfil__img__form' /> : <img src={imgAct ? "data:image/png;base64," + imgAct : user.fotoPerfil ? "data:image/png;base64," + user.fotoPerfil : img} alt="" className='perfil__img__form' />
                             }
                         </div>
                         <div className="perfil__data container">
@@ -226,7 +226,7 @@ const Perfil = () => {
                     :
                     <div className="perfil__container container grid">
                         {
-                            user.fotoPerfil !== "" ? <img src={"data:image/png;base64," + user.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
+                            user.fotoPerfil !== null ? <img src={imgAct ? "data:image/png;base64," + imgAct : user.fotoPerfil ? "data:image/png;base64," + user.fotoPerfil : img} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
                         }
                         <div className="perfil__data container">
 
