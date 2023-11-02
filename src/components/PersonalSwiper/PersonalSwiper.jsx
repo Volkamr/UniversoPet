@@ -50,7 +50,7 @@ const PersonalSwiper = () => {
                                     <img src={icon} alt="" />
                                 </div>
 
-                                <img src={"data:img/png;base64," + fotoPerfil} alt="" className="PersonalSwiper__img" />
+                                <img src={"data:img/png;base64," + fotoPerfil} alt="" className="PersonalSwiper__nos__img" />
                             </div>
                             <p className="PersonalSwiper__description">{profesion}</p>
                             <h3 className="PersonalSwiper__name">{nombres} {apellidos}</h3>

@@ -12,23 +12,42 @@ import { getUserRequest } from '../../api/vet'
 import { BiSolidUser } from 'react-icons/bi'
 import Swal from "sweetalert2";
 import { postCambioInfoRequest } from "../../api/vet";
+import img from '../../assets/usuario.png'
+import { CgSoftwareUpload } from 'react-icons/cg'
 
 
 const Perfil = () => {
 
     //Obtener el usuario 
     const [user, setUser] = useState([]);
-    const[token, setToken] = useState(useParams().accessToken)
+    const [token, setToken] = useState(useParams().accessToken)
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('UserToken');
         const local_data = JSON.parse(loggedUserJSON)
-        if(loggedUserJSON != null && loggedUserJSON.token == token){
+        if (loggedUserJSON != null && loggedUserJSON.token == token) {
             setToken(JSON.stringify(local_data.token));
         }
-        
+
     }, [token])
 
+    const [image, setImage] = useState(null)
+    const [fileName, setFileName] = useState("Imagen sin seleccionar")
+    const [imgForm, setImgForm] = useState("")
+
+    const blobToBase64 = (blob) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+                resolve(reader.result.split(',')[1]);
+            };
+        });
+    };
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     useEffect(() => {
         async function loadUser(token) {
@@ -89,7 +108,7 @@ const Perfil = () => {
         event.preventDefault();
         try {
 
-            const response = await postCambioInfoRequest(user.idUsuario, email, celular, nombres);
+            const response = await postCambioInfoRequest(user.idUsuario, email, celular, nombres, imgForm);
 
             if (response.status < 200 || response.status >= 300) {
                 throw new Error(`Error - ${response.status}`);
@@ -106,9 +125,11 @@ const Perfil = () => {
                 })
 
                     .then(() => {
-                       setAction("Normal");
+                        setAction("Normal");
                     });
 
+                await sleep(1000);
+                window.location.reload()
             } else {
 
                 Swal.fire({
@@ -127,15 +148,27 @@ const Perfil = () => {
 
         <section className="perfil__section section" id="perfil">
             <NavToggle></NavToggle>
-            <div className="perfil__container container grid">
+            {
+                action === "Editar" ?
 
-                {
-                    user.fotoPerfil != null ? <img src={user.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
-                }
-
-                {
-                    action === "Editar" ?
-
+                    <div className="perfil__container container grid">
+                        <div className='perfil__form__img'>
+                            <button type='button' onClick={() => { document.querySelector(".input-field").click() }}> <CgSoftwareUpload className='perfil__icon__form' /> </button>
+                            <input type="file" accept='image/*' name='imagen' className='input-field' value={null} hidden onChange={async ({ target: { files } }) => {
+                                files[0] && setFileName(files[0].name)
+                                if (files) {
+                                    setImage(URL.createObjectURL(files[0]));
+                                    const fileInput = document.querySelector('.input-field')
+                                    const myblob = fileInput.files[0]
+                                    const B64 = await blobToBase64(myblob)
+                                    setImgForm(B64)
+                                }
+                            }} />
+                            {
+                                image !== null ?
+                                    <img src={image} alt={fileName} className='perfil__img__form' /> : <img src={user.fotoPerfil ? "data:image/png;base64," + user.fotoPerfil : img} alt="" className='perfil__img__form' />
+                            }
+                        </div>
                         <div className="perfil__data container">
 
                             <h1 className="perfil__title text-cs">
@@ -175,21 +208,26 @@ const Perfil = () => {
                                     >
                                     </input>
                                     <div className="perfil__btn_editar">
-                                        <p className="btn text-cs" id="cancelar" onClick={() => 
-                                            { setAction("Normal");
-                                                setNombre(user.nombres);
-                                                setEmail(user.email);
-                                                setCelular(user.celular);
-                                            }}> Cancelar </p>
+                                        <p className="btn text-cs" id="cancelar" onClick={() => {
+                                            setAction("Normal");
+                                            setNombre(user.nombres);
+                                            setEmail(user.email);
+                                            setCelular(user.celular);
+                                        }}> Cancelar </p>
                                     </div>
                                 </container>
                             </form>
 
                         </div>
+                    </div>
 
-                        :
 
 
+                    :
+                    <div className="perfil__container container grid">
+                        {
+                            user.fotoPerfil !== "" ? <img src={"data:image/png;base64," + user.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
+                        }
                         <div className="perfil__data container">
 
                             <h1 className="perfil__title text-cs">
@@ -224,13 +262,20 @@ const Perfil = () => {
                             </div>
 
                             <div className='perfil__btn'>
-                                <p className="btn text-cs" onClick={() => { setAction("Editar") }}> Editar </p>
+                                <p className="btn text-cs" onClick={() => {
+                                    {
+                                        setAction("Editar")
+                                        setImage(null)
+                                    }
+                                }}> Editar </p>
                             </div>
 
                         </div>
 
-                }
-            </div>
+                    </div>
+
+
+            }
             <Mascotas idUsuario={user.idUsuario}></Mascotas>
             <Calendario></Calendario>
             <div className='perfil__btn__cita'>

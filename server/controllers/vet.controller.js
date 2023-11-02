@@ -328,6 +328,8 @@ export const postCambiarInfo = async (req, res) => {
         const [result_email] = await pool.query("SELECT * FROM Usuarios WHERE email = ?", [data.email]);
         const [result_celular] = await pool.query("SELECT * FROM Usuarios WHERE celular = ?", [data.celular])
 
+        if (data.imagen == "") data.imagen = user[0].fotoPerfil;
+
         if (data.email == null || data.celular == null || data.nombres == null) {
             return res.status(200).json({
                 success: false,
@@ -343,34 +345,16 @@ export const postCambiarInfo = async (req, res) => {
                 success: false,
                 message: "El celular ingresado ya está en uso"
             })
-        } else if (user[0].celular == data.celular && user[0].email == data.email && user[0].nombres == data.nombres) {
+        } else if (user[0].celular == data.celular && user[0].email == data.email && user[0].nombres == data.nombres && user[0].fotoPerfil == data.imagen) {
             return res.status(200).json({
                 success: false,
                 message: "No realizó ningún cambio"
             })
-        } else if (user[0].celular != data.celular && user[0].email == data.email && user[0].nombres == data.nombres) {
-            pool.query("UPDATE Usuarios SET celular = ? WHERE idUsuario = ?", [data.celular, data.idUsuario])
-            return res.status(200).json({ success: true, message: "Cambió su celular exitosamente" })
-        } else if (user[0].celular != data.celular && user[0].email != data.email && user[0].nombres == data.nombres) {
-            pool.query("UPDATE Usuarios SET celular = ?, email = ? WHERE idUsuario = ? ", [data.celular, data.email, data.idUsuario])
-            return res.status(200).json({ success: true, message: "Cambió su celular y email exitosamente" })
-        } else if (user[0].celular == data.celular && user[0].email != data.email && user[0].nombres == data.nombres) {
-            pool.query("UPDATE Usuarios SET email = ? WHERE idUsuario = ?", [data.email, data.idUsuario])
-            return res.status(200).json({ success: true, message: "Cambió su email exitosamente" })
-        } else if (user[0].celular == data.celular && user[0].email == data.email && user[0].nombres != data.nombres) {
-            pool.query("UPDATE Usuarios SET nombres = ? WHERE idUsuario = ?", [data.nombres, data.idUsuario])
-            return res.status(200).json({ success: true, message: "Cambió sus nombres exitosamente" })
-        } else if (user[0].celular != data.celular && user[0].email == data.email && user[0].nombres != data.nombres) {
-            pool.query("UPDATE Usuarios SET celular = ?, nombres = ? WHERE idUsuario = ? ", [data.celular, data.nombres, data.idUsuario])
-            return res.status(200).json({ success: true, message: "Cambió su celular y nombres exitosamente" })
-        } else if (user[0].celular == data.celular && user[0].email != data.email && user[0].nombres != data.nombres) {
-            pool.query("UPDATE Usuarios SET email = ?, nombres = ? WHERE idUsuario = ?", [data.email, data.nombres, data.idUsuario])
-            return res.status(200).json({ success: true, message: "Cambió su correo y nombres exitosamente" })
-        } else {
-            pool.query("UPDATE Usuarios SET celular = ?, email = ?, nombres = ? WHERE idUsuario = ?",
-                [data.celular, data.email, data.nombres, data.idUsuario])
-            return res.status(200).json({ success: true, message: "Cambió sus datos exitosamente" })
         }
+
+        pool.query("UPDATE Usuarios SET fotoPerfil = ?, celular = ?, email = ?, nombres = ? WHERE idUsuario = ?",
+            [data.imagen, data.celular, data.email, data.nombres, data.idUsuario])
+        return res.status(200).json({ success: true, message: "Cambió sus datos exitosamente" })
     } catch (error) {
         console.log("Error al cambiar la información del usuario: " + error)
     }

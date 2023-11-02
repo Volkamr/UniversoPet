@@ -21,7 +21,6 @@ export const NavBar = () => {
             console.log(token)
             console.log(estado)
         }
-
     }, [estado, token, rol])
 
     return (
@@ -48,14 +47,11 @@ export const NavBar = () => {
                 </Link>
                 {
                     estado === 'Loggeado' ? (
-
-                        <Link to={ rol === 'usuario' ? (`/perfil/${token}`) 
-                        : rol === 'veterinario' ? (`/Veterinario/${token}`) : (`/Administrador/${token}`)}>
+                        <Link to={rol === 'usuario' ? (`/perfil/${token}`)
+                            : rol === 'veterinario' ? (`/Veterinario/${token}`) : (`/Administrador/${token}`)}>
                             <FaUserCircle className="nav_iconR"> </FaUserCircle>
                         </Link>
-
                     ) : (
-
                         <Link to="/login" className="nav_link text-cs">
                             <p>
                                 Login
@@ -63,8 +59,6 @@ export const NavBar = () => {
                         </Link>
                     )
                 }
-
-
             </div>
         </section>
     )

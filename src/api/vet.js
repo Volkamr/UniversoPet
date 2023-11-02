@@ -37,16 +37,16 @@ export const getUserPetsRequest = async (idUsuario) => {
     return response;
 }
 
-export const getVetRequest = async (vetToken) =>{
-    return await axios.get(`http://localhost:3001/UniversoPet/Api/Veterinario/${vetToken}`,{
+export const getVetRequest = async (vetToken) => {
+    return await axios.get(`http://localhost:3001/UniversoPet/Api/Veterinario/${vetToken}`, {
         headers: {
             'Authorization': `Bearer ${vetToken}`,
         }
     })
 }
 
-export const getAdminRequest = async (adminToken) =>{
-    return await axios.get(`http://localhost:3001/UniversoPet/Api/Administrador/${adminToken}`,{
+export const getAdminRequest = async (adminToken) => {
+    return await axios.get(`http://localhost:3001/UniversoPet/Api/Administrador/${adminToken}`, {
         headers: {
             'Authorization': `Bearer ${adminToken}`,
         }
@@ -63,30 +63,31 @@ export const updateMascota = async (mascota) => await axios.post('http://localho
 
 export const eliMascota = async (idMascota) => await axios.post('http://localhost:3001/UniversoPet/Api/eliMascota', idMascota);
 
-export const postCambioInfoRequest = async (idUsuario, email, celular, nombres) =>{
-    return await axios.post("http://localhost:3001/UniversoPet/Api/cambiarInfo",{
+export const postCambioInfoRequest = async (idUsuario, email, celular, nombres, imagen) => {
+    return await axios.post("http://localhost:3001/UniversoPet/Api/cambiarInfo", {
         email: email,
         idUsuario: idUsuario,
         celular: celular,
-        nombres: nombres
+        nombres: nombres,
+        imagen: imagen
     })
 }
 
-export const postLoginRequest = async (email, password) =>{
+export const postLoginRequest = async (email, password) => {
     return await axios.post("http://localhost:3001/UniversoPet/Api/Login", {
         email: email,
         password: password
     })
 }
 
-export const postLoginVetRequest = async (cedula, password) =>{
-    return await axios.post("http://localhost:3001/UniversoPet/Api/LoginVet",{
+export const postLoginVetRequest = async (cedula, password) => {
+    return await axios.post("http://localhost:3001/UniversoPet/Api/LoginVet", {
         cedula: cedula,
         password: password
-    }) 
+    })
 }
 
-export const postLoginAdminRequest = async (adminusr, password) =>{
+export const postLoginAdminRequest = async (adminusr, password) => {
     return await axios.post("http://localhost:3001/UniversoPet/Api/LoginAdmin", {
         admin: adminusr,
         password: password

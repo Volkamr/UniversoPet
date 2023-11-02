@@ -1,9 +1,9 @@
-.Cartas__container {
+.Cartas__nos__container {
     margin-top: 8%;
     grid-template-columns: repeat(3, 1fr);
 }
 
-.Cartas__subtitle {
+.Cartas__nos__subtitle {
     color: var(--color-primario);
     font-size: var(--funte-tamaño-mas-pequeño);
     font-weight: 600;
@@ -11,20 +11,20 @@
     display: block;
 }
 
-.Cartas__title {
+.Cartas__nos__title {
     font-size: var(--fuente-tamaño-h4);
 }
 
-.Cartas__description {
+.Cartas__nos__description {
     margin-top: 2%;
     min-height: 140px;
 }
 
-.Cartas__item {
+.Cartas__nos__item {
     height: 225px;
 }
 
-.Cartas__item img {
+.Cartas__nos__item img {
     width: 21%;
     height: 31%;
 }

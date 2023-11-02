@@ -1,4 +1,4 @@
-.nosotros {
+#nosotros {
     background-color: var(--primer-gradiante);
     min-height: 100vh;
     display: grid;
@@ -24,7 +24,7 @@
     margin-left: -1.1%;
 }
 
-.nosotros::before {
+#nosotros::before {
     content: '';
     position: absolute;
     left: 8%;

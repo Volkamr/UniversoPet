@@ -209,3 +209,35 @@
     text-align: center;
     font-size: 25px;
 }
+
+
+.perfil__form__img {
+    width: 300px;
+    height: 300px;
+    border-radius: 1.5rem;
+    justify-self: center;
+    color: var(--color-grande-alt);
+    background-color: var(--color-primario);
+    position: relative;
+}
+
+.perfil__icon__form {
+    position: absolute;
+    background-color: var(--color-grande-alt);
+    z-index: 100;
+    border-radius: 5rem;
+    top: 35%;
+    right: 35%;
+    height: 80px;
+    width: 80px;
+    padding: 1.5rem;
+    object-fit: cover;
+}
+
+.perfil__img__form {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 1.5rem;
+    opacity: 0.75;
+}

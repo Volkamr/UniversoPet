@@ -40,6 +40,7 @@ const NavToggle = () => {
                             <li>
                                 <Link to="/UniversoPet" className="nav_link text-cs" onClick={() => {
                                     localStorage.removeItem('UserToken');
+                                    window.location.href('/UniversoPet');
                                 }}>
                                     <h1 className="Nav_home text-cs">Cerar sesión</h1>
                                 </Link>
