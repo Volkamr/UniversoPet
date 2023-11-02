@@ -14,9 +14,18 @@ import { BiSolidUser } from 'react-icons/bi'
 
 const Veterinario = () => {
 
-    let token = useParams().vetToken;
-
     const [veterinario, setVeterinario] = useState('')
+
+    const[token, setToken] = useState(useParams().vetToken)
+
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('UserToken');
+        const local_data = JSON.parse(loggedUserJSON)
+        if(loggedUserJSON != null && local_data.token == token){
+            setToken(local_data.token);
+        }
+        
+    }, [token])
 
     useEffect(() => {
         async function loadVet(token) {
@@ -24,7 +33,7 @@ const Veterinario = () => {
             setVeterinario(response.data)
         }
         loadVet(token)
-    }, [])
+    }, [veterinario])
 
 
     return (

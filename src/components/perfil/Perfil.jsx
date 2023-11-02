@@ -17,10 +17,18 @@ import { postCambioInfoRequest } from "../../api/vet";
 const Perfil = () => {
 
     //Obtener el usuario 
-    let token = useParams().accessToken;
-    //const decodedToken = jwtDecode(token);
-    //const idUsuario = decodedToken.idUsuario;
     const [user, setUser] = useState([]);
+    const[token, setToken] = useState(useParams().accessToken)
+
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('UserToken');
+        const local_data = JSON.parse(loggedUserJSON)
+        if(loggedUserJSON != null && loggedUserJSON.token == token){
+            setToken(JSON.stringify(local_data.token));
+        }
+        
+    }, [token])
+
 
     useEffect(() => {
         async function loadUser(token) {
@@ -30,7 +38,6 @@ const Perfil = () => {
         }
         loadUser(token)
     }, [])
-
 
     let [action, setAction] = useState("Normal");
     const [nombres, setNombre] = useState(user.nombres);
@@ -224,7 +231,7 @@ const Perfil = () => {
 
                 }
             </div>
-            <Mascotas token={token}></Mascotas>
+            <Mascotas idUsuario={user.idUsuario}></Mascotas>
             <Calendario></Calendario>
             <div className='perfil__btn__cita'>
                 <button className='btn text-cs h' onClick={() => toggleTab(1)}> Agendar Cita </button>

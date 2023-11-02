@@ -13,18 +13,21 @@ import { updateMascota } from '../../api/vet';
 import { eliMascota } from '../../api/vet';
 import Swal from "sweetalert2";
 
-const Mascotas = ({ token }) => {
+const Mascotas = ({ idUsuario }) => {
 
+    console.log(idUsuario)
     const [UserPets, setUserPets] = useState([])
 
     useEffect(() => {
         async function loadUserPets() {
-            const response = await getUserPetsRequest(token);
+            const response = await getUserPetsRequest(idUsuario);
+            console.log(response.data)
             setUserPets(response.data)
         }
         loadUserPets()
-    }, [token])
+    }, [UserPets])
 
+    console.log(UserPets)
 
     const [toggleState, setToggleState] = useState(0)
     const toggleTab = (index) => {
@@ -314,12 +317,12 @@ const Mascotas = ({ token }) => {
                                     tipoAnimal: null,
                                     raza: null,
                                     estado: null,
-                                    token: null,
+                                    idUsuario: idUsuario
                                 }}
                                 onSubmit={async (values) => {
                                     values.imagen = imgForm
                                     values.estado = "activo"
-                                    values.token = token
+                                    values.idUsuario = idUsuario
 
                                     try {
                                         const response = await createMascota(values)

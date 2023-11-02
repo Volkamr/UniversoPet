@@ -8,15 +8,25 @@ import PersonalSwiper from "./swiper_administrador/s_administrador";
 import estado from '../../assets/estado_pagina_ad.png';
 import mascotas from '../../assets/mascotas_ad.png';
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import  {useEffect }   from 'react'
 import { getAdminRequest } from "../../api/vet";
 
 const Administrador = () => {
 
-    let token = useParams().adminToken;
 
     const [admin, setAdmin] = useState('')
+
+    const[token, setToken] = useState(useParams().adminToken)
+
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('UserToken');
+        const local_data = JSON.parse(loggedUserJSON)
+        if(loggedUserJSON != null && loggedUserJSON.token == token){
+            setToken(JSON.stringify(local_data.token));
+        }
+        
+    }, [token])
 
     useEffect(() => {
         async function loadAdmin(token) {
@@ -45,6 +55,13 @@ const Administrador = () => {
                     <p className="nosotros__job">
                         <b>Veterinaria Universo Pets </b>
                     </p>
+
+                    <br/>
+                    <Link to = "/UniversoPet" onClick={() => {
+                                    localStorage.removeItem('UserToken');
+                                }}>
+                        <p className = "nosotros_text" id = "salir"> Salir </p>
+                    </Link>
 
                 </div>
             </div>

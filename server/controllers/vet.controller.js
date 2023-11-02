@@ -107,21 +107,7 @@ export const getAdministrador = async (req, res) => {
 
 //Mascotas por usuarios
 export const getUserPets = async (req, res) => {
-    const token = req.params.accessToken;
-    console.log("token: " + token)
-    const key = process.env.SECRET_KEY;
-
-    if (token) {
-        jwt.verify(token, key, (err, decoded) => {
-            if (err) {
-                return res.status(403).json({ message: "Token inválido" })
-            } else {
-                req.idUsuario = decoded.idUsuario;
-            }
-        })
-    }
-
-    const id = req.idUsuario;
+    const id = req.params.idUsuario;
     const [result] = await pool.query("select idMascota, nombre, peso, fechaNac, tipoAnimal, raza, imagen, estado from ((Mascotas inner join Razas on Mascotas.idRaza = Razas.idRaza) inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal) inner join Estados on Mascotas.idEstado = Estados.idEstado where idUsuario=? and estado=?", [id, "activo"]);
     res.json(result);
 }
@@ -509,21 +495,7 @@ export const postMascota = async (req, res) => {
 
         const data = req.body
 
-        const token = data.token;
-        console.log("token: " + token)
-        const key = process.env.SECRET_KEY;
-
-        if (token) {
-            jwt.verify(token, key, (err, decoded) => {
-                if (err) {
-                    return res.status(403).json({ message: "Token inválido" })
-                } else {
-                    req.idUsuario = decoded.idUsuario;
-                }
-            })
-        }
-
-        const id = req.idUsuario;
+        const id = data.idUsuario;
 
         if (data.nombre == null) {
             return res.status(200).json({

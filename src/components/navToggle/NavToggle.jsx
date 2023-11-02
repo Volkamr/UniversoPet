@@ -37,6 +37,13 @@ const NavToggle = () => {
                                     <h1 className="Nav_home text-cs"> Datos </h1>
                                 </Link>
                             </li>
+                            <li>
+                                <Link to="/UniversoPet" className="nav_link text-cs" onClick={() => {
+                                    localStorage.removeItem('UserToken');
+                                }}>
+                                    <h1 className="Nav_home text-cs">Cerar sesión</h1>
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>

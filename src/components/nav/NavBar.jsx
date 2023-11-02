@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GiDogHouse } from 'react-icons/gi'
 import { FaUserCircle } from 'react-icons/fa'
 import './navbar.css'
-import { Link } from "react-router-dom"
+import { Link, useActionData } from "react-router-dom"
 
 export const NavBar = () => {
+
+    const [estado, setEstado] = useState('');
+    const [token, setToken] = useState('');
+    const [rol, setRol] = useState('');
+
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('UserToken');
+        const local_data = JSON.parse(loggedUserJSON)
+        console.log(loggedUserJSON)
+        if (loggedUserJSON != null) {
+            setEstado('Loggeado');
+            setToken(local_data.token)
+            setRol(local_data.rol)
+            console.log(token)
+            console.log(estado)
+        }
+
+    }, [estado, token, rol])
+
     return (
 
         <section className="nav" id="nav">
@@ -27,14 +46,25 @@ export const NavBar = () => {
                         Nosotros
                     </p>
                 </Link>
-                <Link to="/login" className="nav_link text-cs">
-                    <p>
-                        Login
-                    </p>
-                </Link>
-                <Link to="/login">
-                    <FaUserCircle className="nav_iconR"> </FaUserCircle>
-                </Link>
+                {
+                    estado === 'Loggeado' ? (
+
+                        <Link to={ rol === 'usuario' ? (`/perfil/${token}`) 
+                        : rol === 'veterinario' ? (`/Veterinario/${token}`) : (`/Administrador/${token}`)}>
+                            <FaUserCircle className="nav_iconR"> </FaUserCircle>
+                        </Link>
+
+                    ) : (
+
+                        <Link to="/login" className="nav_link text-cs">
+                            <p>
+                                Login
+                            </p>
+                        </Link>
+                    )
+                }
+
+
             </div>
         </section>
     )

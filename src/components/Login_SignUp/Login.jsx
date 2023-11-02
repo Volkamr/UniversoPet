@@ -97,6 +97,7 @@ export const Login = () => {
                     timer: 2000 
                 })
                     .then(() => {
+                        localStorage.setItem('UserToken', JSON.stringify({token: data.accessToken, rol: 'usuario'}));
                         window.location.href = `/perfil/${data.accessToken}`;
                     });
 
@@ -137,10 +138,12 @@ export const Login = () => {
                     icon: 'success',
                     title: "Login exitoso",
                     text: "Será redireccionado",
-                    showConfirmButton: true
+                    showConfirmButton: false,
+                    timer: 2000
                 })
 
                 .then(() => {
+                    localStorage.setItem('UserToken', JSON.stringify({token: data.accessToken, rol: 'veterinario'}));
                     window.location.href = `/Veterinario/${data.accessToken}`;
                 });
 
@@ -179,6 +182,7 @@ export const Login = () => {
                 })
 
                 .then(() => {
+                    localStorage.setItem('UserToken', JSON.stringify({token: data.accessToken, rol: 'administrador'}));
                     window.location.href = `/Administrador/${data.accessToken}`;
                 });
 

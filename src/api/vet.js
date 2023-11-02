@@ -31,14 +31,8 @@ export const getUserRequest = async (authToken) => {
     return response;
 }
 
-export const getUserPetsRequest = async (authToken) => {
-    const response = await axios.get(`http://localhost:3001/UniversoPet/Api/MascotasUser/${authToken}`,
-        {
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-            }
-        }
-    );
+export const getUserPetsRequest = async (idUsuario) => {
+    const response = await axios.get(`http://localhost:3001/UniversoPet/Api/MascotasUser/${idUsuario}`,);
     console.log(response)
     return response;
 }

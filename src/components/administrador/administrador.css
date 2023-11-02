@@ -170,3 +170,13 @@
     font-size: 32px;
     text-transform: uppercase;
 }
+
+#salir{
+    font-size: 20px;
+    font-weight: 4;
+    color: black;
+}
+
+#salir:hover{
+    color:rgb(41, 160, 134);
+}
