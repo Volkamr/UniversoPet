@@ -1,7 +1,7 @@
 create table Citas(
     idCita INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    fecha DATE NOT NULL,
-    hora TIME NOT NULL,
+    fechaInicio DATETIME NOT NULL,
+    fechaFin DATETIME NOT NULL,
     idServicio INT NOT NULL,
     idMascota INT NOT NULL,
     cedula BIGINT NOT NULL,

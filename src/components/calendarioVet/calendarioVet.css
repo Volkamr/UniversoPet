@@ -1,0 +1,7 @@
+.calendario__section {
+    width: 93%;
+    margin: 1.5rem 2.5rem -2rem 2.5rem;
+    padding: 2rem 2.5rem;
+    border-radius: 1rem;
+    background-color: var(--color-contenedor);
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import './navToggle.css'
+import Swal from "sweetalert2";
 
 const NavToggle = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -38,9 +39,16 @@ const NavToggle = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/UniversoPet" className="nav_link text-cs" onClick={() => {
-                                    localStorage.removeItem('UserToken');
-                                    window.location.href('/UniversoPet');
+                                <Link className="nav_link text-cs" onClick={() => {
+                                    Swal.fire({
+                                        icon: 'info',
+                                        title: 'Cerró sesión',
+                                        text: 'será redirigido a la página principal',
+                                    })
+                                    .then(() => {
+                                        localStorage.removeItem('UserToken');
+                                        window.location.href = '/UniversoPet';
+                                    });
                                 }}>
                                     <h1 className="Nav_home text-cs">Cerar sesión</h1>
                                 </Link>

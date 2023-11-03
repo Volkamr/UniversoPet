@@ -21,6 +21,7 @@ import {
     eliMascota,
     getVeterinario,
     getAdministrador,
+    getVeterinariosxSede,
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -35,6 +36,7 @@ router.get('/UniversoPet/Api/MascotasUser/:idUsuario', getUserPets)
 router.get('/UniversoPet/Api/PersonalP', getPersonalP)
 router.get('/UniversoPet/Api/Veterinario/:vetToken', getVeterinario)
 router.get('/UniversoPet/Api/Administrador/:adminToken', getAdministrador)
+router.get('/UniversoPet/Api/VetxSedes/:idSede', getVeterinariosxSede)
 
 router.post('/UniversoPet/Api/CreateServices', postServices)
 router.post('/UniversoPet/Api/CreateSedes', postSedes)

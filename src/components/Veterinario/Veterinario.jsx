@@ -3,14 +3,13 @@ import NavToggle from '../navToggle/NavToggle'
 import vet from '../../assets/veterinario.jpg'
 import { Form, Formik } from 'formik'
 import { BsSearchHeart } from 'react-icons/bs'
-import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import './veterinario.css'
 import { useParams } from 'react-router-dom'
 import { useEffect } from "react";
 import { getVetRequest } from '../../api/vet'
 import { BiSolidUser } from 'react-icons/bi'
-
+import CalendarioVet from '../calendarioVet/CalendarioVet'
 
 const Veterinario = () => {
 
@@ -112,10 +111,7 @@ const Veterinario = () => {
                     Tus <span> Citas </span>
                 </p>
                 <div className='calendario__vet'>
-                    <FullCalendar
-                        plugins={[dayGridPlugin]}
-                        initialView="dayGridMonth"
-                    />
+                    <CalendarioVet></CalendarioVet>
                 </div>
             </div>
 

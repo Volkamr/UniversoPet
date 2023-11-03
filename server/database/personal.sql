@@ -14,3 +14,5 @@ create table
     );
 
 ALTER TABLE Personal MODIFY fotoPerfil LONGTEXT NULL;
+
+insert into Personal (cedula, password, nombres, apellidos, email, profesion, fotoPerfil, idTipoPersonal, idEstado) values (123456789, 'pass', 'Cristiano', 'Ronaldo', 'cristiano@gmail.com', 'Veterinario Especializado',null, 1, 1);

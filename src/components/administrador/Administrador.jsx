@@ -11,6 +11,8 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { getAdminRequest } from "../../api/vet";
+import Swal from "sweetalert2";
+
 
 const Administrador = () => {
 
@@ -57,9 +59,16 @@ const Administrador = () => {
                     </p>
 
                     <br />
-                    <Link to="/UniversoPet" onClick={() => {
-                        localStorage.removeItem('UserToken');
-                        window.location.href('/UniversoPet');
+                    <Link  onClick={() => {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Cerró sesión',
+                            text: 'será redirigido a la página principal',
+                        })
+                        .then(() => {
+                            localStorage.removeItem('UserToken');
+                            window.location.href = '/UniversoPet';
+                        });
                     }}>
                         <p className="nosotros_text" id="salir"> Salir </p>
                     </Link>

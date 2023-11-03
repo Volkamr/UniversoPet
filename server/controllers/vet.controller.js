@@ -120,6 +120,20 @@ export const getPersonalP = async (req, res) => {
     res.json(result);
 }
 
+export const getVeterinariosxSede = async (req, res) =>{
+   try{
+    const idSede = req.params.idSede;
+    console.log(idSede)
+    const [result] = await pool.query(
+        "SELECT Personal.cedula, nombres, apellidos FROM Personal inner join historialPersonal on historialPersonal.cedula = Personal.cedula inner join Sedes on historialPersonal.idSede = Sedes.idSede WHERE historialPersonal.FechaFinal IS NULL AND historialPersonal.idSede =? ", [idSede]
+        )
+        console.log(result)
+    return res.json(result);
+   }catch(error){
+    console.log(error)
+   }
+}
+
 
 //---------------------------------------------------------------------------> POST
 
@@ -505,6 +519,11 @@ export const postMascota = async (req, res) => {
             return res.status(200).json({
                 success: false,
                 message: "Una mascota debe tener una raza"
+            })
+        }else if (data.fechaNac == null){
+            return res.status(200).json({
+                success: false,
+                message: "Debe ingresar la fecha de nacimiento de su mascota"
             })
         }
 

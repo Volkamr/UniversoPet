@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom'
 import "./perfil.css"
 import Mascotas from '../mascotas/Mascotas'
 import { useEffect, useState } from "react";
-import Calendario from '../calendario/Calendario'
+import Calendario from '../calendarioUser/Calendario'
+import { getSedesRequest, getUserPetsRequest, getVetRequest, getVeterinarioxSedeRequest } from '../../api/vet'
 import { AiOutlineClose } from 'react-icons/ai'
 import { Form, Formik } from 'formik'
 import { getServicesRequest } from '../../api/vet'
@@ -14,7 +15,8 @@ import Swal from "sweetalert2";
 import { postCambioInfoRequest } from "../../api/vet";
 import img from '../../assets/usuario.png'
 import { CgSoftwareUpload } from 'react-icons/cg'
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'
 
 const Perfil = () => {
 
@@ -59,6 +61,36 @@ const Perfil = () => {
         loadUser(token)
     }, [])
 
+    const [UserPets, setUserPets] = useState([])
+    useEffect(() => {
+        async function loadUserPets() {
+            const response = await getUserPetsRequest(user.idUsuario);
+            console.log(response.data)
+            setUserPets(response.data)
+        }
+        loadUserPets()
+    }, [user.idUsuario])
+
+    const [services, setServices] = useState([])
+
+    useEffect(() => {
+        async function loadServices() {
+            const response = await getServicesRequest();
+            setServices(response.data)
+        }
+        loadServices()
+    }, [services.idService])
+
+    const [sedes, setSedes] = useState([]);
+
+    useEffect(() => {
+        async function loadSedes() {
+            const response = await getSedesRequest();
+            setSedes(response.data)
+        }
+        loadSedes()
+    }, [sedes.idSede])
+
     let [action, setAction] = useState("Normal");
     const [nombres, setNombre] = useState(user.nombres);
     const [email, setEmail] = useState(user.email);
@@ -94,16 +126,6 @@ const Perfil = () => {
     const toggleTab = (index) => {
         setToggleState(index)
     }
-
-    const [services, setServices] = useState([])
-
-    useEffect(() => {
-        async function loadServices() {
-            const response = await getServicesRequest();
-            setServices(response.data)
-        }
-        loadServices()
-    }, [])
 
     const cambioInfo = async (event) => {
         event.preventDefault();
@@ -143,6 +165,47 @@ const Perfil = () => {
             console.log(error)
         }
     }
+
+    const [fechaHora, setFechaHora] = useState(new Date());
+
+    const handleCambioFecha = (nuevaFecha) => {
+        setFechaHora(nuevaFecha);
+    }
+
+    const [SelectedService, setSelectedService] = useState('');
+
+    const handleCambioServicio = (event) => {
+        setSelectedService(event.target.value)
+    }
+
+    const [selectedPet, setSelectedPet] = useState('');
+
+    const handleCambioMascota = (event) => {
+        setSelectedPet(event.target.value);
+    }
+
+    const [sedeSeleccionada, setSedeSeleccionada] = useState(null);
+
+    const handleCambioSede = (event) => {
+        setSedeSeleccionada(event.target.value);
+    }
+
+    const [vetSeleccionado, setVetSeleccionado] = useState('');
+
+    const handleVetSeleccionado = (event) => {
+        setVetSeleccionado(event.target.value)
+    }
+
+
+    const [vets, setVets] = useState([]);
+
+    useEffect(() => {
+        async function loadVets() {
+            const response = await getVeterinarioxSedeRequest(sedeSeleccionada)
+            setVets(response.data)
+        }
+        loadVets()
+    }, [sedeSeleccionada])
 
     return (
 
@@ -276,7 +339,7 @@ const Perfil = () => {
 
 
             }
-            <Mascotas idUsuario={user.idUsuario}></Mascotas>
+            <Mascotas UserPets={UserPets} idUsuario={user.idUsuario}></Mascotas>
             <Calendario></Calendario>
             <div className='perfil__btn__cita'>
                 <button className='btn text-cs h' onClick={() => toggleTab(1)}> Agendar Cita </button>
@@ -292,22 +355,25 @@ const Perfil = () => {
                                     <div className='perfil__form__pri grid'>
                                         <div className='perfil__form__sep'>
                                             <label for="mascotas" className='perfil__formL text-cs'>Mascota</label>
-                                            <select name="mascotas" id="mascotas" className='form__input__perfiL'>
+                                            <select name="mascotas" id="mascotas" className='form__input__perfiL'
+                                                value={selectedPet} onChange={handleCambioMascota}>
                                                 {
-                                                    /*
-                                                    filtrado.map(({ nombre }, index) => {
-                                                        return <option value={nombre} key={index} className='o'>{nombre}</option>
+
+                                                    UserPets.map((mascota, index) => {
+                                                        return <option value={mascota.idMascota} key={index} >{mascota.nombre}</option>
                                                     })
-                                                    */
+
                                                 }
                                             </select>
                                         </div>
                                         <div className='perfil__form__sep'>
                                             <label for="servicios" className='perfil__formL text-cs'>Servicios</label>
-                                            <select name="servicios" id="servicios" className='form__input__perfiL'>
+                                            <select name="servicios" id="servicios" className='form__input__perfiL'
+                                                value={SelectedService} onChange={handleCambioServicio}
+                                            >
                                                 {
-                                                    services.map(({ nombre }, index) => {
-                                                        return <option value={nombre} key={index} >{nombre}</option>
+                                                    services.map((service, index) => {
+                                                        return <option value={service.idServicio} key={index} >{service.nombre}</option>
                                                     })
                                                 }
                                             </select>
@@ -315,12 +381,36 @@ const Perfil = () => {
                                     </div>
                                     <div className='perfil__form__sec grid'>
                                         <div className='perfil__form__sep'>
-                                            <label htmlFor="fechaI" className='perfil__formL text-cs'> Fecha Inicio </label>
-                                            <input type="datetime-local" name='fechaI' className='form__input__perfil' />
+                                            <label htmlFor="hora" className='perfil__formL text-cs'>Fecha</label>
+                                            <DatePicker selected={fechaHora} onChange={handleCambioFecha} timeCaption='Hora'
+                                                showTimeSelect timeFormat='HH:mm' timeIntervals={30} dateFormat={"yyyy-MM-dd HH:mm:ss"}
+                                                className='form__input__perfil'
+                                            ></DatePicker>
                                         </div>
                                         <div className='perfil__form__sep'>
-                                            <label htmlFor="fechaF" className='perfil__formL text-cs'> Fecha Final </label>
-                                            <input type="datetime-local" name='fechaF' className='form__input__perfil' />
+                                            <label for="veterinarios" className='perfil__formL text-cs'> Veterinario </label>
+                                            <select name="veterinarios" className='form__input__perfiL'
+                                                value={vetSeleccionado} onChange={handleVetSeleccionado}
+                                            >
+                                                {
+                                                    vets.map((vet, index) => {
+                                                        return <option value={vet.cedula} key={index} >{vet.nombres + " " + vet.apellidos}</option>
+                                                    })
+                                                }
+
+                                            </select>
+                                        </div>
+                                        <div className='perfil__form__sep'>
+                                            <label for="sedes" className='perfil__formL text-cs'> Sedes </label>
+                                            <select name="sedes" className='form__input__perfiL'
+                                                value={sedeSeleccionada} onChange={handleCambioSede}
+                                            >
+                                                {
+                                                    sedes.map((sede, index) => {
+                                                        return <option value={sede.idSede} key={index} >{sede.titulo}</option>
+                                                    })
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

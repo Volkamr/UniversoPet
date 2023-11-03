@@ -13,21 +13,8 @@ import { updateMascota } from '../../api/vet';
 import { eliMascota } from '../../api/vet';
 import Swal from "sweetalert2";
 
-const Mascotas = ({ idUsuario }) => {
+const Mascotas = ({ UserPets, idUsuario }) => {
 
-    console.log(idUsuario)
-    const [UserPets, setUserPets] = useState([])
-
-    useEffect(() => {
-        async function loadUserPets() {
-            const response = await getUserPetsRequest(idUsuario);
-            console.log(response.data)
-            setUserPets(response.data)
-        }
-        loadUserPets()
-    }, [UserPets])
-
-    console.log(UserPets)
 
     const [toggleState, setToggleState] = useState(0)
     const toggleTab = (index) => {

@@ -33,7 +33,6 @@ export const getUserRequest = async (authToken) => {
 
 export const getUserPetsRequest = async (idUsuario) => {
     const response = await axios.get(`http://localhost:3001/UniversoPet/Api/MascotasUser/${idUsuario}`,);
-    console.log(response)
     return response;
 }
 
@@ -55,6 +54,11 @@ export const getAdminRequest = async (adminToken) => {
 
 export const getPersonalPRequest = async () => {
     return await axios.get("http://localhost:3001/UniversoPet/Api/PersonalP");
+}
+
+export const getVeterinarioxSedeRequest = async (idSede) =>{
+    const response = await axios.get(`http://localhost:3001/UniversoPet/Api/VetxSedes/${idSede}`,)
+    return response;
 }
 
 export const createMascota = async (mascota) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateMascota', mascota);

@@ -1,6 +1,7 @@
 import React from 'react'
 import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid'; // a plugin!
 import "./calendario.css"
 
 const Calendario = () => {
@@ -14,8 +15,15 @@ const Calendario = () => {
             </p>
             <section className='calendario__section section' id='calendario' >
                 <FullCalendar
-                    plugins={[dayGridPlugin]}
+                    plugins={[dayGridPlugin, timeGridPlugin]}
                     initialView="dayGridMonth"
+                    headerToolbar={
+                        {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridWeek'
+                        }
+                    }
                 />
             </section>
         </>
