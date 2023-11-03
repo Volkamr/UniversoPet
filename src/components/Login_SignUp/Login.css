@@ -29,7 +29,7 @@
     grid-template-columns: 2fr 2fr;
     grid-template-rows: 1fr 4fr;
     width: 340px;
-    height: 450px;
+    height: 460px;
     transition: height 0.5s ease;
     transition: width 0.5s ease;
     overflow: hidden;
@@ -327,4 +327,14 @@ label {
 
 #a-terminos:hover {
     text-decoration: underline;
+}
+
+#seleccionar-rol{
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#select-r{
+    margin-bottom: 5px;
 }

@@ -59,7 +59,7 @@ const Perfil = () => {
             console.log(user)
         }
         loadUser(token)
-    }, [])
+    }, [token])
 
     const [UserPets, setUserPets] = useState([])
     useEffect(() => {
@@ -342,14 +342,24 @@ const Perfil = () => {
             <Mascotas UserPets={UserPets} idUsuario={user.idUsuario}></Mascotas>
             <Calendario></Calendario>
             <div className='perfil__btn__cita'>
-                <button className='btn text-cs h' onClick={() => toggleTab(1)}> Agendar Cita </button>
+                <button className='btn text-cs h' 
+                onClick={() => {if (UserPets.length!=0){
+                    toggleTab(1)
+                }else{
+                    Swal.fire({
+                        icon:'error',
+                        title: 'No puede agendar cita sin mascota',
+                        text: 'Debe tener una mascota registrada para agendar una cita'
+                    })
+                }
+                
+                }}> Agendar Cita </button>
             </div>
             <div className={toggleState === 1 ? "perfil__cita__form active-perfil__cita__form" : "perfil__cita__form"}>
                 <div className='perfil__cita__form__c'>
                     <button onClick={() => toggleTab(0)}> <AiOutlineClose className='perfil__cita__close' /> </button>
-                    <h1 className='form__titulo text-cs'> Agregar Cita </h1>
-                    <Formik>
-                        <Form >
+                    <h1 className='form__titulo text-cs'> Agregar Cita </h1>   
+                        <form >
                             <div className='perfil__cform'>
                                 <div className='perfil__cform__content'>
                                     <div className='perfil__form__pri grid'>
@@ -419,8 +429,8 @@ const Perfil = () => {
                             <div className='form__btn'>
                                 <button className="btn text-cs h"> Agregar Cita </button>
                             </div>
-                        </Form>
-                    </Formik>
+                        </form>
+                    
                 </div>
             </div>
         </section>

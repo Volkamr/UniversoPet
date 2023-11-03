@@ -65,7 +65,16 @@
     color: var(--color-titulo);
     height: 25px;
     width: 25px;
-    position: absolute;
+    position: relative;
     top: 13px;
     transition: .5s;
+}
+
+.logged{
+    display: flex;
+    text-align: center;
+    height: 20px;
+    padding: 1.4%;
+    transition: .5s;
+    position: relative;
 }

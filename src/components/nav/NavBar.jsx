@@ -3,6 +3,7 @@ import { GiDogHouse } from 'react-icons/gi'
 import { FaUserCircle } from 'react-icons/fa'
 import './navbar.css'
 import { Link, useActionData } from "react-router-dom"
+import Swal from "sweetalert2";
 
 export const NavBar = () => {
 
@@ -47,10 +48,29 @@ export const NavBar = () => {
                 </Link>
                 {
                     estado === 'Loggeado' ? (
-                        <Link to={rol === 'usuario' ? (`/perfil/${token}`)
-                            : rol === 'veterinario' ? (`/Veterinario/${token}`) : (`/Administrador/${token}`)}>
-                            <FaUserCircle className="nav_iconR"> </FaUserCircle>
-                        </Link>
+                        <div className="logged">
+                            <Link to="/UniversoPet" className="nav_link text-cs" id="logout"
+                            onClick={() => {
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Cerró sesión',
+                                    text: 'será redirigido a la página principal',
+                                })
+                                .then(() => {
+                                    localStorage.removeItem('UserToken');
+                                    window.location.href = '/UniversoPet';
+                                });
+                            }}
+                            >
+                                <p>
+                                    Logout
+                                </p>
+                            </Link>
+                            <Link to={rol === 'usuario' ? (`/perfil/${token}`)
+                                : rol === 'veterinario' ? (`/Veterinario/${token}`) : (`/Administrador/${token}`)}>
+                                <FaUserCircle id="user" className="nav_iconR"> </FaUserCircle>
+                            </Link>
+                        </div>
                     ) : (
                         <Link to="/login" className="nav_link text-cs">
                             <p>

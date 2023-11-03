@@ -232,7 +232,17 @@ export const Login = () => {
                     icon: 'success',
                     title: data.message,
                     text: "Debe iniciar sesión",
+                })
+                .then(() => {
+                   setNombres('');
+                   setCelular('');
+                   setPassReg('');
+                   setAPellidos('');
+                   setNombres('');
+                   setEmailReg('');
+                   setEdad('');
                 });
+
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -268,6 +278,13 @@ export const Login = () => {
                             <span className="line"></span>
 
                             <div className="inputs">
+                                <p id="seleccionar-rol">Seleccione su rol</p>
+                                <Select id="select-r"
+                                    value={rol}
+                                    options={opcionesFiltradas}
+                                    onChange={handleSelectItem}
+                                >
+                                </Select>
 
                                 <label for={rol.value === 'Usuario' ? ("email") : rol.value === 'Veterinario' ? ("cedula") : ("admin_user")}>
                                     {rol.value === 'Usuario' ? ('Email') : rol.value === "Veterinario" ? ('Cedula') : ('Admin user')}
@@ -284,13 +301,6 @@ export const Login = () => {
                                 <label for="psswd">Contraseña</label>
                                 <input className="input-log" type="password" name="password" value={password_log} required
                                     placeholder="Ingrese su contraseña" id="psswd" onChange={passLoginChange}></input>
-
-                                <Select
-                                    value={rol}
-                                    options={opcionesFiltradas}
-                                    onChange={handleSelectItem}
-                                >
-                                </Select>
 
                                 <p className="mensaje">
                                     ¿Olvidó su contraseña?
