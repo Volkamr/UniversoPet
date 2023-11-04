@@ -50,17 +50,17 @@ export const NavBar = () => {
                     estado === 'Loggeado' ? (
                         <div className="logged">
                             <Link to="/UniversoPet" className="nav_link text-cs" id="logout"
-                            onClick={() => {
-                                Swal.fire({
-                                    icon: 'info',
-                                    title: 'Cerró sesión',
-                                    text: 'será redirigido a la página principal',
-                                })
-                                .then(() => {
-                                    localStorage.removeItem('UserToken');
-                                    window.location.href = '/UniversoPet';
-                                });
-                            }}
+                                onClick={() => {
+                                    Swal.fire({
+                                        icon: 'info',
+                                        title: 'Cerró sesión',
+                                        text: 'será redirigido a la página principal',
+                                    })
+                                        .then(() => {
+                                            localStorage.removeItem('UserToken');
+                                            window.location.href = '/UniversoPet';
+                                        });
+                                }}
                             >
                                 <p>
                                     Logout

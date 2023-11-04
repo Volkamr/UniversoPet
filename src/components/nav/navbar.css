@@ -8,7 +8,7 @@
 }
 
 .nav-active {
-    column-gap: 30%;
+    column-gap: 12%;
 }
 
 .nav__left {
@@ -66,15 +66,17 @@
     height: 25px;
     width: 25px;
     position: relative;
-    top: 13px;
+    top: -5px;
+    margin-left: 20px;
     transition: .5s;
 }
 
-.logged{
+.logged {
     display: flex;
     text-align: center;
     height: 20px;
     padding: 1.4%;
     transition: .5s;
     position: relative;
+    top: -3.5px;
 }
