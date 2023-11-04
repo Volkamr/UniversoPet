@@ -12,14 +12,18 @@ import { Link, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { getAdminRequest } from "../../api/vet";
 import Swal from "sweetalert2";
+import { getSedesRequest } from "../../api/vet";
 
+const Sedes = [
+    ...new Set(((await getSedesRequest()).data))
+]
 
 const Administrador = () => {
 
 
     const [admin, setAdmin] = useState('')
-
     const [token, setToken] = useState(useParams().adminToken)
+
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('UserToken');
@@ -59,16 +63,16 @@ const Administrador = () => {
                     </p>
 
                     <br />
-                    <Link  onClick={() => {
+                    <Link onClick={() => {
                         Swal.fire({
                             icon: 'info',
                             title: 'Cerró sesión',
                             text: 'será redirigido a la página principal',
                         })
-                        .then(() => {
-                            localStorage.removeItem('UserToken');
-                            window.location.href = '/UniversoPet';
-                        });
+                            .then(() => {
+                                localStorage.removeItem('UserToken');
+                                window.location.href = '/UniversoPet';
+                            });
                     }}>
                         <p className="nosotros_text" id="salir"> Salir </p>
                     </Link>
@@ -78,7 +82,7 @@ const Administrador = () => {
             <br />
             <br />
             <h2 className="empleados__title"> Empleados</h2>
-            <Cartas></Cartas>
+            <Cartas Sedes={Sedes}></Cartas>
             <h3 className="sede__title"> Sede 1</h3>
             <PersonalSwiper></PersonalSwiper>
             <h3 className="sede__title"> Sede 2</h3>
