@@ -120,18 +120,55 @@ export const getPersonalP = async (req, res) => {
     res.json(result);
 }
 
-export const getVeterinariosxSede = async (req, res) =>{
-   try{
-    const idSede = req.params.idSede;
-    console.log(idSede)
-    const [result] = await pool.query(
-        "SELECT Personal.cedula, nombres, apellidos FROM Personal inner join historialPersonal on historialPersonal.cedula = Personal.cedula inner join Sedes on historialPersonal.idSede = Sedes.idSede WHERE historialPersonal.FechaFinal IS NULL AND historialPersonal.idSede =? ", [idSede]
+export const getVeterinariosxSede = async (req, res) => {
+    try {
+        const idSede = req.params.idSede;
+        const [result] = await pool.query(
+            "SELECT Personal.cedula, nombres, apellidos FROM Personal inner join historialPersonal on historialPersonal.cedula = Personal.cedula inner join Sedes on historialPersonal.idSede = Sedes.idSede WHERE historialPersonal.FechaFinal IS NULL AND historialPersonal.idSede =? ", [idSede]
         )
         console.log(result)
-    return res.json(result);
-   }catch(error){
-    console.log(error)
-   }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const getCitasMascota = async (req, res) => {
+    try {
+        const idMascota = req.params.idMascota;
+        const [result] = await pool.query("SELECT titulo AS sede, Servicios.nombre AS servicio, nombres AS nombres_vet, apellidos AS apellidos_vet, FechaInicio, estadoCita  From Citas inner join Sedes on Sedes.idSede = Citas.idSede" +
+            " inner join Servicios on Servicios.idServicio = Citas.idServicio inner join Personal on Personal.cedula = Citas.cedula inner join EstadosCitas on EstadosCitas.idEstadoCita = Citas.idEstadoCita" +
+            " inner join Mascotas on Mascotas.idMascota = Citas.idMascota WHERE Mascotas.idMascota = ? ", [idMascota]);
+
+        return res.status(200).json(result)
+    } catch (error) {
+        console.error('Error en la función postLogin:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+}
+
+export const getCitasUsuario = async (req, res) => {
+    try {
+
+        const idUsuario = req.params.idUsuario;
+        const [result] = await pool.query("SELECT Mascotas.idMascota, Mascotas.nombre AS nombre_mascota, Servicios.nombre AS servicio, Sedes.titulo AS sede, Personal.nombres AS nombre_vet, Personal.apellidos AS apellidos_vet, FechaInicio, estadoCita FROM Citas Inner Join Mascotas on Mascotas.idMascota = Citas.idMascota " +
+            " inner join Sedes on Citas.idSede = Sedes.idSede inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Personal on Citas.cedula = Personal.cedula inner join Usuarios on Mascotas.idUsuario = Usuarios.idUsuario" +
+            " inner join EstadosCitas on Citas.idEstadoCita = EstadosCitas.idEstadoCita WHERE Usuarios.idUsuario = ? ", [idUsuario])
+
+        return res.status(200).json(result)
+
+    } catch (error) {
+        console.error('Error en la función postLogin:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+
 }
 
 
@@ -399,13 +436,13 @@ export const PostAgendarCita = async (req, res) => {
                 title: 'Datos incompletos',
                 message: "La cita debe tener una fecha"
             })
-        } else if (data.cedulaVet == null || data.cedulaVet=='') {
+        } else if (data.cedulaVet == null || data.cedulaVet == '') {
             return res.status(200).json({
                 success: false,
                 title: 'Datos incompletos',
                 message: "Debe seleccionar un veterinario"
             })
-        } else if (data.idSede == null || data.idSede=='') {
+        } else if (data.idSede == null || data.idSede == '') {
             return res.status(200).json({
                 success: false,
                 title: 'Datos incompletos',
@@ -458,15 +495,26 @@ export const PostAgendarCita = async (req, res) => {
             if (result_fecha_servicio.length != 0) {
                 return res.status(200).json({
                     success: false,
+                    title: "Fecha y hora no disponible",
                     message: "Esa fecha ya está tomada por otro paciente para el servicio solicitado en la sede especificada"
                 })
             } else {
                 if (result_vet.length != 0) {
                     return res.status(200).json({
                         success: false,
+                        title: "Veterinario ocupado",
                         message: "Ese veterinario está ocupado para la fecha y hora especificadas"
                     })
                 } else {
+
+                    const [result_mascota_servicio] = await pool.query("Select * FROM Citas WHERE idMascota = ? AND FechaInicio = ? AND idEstadoCita = ?", [data.idMascota, fechaCita, idEstado])
+                    if (result_mascota_servicio.length != 0) {
+                        return res.status(200).json({
+                            success: false,
+                            title: 'Mascota ya agendada',
+                            message: "La mascota seleccionada ya tiene agendade una cita"
+                        })
+                    }
 
                     try {
                         await pool.query("INSERT INTO Citas SET ?", {
@@ -477,6 +525,7 @@ export const PostAgendarCita = async (req, res) => {
                             idSede: data.idSede,
                             idEstadoCita: idEstado
                         })
+
                     } catch (error) {
                         console.error('Error al enviar datos a la BD:', error);
                         return res.status(500).json({
@@ -504,6 +553,7 @@ export const PostAgendarCita = async (req, res) => {
     }
 
 }
+
 
 
 export const postServices = (req, res) => {
@@ -652,7 +702,7 @@ export const postMascota = async (req, res) => {
                 success: false,
                 message: "Una mascota debe tener una raza"
             })
-        }else if (data.fechaNac == null){
+        } else if (data.fechaNac == null) {
             return res.status(200).json({
                 success: false,
                 message: "Debe ingresar la fecha de nacimiento de su mascota"

@@ -22,7 +22,9 @@ import {
     getVeterinario,
     getAdministrador,
     getVeterinariosxSede,
-    PostAgendarCita
+    PostAgendarCita,
+    getCitasMascota,
+    getCitasUsuario
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -38,6 +40,8 @@ router.get('/UniversoPet/Api/PersonalP', getPersonalP)
 router.get('/UniversoPet/Api/Veterinario/:vetToken', getVeterinario)
 router.get('/UniversoPet/Api/Administrador/:adminToken', getAdministrador)
 router.get('/UniversoPet/Api/VetxSedes/:idSede', getVeterinariosxSede)
+router.get('/UniversoPet/Api/CitasxMascota/:idMascota', getCitasMascota)
+router.get('/UniversoPet/Api/CitasxUsuario/:idUsuario', getCitasUsuario)
 
 router.post('/UniversoPet/Api/CreateServices', postServices)
 router.post('/UniversoPet/Api/CreateSedes', postSedes)

@@ -239,28 +239,48 @@ const Perfil = () => {
         event.preventDefault();
         try {
 
-            const response = await postAgendarCitaRequest(fechaHora, vetSeleccionado, sedeSeleccionada, selectedPet, SelectedService)
+            const result = await Swal.fire({
+                title: '¿Está seguro?',
+                text: "¿Está seguro de agendar esta cita?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar'
+            })
 
-            if (response.status < 200 || response.status >= 300) {
-                throw new Error(`Error - ${response.status}`);
-            }
 
-            const data = response.data;
+            if (result.isConfirmed == true) {
+                const response = await postAgendarCitaRequest(fechaHora, vetSeleccionado, sedeSeleccionada, selectedPet, SelectedService)
 
-            if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: data.title,
-                    text: data.message,
-                    showConfirmButton: true,
-                })
+                if (response.status < 200 || response.status >= 300) {
+                    throw new Error(`Error - ${response.status}`);
+                }
 
+                const data = response.data;
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: data.title,
+                        text: data.message,
+                        showConfirmButton: true,
+                    })
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: data.title,
+                        text: data.message,
+                        showConfirmButton: true,
+                    });
+                }
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: data.title,
-                    text: data.message,
-                    showConfirmButton: true,
+                    title: 'Cancelada',
+                    text: 'No agendó su cita'
                 });
             }
 
