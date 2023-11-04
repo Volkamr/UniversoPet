@@ -97,3 +97,13 @@ export const postLoginAdminRequest = async (adminusr, password) => {
         password: password
     })
 }
+
+export const postAgendarCitaRequest = async (fecha, cedulaVet, idSede, idMascota, idServicio) =>{
+    return await axios.post('http://localhost:3001/UniversoPet/Api/AgendarCita',{
+        fecha: fecha,
+        cedulaVet: cedulaVet,
+        idSede: idSede,
+        idMascota: idMascota,
+        idServicio: idServicio
+    })
+}

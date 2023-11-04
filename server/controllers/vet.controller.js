@@ -374,6 +374,138 @@ export const postCambiarInfo = async (req, res) => {
     }
 }
 
+
+export const PostAgendarCita = async (req, res) => {
+
+    try {
+        const data = req.body;
+
+        const fechaActual = new Date();
+        const horaActual = fechaActual.getHours();
+        const minutoActual = fechaActual.getMinutes();
+        const minutoHoraActual = (horaActual * 60) + minutoActual;
+        const diaActual = fechaActual.getDate();
+
+        const fechaCita = new Date(data.fecha);
+        const horaCita = fechaCita.getHours();
+        const diaCita = fechaCita.getDate();
+        const minutoCita = fechaCita.getMinutes();
+
+        const minutoHoraCita = (horaCita * 60) + minutoCita;
+
+        if (data.fecha == null) {
+            return res.status(200).json({
+                success: false,
+                title: 'Datos incompletos',
+                message: "La cita debe tener una fecha"
+            })
+        } else if (data.cedulaVet == null || data.cedulaVet=='') {
+            return res.status(200).json({
+                success: false,
+                title: 'Datos incompletos',
+                message: "Debe seleccionar un veterinario"
+            })
+        } else if (data.idSede == null || data.idSede=='') {
+            return res.status(200).json({
+                success: false,
+                title: 'Datos incompletos',
+                message: "Debe seleccionar una sede"
+            })
+        } else if (data.idMascota == null || data.idMascota == '') {
+            return res.status(200).json({
+                success: false,
+                title: 'Datos incompletos',
+                message: "Debe seleccionar una mascota"
+            })
+        } else if (data.idServicio == null || data.idServicio == '') {
+            return res.status(200).json({
+                success: false,
+                title: 'Datos incompletos',
+                message: "Debe seleccionar un servicio"
+            })
+        } else if (fechaCita < fechaActual) {
+            return res.status(200).json({
+                success: false,
+                title: 'Fecha incorrecta',
+                message: "Debe seleccionar una fecha futura"
+            })
+        } else if (minutoCita % 30 != 0) {
+            return res.status(200).json({
+                success: false,
+                title: 'Hora incorrecta',
+                message: "La hora debe estar solo en rangos de media hora \n Ejemplo: (..,2:00, 2:30,..)"
+            })
+        } else if (minutoHoraCita < 480 || minutoHoraCita > 1170) {
+            return res.status(200).json({
+                success: false,
+                title: 'Hora incorrecta',
+                message: "Nuestro Horario de atención es de 8:00AM a 8:00PM"
+            })
+        } else if (((minutoHoraCita - minutoHoraActual) < 30) && diaCita == diaActual) {
+            return res.status(200).json({
+                success: false,
+                title: 'Hora incorrecta',
+                message: "Debe agendar su cita al menos con media hora de anticipación"
+            })
+        }
+        else {
+
+            const [result_estado] = await pool.query("Select idEstadoCita FROM EstadosCitas WHERE estadoCita = ?", ["agendada"]);
+            const idEstado = result_estado[0].idEstadoCita;
+            const [result_fecha_servicio] = await pool.query("SELECT * FROM Citas WHERE FechaInicio = ? AND idEstadoCita = ? AND idServicio = ? AND idSede = ?", [fechaCita, idEstado, data.idServicio, data.idSede]);
+            const [result_vet] = await pool.query('SELECT * FROM Citas WHERE FechaInicio = ? AND cedula = ? AND idEstadoCita', [fechaCita, data.cedulaVet, idEstado]);
+
+            if (result_fecha_servicio.length != 0) {
+                return res.status(200).json({
+                    success: false,
+                    message: "Esa fecha ya está tomada por otro paciente para el servicio solicitado en la sede especificada"
+                })
+            } else {
+                if (result_vet.length != 0) {
+                    return res.status(200).json({
+                        success: false,
+                        message: "Ese veterinario está ocupado para la fecha y hora especificadas"
+                    })
+                } else {
+
+                    try {
+                        await pool.query("INSERT INTO Citas SET ?", {
+                            fechaInicio: fechaCita,
+                            idServicio: data.idServicio,
+                            idMascota: data.idMascota,
+                            cedula: data.cedulaVet,
+                            idSede: data.idSede,
+                            idEstadoCita: idEstado
+                        })
+                    } catch (error) {
+                        console.error('Error al enviar datos a la BD:', error);
+                        return res.status(500).json({
+                            message: "Error en el servidor",
+                            success: false
+                        });
+                    }
+
+                    return res.status(200).json({
+                        success: true,
+                        title: 'Cita agendada correctamente',
+                        message: "Recibirá un correo con la confirmación de su cita"
+                    })
+
+                }
+            }
+        }
+
+    } catch (error) {
+        console.error('Error en la función postAgendarCita:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+
+}
+
+
 export const postServices = (req, res) => {
 
 

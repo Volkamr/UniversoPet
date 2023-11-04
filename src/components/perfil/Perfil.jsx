@@ -5,7 +5,7 @@ import "./perfil.css"
 import Mascotas from '../mascotas/Mascotas'
 import { useEffect, useState } from "react";
 import Calendario from '../calendarioUser/Calendario'
-import { getSedesRequest, getUserPetsRequest, getVetRequest, getVeterinarioxSedeRequest } from '../../api/vet'
+import { getSedesRequest, getUserPetsRequest, getVetRequest, getVeterinarioxSedeRequest, postAgendarCitaRequest } from '../../api/vet'
 import { AiOutlineClose } from 'react-icons/ai'
 import { Form, Formik } from 'formik'
 import { getServicesRequest } from '../../api/vet'
@@ -166,19 +166,30 @@ const Perfil = () => {
         }
     }
 
-    const [fechaHora, setFechaHora] = useState(new Date());
+    const [fechaHora, setFechaHora] = useState(null);
+    console.log(fechaHora)
 
     const handleCambioFecha = (nuevaFecha) => {
         setFechaHora(nuevaFecha);
     }
 
-    const [SelectedService, setSelectedService] = useState('');
+    const [SelectedService, setSelectedService] = useState(null);
+
+    const service_def = services.length > 0 ? services[0].idServicio : null;
+    useEffect(() => {
+        setSelectedService(service_def);
+      }, [service_def]);
 
     const handleCambioServicio = (event) => {
         setSelectedService(event.target.value)
     }
 
-    const [selectedPet, setSelectedPet] = useState('');
+    const [selectedPet, setSelectedPet] = useState(null);
+
+    const pet_def = UserPets.length > 0 ? UserPets[0].idMascota : null;
+    useEffect(() => {
+        setSelectedPet(pet_def);
+      }, [pet_def]);
 
     const handleCambioMascota = (event) => {
         setSelectedPet(event.target.value);
@@ -186,16 +197,16 @@ const Perfil = () => {
 
     const [sedeSeleccionada, setSedeSeleccionada] = useState(null);
 
+    const sede_def = sedes.length > 0 ? sedes[0].idSede : null;
+    useEffect(() => {
+        setSedeSeleccionada(sede_def);
+      }, [sede_def]);
+
+
     const handleCambioSede = (event) => {
         setSedeSeleccionada(event.target.value);
+
     }
-
-    const [vetSeleccionado, setVetSeleccionado] = useState('');
-
-    const handleVetSeleccionado = (event) => {
-        setVetSeleccionado(event.target.value)
-    }
-
 
     const [vets, setVets] = useState([]);
 
@@ -206,6 +217,63 @@ const Perfil = () => {
         }
         loadVets()
     }, [sedeSeleccionada])
+
+
+    const [vetSeleccionado, setVetSeleccionado] = useState(null);
+    const vet_def = vets.length > 0 ? vets[0].cedula : null;
+
+    useEffect(() => {
+        setVetSeleccionado(vet_def);
+      }, [vet_def]);
+
+    const handleVetSeleccionado = (event) => {
+        setVetSeleccionado(event.target.value)
+    }
+
+    console.log("vet: " + vetSeleccionado)
+    console.log("pet: " + selectedPet)
+    console.log("servicio: " + SelectedService);
+    console.log("sede: " + sedeSeleccionada)
+
+    const handleAgendarCita = async (event) => {
+        event.preventDefault();
+        try {
+
+            const response = await postAgendarCitaRequest(fechaHora, vetSeleccionado, sedeSeleccionada, selectedPet, SelectedService)
+
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(`Error - ${response.status}`);
+            }
+
+            const data = response.data;
+
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: data.title,
+                    text: data.message,
+                    showConfirmButton: true,
+                })
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: data.title,
+                    text: data.message,
+                    showConfirmButton: true,
+                });
+            }
+
+        } catch (error) {
+            console.error('error:', error);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'ERROR EN EL SERVIDOR',
+                text: 'Error en el servidor'
+            });
+        }
+    }
 
     return (
 
@@ -342,95 +410,99 @@ const Perfil = () => {
             <Mascotas UserPets={UserPets} idUsuario={user.idUsuario}></Mascotas>
             <Calendario></Calendario>
             <div className='perfil__btn__cita'>
-                <button className='btn text-cs h' 
-                onClick={() => {if (UserPets.length!=0){
-                    toggleTab(1)
-                }else{
-                    Swal.fire({
-                        icon:'error',
-                        title: 'No puede agendar cita sin mascota',
-                        text: 'Debe tener una mascota registrada para agendar una cita'
-                    })
-                }
-                
-                }}> Agendar Cita </button>
+                <button className='btn text-cs h'
+                    onClick={() => {
+                        if (UserPets.length != 0) {
+                            toggleTab(1)
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'No puede agendar cita sin mascota',
+                                text: 'Debe tener una mascota registrada para agendar una cita'
+                            })
+                        }
+
+                    }}> Agendar Cita </button>
             </div>
             <div className={toggleState === 1 ? "perfil__cita__form active-perfil__cita__form" : "perfil__cita__form"}>
                 <div className='perfil__cita__form__c'>
                     <button onClick={() => toggleTab(0)}> <AiOutlineClose className='perfil__cita__close' /> </button>
-                    <h1 className='form__titulo text-cs'> Agregar Cita </h1>   
-                        <form >
-                            <div className='perfil__cform'>
-                                <div className='perfil__cform__content'>
-                                    <div className='perfil__form__pri grid'>
-                                        <div className='perfil__form__sep'>
-                                            <label for="mascotas" className='perfil__formL text-cs'>Mascota</label>
-                                            <select name="mascotas" id="mascotas" className='form__input__perfiL'
-                                                value={selectedPet} onChange={handleCambioMascota}>
-                                                {
+                    <h1 className='form__titulo text-cs'> Agendar Cita </h1>
+                    <form onSubmit={handleAgendarCita}>
+                        <div className='perfil__cform'>
+                            <div className='perfil__cform__content'>
+                                <div className='perfil__form__pri grid'>
+                                    <div className='perfil__form__sep'>
+                                        <label for="mascotas" className='perfil__formL text-cs'>Mascota</label>
+                                        <select name="mascotas" id="mascotas" className='form__input__perfiL'
+                                            value={selectedPet} onChange={handleCambioMascota}>
+                                            {
 
-                                                    UserPets.map((mascota, index) => {
-                                                        return <option value={mascota.idMascota} key={index} >{mascota.nombre}</option>
-                                                    })
+                                                UserPets.map((mascota, index) => {
+                                                    return <option value={mascota.idMascota} key={index} >{mascota.nombre}</option>
+                                                })
 
-                                                }
-                                            </select>
-                                        </div>
-                                        <div className='perfil__form__sep'>
-                                            <label for="servicios" className='perfil__formL text-cs'>Servicios</label>
-                                            <select name="servicios" id="servicios" className='form__input__perfiL'
-                                                value={SelectedService} onChange={handleCambioServicio}
-                                            >
-                                                {
-                                                    services.map((service, index) => {
-                                                        return <option value={service.idServicio} key={index} >{service.nombre}</option>
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
+                                            }
+                                        </select>
                                     </div>
-                                    <div className='perfil__form__sec grid'>
-                                        <div className='perfil__form__sep'>
-                                            <label htmlFor="hora" className='perfil__formL text-cs'>Fecha</label>
-                                            <DatePicker selected={fechaHora} onChange={handleCambioFecha} timeCaption='Hora'
-                                                showTimeSelect timeFormat='HH:mm' timeIntervals={30} dateFormat={"yyyy-MM-dd HH:mm:ss"}
-                                                className='form__input__perfil'
-                                            ></DatePicker>
-                                        </div>
-                                        <div className='perfil__form__sep'>
-                                            <label for="veterinarios" className='perfil__formL text-cs'> Veterinario </label>
-                                            <select name="veterinarios" className='form__input__perfiL'
-                                                value={vetSeleccionado} onChange={handleVetSeleccionado}
-                                            >
-                                                {
-                                                    vets.map((vet, index) => {
-                                                        return <option value={vet.cedula} key={index} >{vet.nombres + " " + vet.apellidos}</option>
-                                                    })
-                                                }
+                                    <div className='perfil__form__sep'>
+                                        <label for="servicios" className='perfil__formL text-cs'>Servicios</label>
+                                        <select name="servicios" id="servicios" className='form__input__perfiL'
+                                            value={SelectedService} onChange={handleCambioServicio}
+                                        >
+                                            {
+                                                services.map((service, index) => {
+                                                    return <option value={service.idServicio} key={index} >{service.nombre}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className='perfil__form__sec grid'>
+                                    <div className='perfil__form__sep'>
+                                        <label htmlFor="hora" className='perfil__formL text-cs'>Fecha</label>
+                                        <DatePicker selected={fechaHora} onChange={handleCambioFecha} timeCaption='Hora'
+                                            showTimeSelect timeFormat='HH:mm' timeIntervals={30} dateFormat={"yyyy-MM-dd HH:mm:ss"}
+                                            className='form__input__perfil'
+                                        ></DatePicker>
+                                    </div>
+                                    <div className='perfil__form__sep'>
+                                        <label for="veterinarios" className='perfil__formL text-cs'> Veterinario </label>
+                                        <select name="veterinarios" className='form__input__perfiL'
+                                            value={vetSeleccionado} onChange={handleVetSeleccionado}
+                                        >
+                                            {
+                                                vets.map((vet, index) => {
 
-                                            </select>
-                                        </div>
-                                        <div className='perfil__form__sep'>
-                                            <label for="sedes" className='perfil__formL text-cs'> Sedes </label>
-                                            <select name="sedes" className='form__input__perfiL'
-                                                value={sedeSeleccionada} onChange={handleCambioSede}
-                                            >
-                                                {
-                                                    sedes.map((sede, index) => {
-                                                        return <option value={sede.idSede} key={index} >{sede.titulo}</option>
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
+                                                    return <option value={vet.cedula} key={index}>{vet.nombres + " " + vet.apellidos}</option>
+
+                                                })
+                                            }
+
+                                        </select>
+                                    </div>
+                                    <div className='perfil__form__sep'>
+                                        <label for="sedes" className='perfil__formL text-cs'> Sedes </label>
+                                        <select name="sedes" className='form__input__perfiL'
+                                            value={sedeSeleccionada
+                                            } onChange={handleCambioSede}
+                                        >
+                                            {
+                                                sedes.map((sede, index) => {
+                                                    return <option value={sede.idSede} key={index} >{sede.titulo}</option>
+                                                })
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div className='form__btn'>
-                                <button className="btn text-cs h"> Agregar Cita </button>
-                            </div>
-                        </form>
-                    
+                        <div className='form__btn'>
+                            <button className="btn text-cs h"> Agendar Cita </button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </section>
