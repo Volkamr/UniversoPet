@@ -111,7 +111,7 @@ const Veterinario = () => {
                     Tus <span> Citas </span>
                 </p>
                 <div className='calendario__vet'>
-                    <CalendarioVet></CalendarioVet>
+                    <CalendarioVet cedula={veterinario.cedula}></CalendarioVet>
                 </div>
             </div>
 

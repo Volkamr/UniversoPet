@@ -1,0 +1,75 @@
+.fondo{
+    position: fixed;
+    background: rgba(0,0,0,0, 0.7);
+    top:0;
+    bottom:0;
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.ventana{
+    background-color: '#fffff';
+    width: 1000px;
+    height: 200px;
+    backdrop-filter: blur(20px);
+    padding: 30px 50px 50px 40px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    border-radius: 25px;
+    align-self: center;
+    z-index: 1000;
+    position: absolute;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.header{
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+}
+
+#titulo{
+    grid-column: 1;
+    font-size: 30px;
+}
+
+.cerrar{
+    grid-column: 2;
+    margin-left: 150px;
+    cursor: pointer;
+}
+
+.body{
+    display: grid;
+    grid-template-columns: 2fr 2fr 3fr 2fr 2fr 2fr; 
+}
+
+.servicio{
+    grid-column: 1;
+}
+
+.mascota{
+    grid-column: 2;
+}
+
+.usuario{
+    grid-column: 3;
+}
+
+.fecha{
+    grid-column: 4;
+}
+
+.estado{
+    grid-column: 6;
+}
+
+.sede{
+    grid-column: 5;
+}
+
+.titulos{
+    font-size: 20px;
+}

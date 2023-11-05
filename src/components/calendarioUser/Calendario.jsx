@@ -5,7 +5,6 @@ import timeGridPlugin from '@fullcalendar/timegrid'; // a plugin!
 import "./calendario.css"
 import { getCitasxUsuarioRequest } from '../../api/vet';
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
 import CartaCitaUser from './cartaCitaUser/CartaCitaUser';
 
 const Calendario = (idUsuario) => {

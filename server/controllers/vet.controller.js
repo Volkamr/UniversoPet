@@ -171,6 +171,22 @@ export const getCitasUsuario = async (req, res) => {
 
 }
 
+export const getCitasVet = async (req, res) =>{
+    try{
+        
+        const cedula = req.params.cedula;
+        const[result] = await pool.query("SELECT Mascotas.idMascota, Mascotas.nombre AS nombre_mascota, Mascotas.idUsuario, Servicios.nombre AS servicio, Sedes.titulo AS sede, FechaInicio, estadoCita, Usuarios.email as correo_usuario FROM Citas Inner Join Mascotas on Mascotas.idMascota = Citas.idMascota"+
+        " inner join EstadosCitas on Citas.idEstadoCita = EstadosCitas.idEstadoCita inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Sedes.idSede = Citas.idSede inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario where cedula = ?", [cedula])
+        return res.status(200).json(result)
+    }catch(error){
+        console.error('Error en la función postLogin:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+}
+
 
 //---------------------------------------------------------------------------> POST
 

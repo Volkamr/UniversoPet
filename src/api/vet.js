@@ -71,6 +71,11 @@ export const getCitasxUsuarioRequest = async (idUsuario) =>{
     return response;
 }
 
+export const getCitasxVetRequest = async (cedula) =>{
+    const response = await axios.get(`http://localhost:3001/UniversoPet/Api/CitasxVet/${cedula}`)
+    return response;
+}
+
 export const createMascota = async (mascota) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateMascota', mascota);
 
 export const updateMascota = async (mascota) => await axios.post('http://localhost:3001/UniversoPet/Api/UpdateMascota', mascota);
