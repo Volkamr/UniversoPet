@@ -43,7 +43,7 @@ const Veterinario = () => {
                     <div className='vet__foto'>
                     {
                     veterinario.fotoPerfil != null ? <img src={veterinario.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
-                }
+                    }
                     </div>
                     <div className="vet__info__content">
                         <h1 className='vet__tittle text-cs'> {"Dr. " + veterinario.nombres} </h1>
@@ -111,7 +111,7 @@ const Veterinario = () => {
                     Tus <span> Citas </span>
                 </p>
                 <div className='calendario__vet'>
-                    <CalendarioVet cedula={veterinario.cedula}></CalendarioVet>
+                    <CalendarioVet cedula={veterinario.cedula} token={token}></CalendarioVet>
                 </div>
             </div>
 

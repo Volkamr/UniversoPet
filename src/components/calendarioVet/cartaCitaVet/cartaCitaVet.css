@@ -33,6 +33,11 @@
 #titulo{
     grid-column: 1;
     font-size: 30px;
+    cursor: pointer;
+}
+
+#titulo:hover{
+    color: rgb(43, 161, 132);
 }
 
 .cerrar{

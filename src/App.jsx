@@ -25,7 +25,7 @@ function App() {
                 <Route path="/perfil/:accessToken" element={<Perfil />} />
                 <Route path="/citas/:idCita" element={<Citas />} >  </Route>
                 <Route path="/Veterinario/:vetToken" element={<Veterinario />}></Route>
-                <Route path="/CitasVet" element={<CitasVet />}></Route>
+                <Route path="/Veterinario/:vetToken/:idCita" element={<CitasVet />}></Route>
                 <Route path="/Administrador/:adminToken" element={<Administrador/>}></Route>
             </Routes>
 

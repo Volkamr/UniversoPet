@@ -175,11 +175,42 @@ export const getCitasVet = async (req, res) =>{
     try{
         
         const cedula = req.params.cedula;
-        const[result] = await pool.query("SELECT Mascotas.idMascota, Mascotas.nombre AS nombre_mascota, Mascotas.idUsuario, Servicios.nombre AS servicio, Sedes.titulo AS sede, FechaInicio, estadoCita, Usuarios.email as correo_usuario FROM Citas Inner Join Mascotas on Mascotas.idMascota = Citas.idMascota"+
+        const[result] = await pool.query("SELECT Citas.idCita as idCita, Mascotas.idMascota, Mascotas.nombre AS nombre_mascota, Mascotas.idUsuario, Servicios.nombre AS servicio, Sedes.titulo AS sede, FechaInicio, estadoCita, Usuarios.email as correo_usuario FROM Citas Inner Join Mascotas on Mascotas.idMascota = Citas.idMascota"+
         " inner join EstadosCitas on Citas.idEstadoCita = EstadosCitas.idEstadoCita inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Sedes.idSede = Citas.idSede inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario where cedula = ?", [cedula])
         return res.status(200).json(result)
     }catch(error){
-        console.error('Error en la función postLogin:', error);
+        console.error('Error en la función getCitasVet:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+}
+
+export const getCita = async (req, res) =>{
+    try{
+        const idCita = req.params.idCita;
+        const [result] = await pool.query("Select peso, raza, tipoAnimal, Usuarios.nombres as nombres_user, Usuarios.apellidos as apellidos_user, Servicios.nombre as servicio, estadoCita, Sedes.titulo as sede, FechaInicio, Mascotas.nombre AS mascota FROM Citas inner join Mascotas on Mascotas.idMascota=Citas.idMascota"+
+        " inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Citas.idSede = Sedes.idSede inner join EstadosCitas on EstadosCitas.idEstadoCita = Citas.idEstadoCita inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario inner join Razas on Razas.idRaza = Mascotas.idRaza" + 
+        " inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal where Citas.idCita = ?", [idCita])
+        return res.status(200).json(result)
+    }catch(error){
+        console.error('Error en la función getCita:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+}
+
+
+export const getDiagnosticoxCita = async (req, res) =>{
+    try{
+        const idCita = req.params.idCita;
+        const [result] = await pool.query("Select * From Diagnosticos where idCita = ?", [idCita]);
+        return res.status(200).json(result);
+    }catch(error){
+        console.error('Error en la función getDiagnosticoxCita:', error);
         return res.status(500).json({
             message: "Error en el servidor",
             success: false

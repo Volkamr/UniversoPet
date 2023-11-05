@@ -65,7 +65,6 @@ const Perfil = () => {
     useEffect(() => {
         async function loadUserPets() {
             const response = await getUserPetsRequest(user.idUsuario);
-            console.log(response.data)
             setUserPets(response.data)
         }
         loadUserPets()

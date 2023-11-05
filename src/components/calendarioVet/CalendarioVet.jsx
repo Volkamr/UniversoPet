@@ -7,7 +7,7 @@ import { getCitasxVetRequest } from '../../api/vet';
 import CartaCitaVet from './cartaCitaVet/CartaCitaVet';
 import { useState, useEffect } from 'react';
 
-const CalendarioVet = (cedula) => {
+const CalendarioVet = ({cedula, token}) => {
 
     const [citas, setCitas] = useState([]);
     const [events, setEvents] = useState([]);
@@ -20,11 +20,11 @@ const CalendarioVet = (cedula) => {
 
     useEffect(() => {
         async function loadCitasVet() {
-            const response = await getCitasxVetRequest(cedula.cedula)
+            const response = await getCitasxVetRequest(cedula)
             setCitas(response.data)
         }
         loadCitasVet()
-    }, [cedula.cedula])
+    }, [cedula])
 
     useEffect(() => {
         const mappedEvents = citas.map((cita, index) => ({
@@ -40,6 +40,7 @@ const CalendarioVet = (cedula) => {
                 sede: cita.sede,
                 idMascota: cita.idMascota,
                 userEmail: cita.correo_usuario, 
+                idCita: cita.idCita
             }
         }));
 
@@ -96,6 +97,8 @@ const CalendarioVet = (cedula) => {
                 hora={parseHora(selectedEvent.start)}
                 estado={selectedEvent.extendedProps.estado}
                 userEmail={selectedEvent.extendedProps.userEmail}
+                idCita={selectedEvent.extendedProps.idCita}
+                token={token}
                 >
                     </CartaCitaVet>}
             </section>

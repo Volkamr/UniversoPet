@@ -1,14 +1,17 @@
 import React from 'react'
 import './cartaCitaVet.css'
 import {AiOutlineCloseCircle} from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
-const CartaCitaVet = ({setIsModalOpen,titulo, servicio, mascota, fecha, hora, estado, sede, userEmail}) =>{
+const CartaCitaVet = ({setIsModalOpen,titulo, servicio, mascota, fecha, hora, estado, sede, userEmail, token, idCita}) =>{
     return(
         <section>
             <div className="fondo">
                 <div className="ventana">
                     <div className="header">
-                        <h1 id ="titulo">{titulo}</h1>
+                        <Link to={`/Veterinario/${token}/${idCita}`}>
+                            <h1 id ="titulo">{titulo}</h1>
+                        </Link>
                         <div onClick={setIsModalOpen.bind(this, false)}>
                             <AiOutlineCloseCircle className="cerrar"></AiOutlineCloseCircle>
                         </div>
