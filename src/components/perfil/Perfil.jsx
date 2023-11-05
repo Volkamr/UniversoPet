@@ -428,7 +428,7 @@ const Perfil = () => {
 
             }
             <Mascotas UserPets={UserPets} idUsuario={user.idUsuario}></Mascotas>
-            <Calendario></Calendario>
+            <Calendario idUsuario={user.idUsuario}></Calendario>
             <div className='perfil__btn__cita'>
                 <button className='btn text-cs h'
                     onClick={() => {
