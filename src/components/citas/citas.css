@@ -10,7 +10,6 @@
 }
 
 .citas__header__titulo {
-    padding: 2rem 2.5rem;
     width: 250px;
     height: 70%;
 }
@@ -82,13 +81,15 @@
 
 .citas__vet {
     text-align: center;
-    padding: 1rem 12rem;
+    align-items: center;
+    justify-content: center;
     grid-template-columns: repeat(2, 1fr);
 }
 
 .citas__content__vet {
-    margin-top: -0.2%;
+    margin-top: -0.1%;
     margin-bottom: -10%;
+    justify-self: center;
 }
 
 .vet__content {
@@ -96,7 +97,6 @@
 }
 
 .vet__info {
-    padding: 2rem 2rem;
     width: 450px;
 }
 

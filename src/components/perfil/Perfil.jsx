@@ -5,7 +5,7 @@ import "./perfil.css"
 import Mascotas from '../mascotas/Mascotas'
 import { useEffect, useState } from "react";
 import Calendario from '../calendarioUser/Calendario'
-import { getSedesRequest, getUserPetsRequest, getVetRequest, getVeterinarioxSedeRequest, postAgendarCitaRequest } from '../../api/vet'
+import { getSedesRequest, getUserPetsRequest, getVetRequest, getVeterinarioxSedeRequest, postAgendarCitaRequest, getCitasxUsuarioRequest } from '../../api/vet'
 import { AiOutlineClose } from 'react-icons/ai'
 import { Form, Formik } from 'formik'
 import { getServicesRequest } from '../../api/vet'
@@ -68,6 +68,16 @@ const Perfil = () => {
             setUserPets(response.data)
         }
         loadUserPets()
+    }, [user.idUsuario])
+
+    const [citasUser, setCitasUser] = useState([])
+
+    useEffect(() => {
+        async function loadCitasUser() {
+            const response = await getCitasxUsuarioRequest(user.idUsuario)
+            setCitasUser(response.data)
+        }
+        loadCitasUser()
     }, [user.idUsuario])
 
     const [services, setServices] = useState([])
@@ -426,8 +436,8 @@ const Perfil = () => {
 
 
             }
-            <Mascotas UserPets={UserPets} idUsuario={user.idUsuario}></Mascotas>
-            <Calendario idUsuario={user.idUsuario}></Calendario>
+            <Mascotas UserPets={UserPets} idUsuario={user.idUsuario} citas={citasUser} token={token}></Mascotas>
+            <Calendario citas={citasUser} token={token}></Calendario>
             <div className='perfil__btn__cita'>
                 <button className='btn text-cs h'
                     onClick={() => {

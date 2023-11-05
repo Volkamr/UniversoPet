@@ -24,7 +24,7 @@ const CitasVet = () => {
     useEffect(() =>{
         async function loadDIagnostico(){
             const response = await getDiagnosticoxCitaRequest(idCita);
-            setDiagnostico(response.data[0])
+            setDiagnostico(response.data)
         }
         loadDIagnostico()
     }, [citaVet.idCita])
@@ -100,11 +100,11 @@ const CitasVet = () => {
                         <div className='citasVet__info__cita grid'>
                             <div className='citasVet__comentario'>
                                 <h1 className='citasVet__title text-cs'> Comentario </h1>
-                                <p className='citasVet__comentario'> {diagnostico.length === 0 ? 'Aún no hay diagnóstico' : diagnostico.descDIagnostico} </p>
+                                <p className='citasVet__comentario'> {diagnostico.length === 0 ? 'Aún no hay diagnóstico' : diagnostico[0].descDIagnostico} </p>
                             </div>
                             <div className='citasVet__diagnostico'>
                                 <h1 className='citasVet__title text-cs'> Diagnostico </h1>
-                                <p className='citasVet__comentario'> {diagnostico.length === 0 ? 'Aún no hay comentario' : diagnostico.comentario}</p>
+                                <p className='citasVet__comentario'> {diagnostico.length === 0 ? 'Aún no hay comentario' : diagnostico[0].comentario}</p>
                             </div>
                         </div>
                         <div className='citasVet__btn'>

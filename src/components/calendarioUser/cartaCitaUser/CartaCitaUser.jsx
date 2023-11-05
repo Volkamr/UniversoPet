@@ -1,8 +1,9 @@
 import React from 'react'
 import './cartaCitaUser.css'
 import {AiOutlineCloseCircle} from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
-const CartaCitaUser = ({setIsModalOpen,titulo, servicio, mascota, nombresVet, apellidosVet, fecha, hora, estado, sede}) => {
+const CartaCitaUser = ({setIsModalOpen,titulo, servicio, mascota, nombresVet, apellidosVet, fecha, hora, estado, sede, token, idCita}) => {
 
     return (
 
@@ -10,7 +11,9 @@ const CartaCitaUser = ({setIsModalOpen,titulo, servicio, mascota, nombresVet, ap
             <div className="fondo">
                 <div className="ventana">
                     <div className="header">
-                        <h1 id ="titulo">{titulo}</h1>
+                        <Link to={`/perfil/${token}/${idCita}`}>
+                            <h1 id ="titulo">{titulo}</h1>
+                        </Link>
                         <div onClick={setIsModalOpen.bind(this, false)}>
                             <AiOutlineCloseCircle className="cerrar"></AiOutlineCloseCircle>
                         </div>
@@ -34,13 +37,13 @@ const CartaCitaUser = ({setIsModalOpen,titulo, servicio, mascota, nombresVet, ap
                             <h2 className="titulos">Hora:</h2>
                             <p>{hora}</p>
                         </div>
-                        <div className="estado">
-                            <h2 className="titulos">Estado:</h2>
-                            <p>{estado}</p>
-                        </div>
                         <div className="sede">
                             <h2 className="titulos">Sede:</h2>
                             <p>{sede}</p>
+                        </div>
+                        <div className="estado">
+                            <h2 className="titulos">Estado:</h2>
+                            <p>{estado}</p>
                         </div>
                     </div>
                 </div>

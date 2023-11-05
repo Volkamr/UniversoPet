@@ -13,8 +13,7 @@ import { updateMascota } from '../../api/vet';
 import { eliMascota } from '../../api/vet';
 import Swal from "sweetalert2";
 
-const Mascotas = ({ UserPets, idUsuario }) => {
-
+const Mascotas = ({ UserPets, idUsuario, citas, token }) => {
 
     const [toggleState, setToggleState] = useState(0)
     const toggleTab = (index) => {
@@ -106,29 +105,16 @@ const Mascotas = ({ UserPets, idUsuario }) => {
                                             <h1 className='text-cs'>Citas</h1>
                                             {citas.map(cita => {
                                                 var citasMas = []
-                                                var link = '/citas/'
                                                 if (cita.idMascota === pet.idMascota) {
                                                     citasMas.push(cita)
                                                 }
                                                 citasMas.filter(x => x !== undefined)
                                                 return citasMas.map(x => {
                                                     return <div className="" key={pet.idMascota}>
-                                                        <Link to={link + x.idCita} className='link__citas link'> Cita {x.idCita} </Link>
-                                                        <p className='mascota__citas__content'> {x.comentario} </p>
+                                                        <Link to={`/perfil/${token}/${x.idCita}`} className='link__citas link'>
+                                                            <p className='mascota__citas__content'> Cita # {x.idCita} - Servicio: {x.servicio}</p>
+                                                        </Link>
                                                     </div>
-                                                })
-                                            })}
-                                        </div>
-                                        <div className="mascota__diagnostico">
-                                            <h1 className='text-cs'>Diagnosticos</h1>
-                                            {citas.map(cita => {
-                                                var citasMas = []
-                                                if (cita.idMascota === pet.idMascota) {
-                                                    citasMas.push(cita.diagnostico)
-                                                }
-                                                citasMas.filter(x => x !== undefined)
-                                                return citasMas.map(x => {
-                                                    return <p className='mascota__diagnostico__content' key={pet.idMascota}> {x} </p>
                                                 })
                                             })}
                                         </div>

@@ -250,9 +250,14 @@
 }
 
 .link__citas {
-    color: var(--color-primario);
-    width: 20%;
+    color: black;
+    font-size: 16px;
+    width: 80%;
     display: inline-block;
+}
+
+.link__citas:hover{
+    color: var(--color-primario);
 }
 
 .h:hover {

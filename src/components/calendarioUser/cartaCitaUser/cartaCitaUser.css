@@ -14,7 +14,7 @@
 
 .ventana{
     background-color: '#fffff';
-    width: 1200px;
+    width: 1250px;
     height: 200px;
     backdrop-filter: blur(20px);
     padding: 30px 50px 50px 40px;
@@ -64,11 +64,11 @@
 }
 
 .estado{
-    grid-column: 5;
+    grid-column: 6;
 }
 
 .sede{
-    grid-column: 6;
+    grid-column: 5;
 }
 
 .titulos{

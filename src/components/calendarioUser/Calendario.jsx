@@ -7,24 +7,13 @@ import { getCitasxUsuarioRequest } from '../../api/vet';
 import { useEffect, useState } from "react";
 import CartaCitaUser from './cartaCitaUser/CartaCitaUser';
 
-const Calendario = (idUsuario) => {
+const Calendario = ({citas, token}) => {
 
-    const [citas, setCitas] = useState([]);
     const [events, setEvents] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
 
-    useEffect(() => {
-        setEvents([])
-    }, [citas])
 
-    useEffect(() => {
-        async function loadCitasUser() {
-            const response = await getCitasxUsuarioRequest(idUsuario.idUsuario)
-            setCitas(response.data)
-        }
-        loadCitasUser()
-    }, [idUsuario.idUsuario])
 
     useEffect(() => {
         const mappedEvents = citas.map((cita, index) => ({
@@ -39,7 +28,8 @@ const Calendario = (idUsuario) => {
                 apellidos_vet: cita.apellidos_vet,
                 mascota: cita.nombre_mascota,
                 estado: cita.estadoCita,
-                sede: cita.sede  
+                sede: cita.sede,
+                idCita: cita.idCita 
             }
         }));
 
@@ -103,6 +93,8 @@ const Calendario = (idUsuario) => {
                 apellidosVet={selectedEvent.extendedProps.apellidos_vet}
                 fecha={parseFecha(selectedEvent.start)}
                 hora = {parseHora(selectedEvent.start)}
+                token={token}
+                idCita={selectedEvent.extendedProps.idCita}
                 ></CartaCitaUser>}
             </section>
         </>

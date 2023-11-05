@@ -3,22 +3,51 @@ import NavToggle from '../navToggle/NavToggle'
 import { citas } from '../../Data'
 import { useParams } from 'react-router-dom'
 import { veterinario } from '../../Data'
-import { pets } from '../../Data'
 import './citas.css'
+import { getCitaRequest, getCitasxMascotaRequest, getDiagnosticoxCitaRequest } from '../../api/vet'
+import { useState, useEffect } from 'react'
 
 
 const Citas = () => {
-    let { idCita } = useParams()
-    let Cita = citas.find(cita => cita.idCita === idCita)
-    let Veterinario = veterinario.find(vet => vet.idVeterinario === Cita.idVeterinario)
-    let Mascota = pets.find(pet => pet.idMascota === Cita.idMascota)
+
+    const idCita = useParams().idCita
+
+    const [cita, setCita] = useState([]);
+    const [diagnostico, setDiagnostico] = useState([]);
+
+    useEffect(() => {
+        async function loadCita() {
+            const response = await getCitaRequest(idCita)
+            setCita(response.data[0])
+        }
+        loadCita()
+    }, [cita.idCita])
+
+    console.log(cita)
+
+    useEffect(() => {
+        async function loadDiagnostico() {
+            const response = await getDiagnosticoxCitaRequest(idCita)
+            setDiagnostico(response.data)
+        }
+    }, [cita.idCita])
+
+
+    const parseFecha = (fecha) => {
+        const fechaP = new Date(fecha);
+        const dia = fechaP.getDate();
+        const mes = fechaP.getMonth();
+        const year = fechaP.getFullYear();
+        return dia + "/" + mes + "/" + year
+    }
+
     return (
         <div className='citas__section section' id='citas'>
             <NavToggle></NavToggle>
             <div className="citas__header container grid">
                 <div className='citas__header__titulo'>
-                    <h1 className='section__title'> Cita {Cita.idCita}</h1>
-                    <p className='section__subtitle'> Mascota:  <span> {Mascota.nombre} </span> </p>
+                    <h1 className='section__title'> Cita # {idCita}</h1>
+                    <p className='section__subtitle'> Mascota:  <span> {cita.mascota} </span> </p>
                 </div>
                 <div className='citas__info__info container grid'>
                     <div className="">
@@ -26,7 +55,7 @@ const Citas = () => {
                             FECHA
                         </h1>
                         <p className='citas__content__content '>
-                            {Cita.fecha}
+                            {parseFecha(cita.FechaInicio)}
                         </p>
                     </div>
                     <div>
@@ -34,7 +63,7 @@ const Citas = () => {
                             SEDE
                         </h1>
                         <p className='citas__content__content '>
-                            {Cita.sede}
+                            {cita.sede}
                         </p>
                     </div>
                     <div>
@@ -42,7 +71,15 @@ const Citas = () => {
                             ESTADO
                         </h1>
                         <p className='citas__content__content '>
-                            {Cita.estado}
+                            {cita.estadoCita}
+                        </p>
+                    </div>
+                    <div>
+                        <h1 className='citas__content__titulo '>
+                            Servicio
+                        </h1>
+                        <p className='citas__content__content '>
+                            {cita.servicio}
                         </p>
                     </div>
                 </div>
@@ -53,7 +90,7 @@ const Citas = () => {
                         COMENTARIO
                     </h1>
                     <p className='citas__content__content '>
-                        {Cita.comentario}
+                        {diagnostico.length === 0 ? "Aún no hay comentario" : diagnostico[0].comentario}
                     </p>
                 </div>
                 <div className="citas__info__diagnostico">
@@ -61,13 +98,13 @@ const Citas = () => {
                         DIAGNOSTICO
                     </h1>
                     <p className='citas__content__content '>
-                        {Cita.diagnostico}
+                        {diagnostico.length === 0 ? "Aún no hay diagnóstico" : diagnostico[0].diagnostico}
                     </p>
                 </div>
             </div>
             <div className='citas__content__vet'>
                 <div className="citas__vet container grid">
-                    <img src={Veterinario.avatar} alt="" className='vet__img' />
+                    <img src={veterinario.avatar} alt="" className='vet__img' />
                     <div className="vet__info">
                         <h1 className='text-cs' > veterinario </h1>
                         <div className='vet__content container grid'>
@@ -76,7 +113,7 @@ const Citas = () => {
                                     NOMBRE
                                 </h1>
                                 <p className='vet__content__content '>
-                                    {Veterinario.nombre}
+                                    {cita.nombres_vet + " " + cita.apellidos_vet}
                                 </p>
                             </div>
                             <div className='vet__email'>
@@ -84,7 +121,7 @@ const Citas = () => {
                                     CORREO
                                 </h1>
                                 <p className='vet__content__content '>
-                                    {Veterinario.email}
+                                    {cita.email_vet}
                                 </p>
                             </div>
                         </div>
