@@ -135,3 +135,7 @@
 #laboratorio {
     grid-column: 1;
 }
+
+.sd {
+    border-radius: 1rem;
+}

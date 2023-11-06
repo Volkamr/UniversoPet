@@ -15,15 +15,15 @@ const Veterinario = () => {
 
     const [veterinario, setVeterinario] = useState('')
 
-    const[token, setToken] = useState(useParams().vetToken)
+    const [token, setToken] = useState(useParams().vetToken)
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('UserToken');
         const local_data = JSON.parse(loggedUserJSON)
-        if(loggedUserJSON != null && local_data.token == token){
+        if (loggedUserJSON != null && local_data.token == token) {
             setToken(local_data.token);
         }
-        
+
     }, [token])
 
     useEffect(() => {
@@ -41,9 +41,9 @@ const Veterinario = () => {
             <div className="veterinario__container container">
                 <div className="vet__info grid">
                     <div className='vet__foto'>
-                    {
-                    veterinario.fotoPerfil != null ? <img src={veterinario.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
-                    }
+                        {
+                            veterinario.fotoPerfil !== "" ? <img src={"data:img/png;base64," + veterinario.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
+                        }
                     </div>
                     <div className="vet__info__content">
                         <h1 className='vet__tittle text-cs'> {"Dr. " + veterinario.nombres} </h1>

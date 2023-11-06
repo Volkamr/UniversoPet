@@ -76,7 +76,7 @@ const Citas = () => {
                     </div>
                     <div>
                         <h1 className='citas__content__titulo '>
-                            Servicio
+                            SERVICIO
                         </h1>
                         <p className='citas__content__content '>
                             {cita.servicio}

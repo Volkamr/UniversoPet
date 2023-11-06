@@ -56,36 +56,42 @@ export const getPersonalPRequest = async () => {
     return await axios.get("http://localhost:3001/UniversoPet/Api/PersonalP");
 }
 
-export const getVeterinarioxSedeRequest = async (idSede) =>{
+export const getVeterinarioxSedeRequest = async (idSede) => {
     const response = await axios.get(`http://localhost:3001/UniversoPet/Api/VetxSedes/${idSede}`,)
     return response;
 }
 
-export const getCitasxMascotaRequest = async (idMascota) =>{
+export const getCitasxMascotaRequest = async (idMascota) => {
     const response = await axios.get(`http://localhost:3001/UniversoPet/Api/CitasxMascota/${idMascota}`)
     return response;
 }
 
-export const getCitasxUsuarioRequest = async (idUsuario) =>{
+export const getCitasxUsuarioRequest = async (idUsuario) => {
     const response = await axios.get(`http://localhost:3001/UniversoPet/Api/CitasxUsuario/${idUsuario}`)
     return response;
 }
 
-export const getCitasxVetRequest = async (cedula) =>{
+export const getCitasxVetRequest = async (cedula) => {
     const response = await axios.get(`http://localhost:3001/UniversoPet/Api/CitasxVet/${cedula}`)
     return response;
 }
 
-export const getCitaRequest = async (idCita) =>{
+export const getCitaRequest = async (idCita) => {
     const response = await axios.get(`http://localhost:3001/UniversoPet/Api/Cita/${idCita}`)
     console.log(response)
     return response;
 }
 
-export const getDiagnosticoxCitaRequest = async (idCita) =>{
+export const getDiagnosticoxCitaRequest = async (idCita) => {
     const response = await axios.get(`http://localhost:3001/UniversoPet/Api/DiagnosticoCita/${idCita}`)
     return response;
 }
+
+export const createSedes = async (sede) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateSedes', sede);
+
+export const createServices = async (service) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateServices', service);
+
+export const createPersonal = async (personal) => await axios.post('http://localhost:3001/UniversoPet/Api/CreatePersonal', personal);
 
 export const createMascota = async (mascota) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateMascota', mascota);
 
@@ -124,8 +130,8 @@ export const postLoginAdminRequest = async (adminusr, password) => {
     })
 }
 
-export const postAgendarCitaRequest = async (fecha, cedulaVet, idSede, idMascota, idServicio) =>{
-    return await axios.post('http://localhost:3001/UniversoPet/Api/AgendarCita',{
+export const postAgendarCitaRequest = async (fecha, cedulaVet, idSede, idMascota, idServicio) => {
+    return await axios.post('http://localhost:3001/UniversoPet/Api/AgendarCita', {
         fecha: fecha,
         cedulaVet: cedulaVet,
         idSede: idSede,

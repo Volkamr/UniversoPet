@@ -7,12 +7,21 @@ import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import './personalswiper.css';
 import { getPersonalRequest } from '../../api/vet';
-
-const Personal = [
-    ...new Set(((await getPersonalRequest()).data))
-]
+import def from '../../assets/veterinario.jpg'
+import { useEffect, useState } from "react";
 
 const PersonalSwiper = () => {
+
+    const [Personal, setPersonal] = useState([])
+
+    useEffect(() => {
+        async function loadPersonal() {
+            const response = await getPersonalRequest();
+            setPersonal(response.data)
+        }
+        loadPersonal()
+    }, [])
+
     return (
         <section className="PersonalSwiper section" id="PersonalSwiper">
             <h2 className="section__title"> PERSONAL </h2>
@@ -50,7 +59,9 @@ const PersonalSwiper = () => {
                                     <img src={icon} alt="" />
                                 </div>
 
-                                <img src={"data:img/png;base64," + fotoPerfil} alt="" className="PersonalSwiper__nos__img" />
+                                {
+                                    fotoPerfil ? <img src={"data:img/png;base64," + fotoPerfil} alt="" className="PersonalSwiper__nos__img" /> : <img src={def} alt="" className="PersonalSwiper__nos__img" />
+                                }
                             </div>
                             <p className="PersonalSwiper__description">{profesion}</p>
                             <h3 className="PersonalSwiper__name">{nombres} {apellidos}</h3>

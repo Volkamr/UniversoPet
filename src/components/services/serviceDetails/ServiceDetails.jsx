@@ -4,6 +4,7 @@ import { NavBar } from '../../nav/NavBar';
 import './ServiceDetails.css';
 import { getService } from '../../../api/vet';
 import { useEffect, useState } from "react";
+import ser from '../../../assets/servicio def.jpg'
 
 export default function ServiceDetails() {
 
@@ -26,7 +27,9 @@ export default function ServiceDetails() {
           <h2 className="titulo-servicio text-cs">{service.nombre}</h2>
         </container>
         <container className="container-descripcion grid">
-          <img className="img2-servicio" alt="" src={"data:image/png;base64," + service.imgServicio}></img>
+          {
+            service.imgServicio ? <img className="img2-servicio" alt="" src={"data:image/png;base64," + service.imgServicio}></img> : <img className="img2-servicio" alt="" src={ser}></img>
+          }
           <div>
             <p className="contenido-servicio">{service.descripcion}</p>
             <div className='btn__servicio'>

@@ -1,7 +1,11 @@
-import formidable from "formidable"
 import { pool } from '../db.js'
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
+
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 //---------------------------------------------------------------------------> GET
 
@@ -171,14 +175,14 @@ export const getCitasUsuario = async (req, res) => {
 
 }
 
-export const getCitasVet = async (req, res) =>{
-    try{
-        
+export const getCitasVet = async (req, res) => {
+    try {
+
         const cedula = req.params.cedula;
-        const[result] = await pool.query("SELECT Citas.idCita as idCita, Mascotas.idMascota, Mascotas.nombre AS nombre_mascota, Mascotas.idUsuario, Servicios.nombre AS servicio, Sedes.titulo AS sede, FechaInicio, estadoCita, Usuarios.email as correo_usuario FROM Citas Inner Join Mascotas on Mascotas.idMascota = Citas.idMascota"+
-        " inner join EstadosCitas on Citas.idEstadoCita = EstadosCitas.idEstadoCita inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Sedes.idSede = Citas.idSede inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario where cedula = ?", [cedula])
+        const [result] = await pool.query("SELECT Citas.idCita as idCita, Mascotas.idMascota, Mascotas.nombre AS nombre_mascota, Mascotas.idUsuario, Servicios.nombre AS servicio, Sedes.titulo AS sede, FechaInicio, estadoCita, Usuarios.email as correo_usuario FROM Citas Inner Join Mascotas on Mascotas.idMascota = Citas.idMascota" +
+            " inner join EstadosCitas on Citas.idEstadoCita = EstadosCitas.idEstadoCita inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Sedes.idSede = Citas.idSede inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario where cedula = ?", [cedula])
         return res.status(200).json(result)
-    }catch(error){
+    } catch (error) {
         console.error('Error en la función getCitasVet:', error);
         return res.status(500).json({
             message: "Error en el servidor",
@@ -187,14 +191,14 @@ export const getCitasVet = async (req, res) =>{
     }
 }
 
-export const getCita = async (req, res) =>{
-    try{
+export const getCita = async (req, res) => {
+    try {
         const idCita = req.params.idCita;
-        const [result] = await pool.query("Select peso, raza, Personal.nombres as nombres_vet, Personal.apellidos as apellidos_vet, Personal.email as email_vet, tipoAnimal, Usuarios.nombres as nombres_user, Usuarios.apellidos as apellidos_user, Servicios.nombre as servicio, estadoCita, Sedes.titulo as sede, FechaInicio, Mascotas.nombre AS mascota FROM Citas inner join Mascotas on Mascotas.idMascota=Citas.idMascota"+
-        " inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Citas.idSede = Sedes.idSede inner join EstadosCitas on EstadosCitas.idEstadoCita = Citas.idEstadoCita inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario inner join Razas on Razas.idRaza = Mascotas.idRaza" + 
-        " inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal inner join Personal on Personal.cedula = Citas.cedula where Citas.idCita = ?", [idCita])
+        const [result] = await pool.query("Select peso, raza, Personal.nombres as nombres_vet, Personal.apellidos as apellidos_vet, Personal.email as email_vet, tipoAnimal, Usuarios.nombres as nombres_user, Usuarios.apellidos as apellidos_user, Servicios.nombre as servicio, estadoCita, Sedes.titulo as sede, FechaInicio, Mascotas.nombre AS mascota FROM Citas inner join Mascotas on Mascotas.idMascota=Citas.idMascota" +
+            " inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Citas.idSede = Sedes.idSede inner join EstadosCitas on EstadosCitas.idEstadoCita = Citas.idEstadoCita inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario inner join Razas on Razas.idRaza = Mascotas.idRaza" +
+            " inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal inner join Personal on Personal.cedula = Citas.cedula where Citas.idCita = ?", [idCita])
         return res.status(200).json(result)
-    }catch(error){
+    } catch (error) {
         console.error('Error en la función getCita:', error);
         return res.status(500).json({
             message: "Error en el servidor",
@@ -204,12 +208,12 @@ export const getCita = async (req, res) =>{
 }
 
 
-export const getDiagnosticoxCita = async (req, res) =>{
-    try{
+export const getDiagnosticoxCita = async (req, res) => {
+    try {
         const idCita = req.params.idCita;
         const [result] = await pool.query("Select * From Diagnosticos where idCita = ?", [idCita]);
         return res.status(200).json(result);
-    }catch(error){
+    } catch (error) {
         console.error('Error en la función getDiagnosticoxCita:', error);
         return res.status(500).json({
             message: "Error en el servidor",
@@ -274,12 +278,13 @@ export const postLoginVet = async (req, res) => {
         const data = req.body;
         if (data.cedula != null && data.password != null) {
             const [result] = await pool.query("SELECT * FROM Personal WHERE cedula = ?", [data.cedula]);
+            let passwordHaash = await (bcrypt.hash(data.password, 8))
             if (result.length === 0) {
                 return res.status(200).json({
                     message: "VETERINARIO NO ENCONTRADO",
                     success: false
                 });
-            } else if (data.password != result[0].password) {
+            } else if (!(await bcrypt.compare(data.password, result[0].password))) {
                 return res.status(200).json({
                     message: "Contraseña incorrecta",
                     success: false
@@ -604,115 +609,257 @@ export const PostAgendarCita = async (req, res) => {
 
 
 export const postServices = (req, res) => {
+    try {
 
+        const data = req.body
 
-    const form = formidable({ multiples: true });
-    form.parse(req, (error, fields, files) => {
-        if (error) throw error;
-        const data = { ...fields, ...files }
+        if (data.nombre == null) {
+            return res.status(200).json({
+                success: false,
+                message: "Un servicio necesita un nombre"
+            })
+        } else if (data.idName == null) {
+            return res.status(200).json({
+                success: false,
+                message: "Un servicio debe tener un idName "
+            })
+        } else if (data.descripcion == null) {
+            return res.status(200).json({
+                success: false,
+                message: "Un servicio necesita una descripcion"
+            })
+        }
 
+        async function servicio() {
 
-        pool.query("INSERT INTO Servicios set ?",
-            {
-                imgVista: data.imgVista,
-                imgServicio: data.imgServicio,
-                idName: data.idName,
-                nombre: data.nombre,
-                descripcion: data.descripcion
-            }, (error) => {
-                if (error) throw error;
+            const [estado] = await pool.query(
+                "SELECT * FROM Estados where estado='activo'"
+            );
+
+            if (estado.length == 0) {
+                await pool.query("insert into Estados set ?", {
+                    estado: "activo"
+                })
             }
-        )
-        res.send("DATA SAVE!")
-    })
+
+            const idEstado = await pool.query("select idEstado from Estados where estado='activo'")
+            const idEst = idEstado[0][0].idEstado
+
+            pool.query("INSERT INTO Servicios set ?",
+                {
+                    nombre: data.nombre,
+                    idName: data.idName,
+                    descripcion: data.descripcion,
+                    imgVista: data.imagen,
+                    imgServicio: data.imagen2,
+                    idEstado: idEst
+
+                }, (error) => {
+                    if (error) throw error;
+                }
+            )
+
+        }
+
+        servicio()
+        return res.status(200).json({
+            success: true,
+            message: "Servicio Agregado"
+        })
+
+    } catch (error) {
+        console.error('Error en la función postServicios:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
 }
 
 export const postSedes = (req, res) => {
-    const form = formidable({ multiples: true });
-    form.parse(req, (error, fields, files) => {
-        if (error) throw error;
-        const data = { ...fields, ...files }
+    try {
 
-        async function ciudad() {
-            const [result] = await pool.query(
+        const data = req.body
+
+        if (data.titulo == null) {
+            return res.status(200).json({
+                success: false,
+                message: "Una sede necesita un nombre"
+            })
+        } else if (data.ciudad == null) {
+            return res.status(200).json({
+                success: false,
+                message: "Una sede debe pertenecer a una ciudad"
+            })
+        } else if (data.descripcion == null) {
+            return res.status(200).json({
+                success: false,
+                message: "Una sede necesita una descripcion"
+            })
+        }
+
+        async function sede() {
+
+            const [ciudad] = await pool.query(
                 "SELECT * FROM Ciudades where ciudad='" + data.ciudad + "'"
             );
 
-            if (result.length == 0) {
+            if (ciudad.length == 0) {
                 await pool.query("insert into Ciudades set ?", {
                     ciudad: data.ciudad
                 })
             }
 
-            const id = await pool.query("select idCiudad from Ciudades where ciudad='" + data.ciudad + "'")
-            const idCiu = id[0][0].idCiudad
-
-            pool.query("insert into Sedes set ?", {
-                img: data.img,
-                idCiudad: idCiu,
-                titulo: data.titulo,
-                descripcion: data.descripcion
-            })
-
-            res.send('Sede ---> OK!')
-        }
-
-        ciudad()
-    })
-}
-
-export const postPersonal = (req, res) => {
-    const form = formidable({ multiples: true });
-    form.parse(req, (error, fields, files) => {
-        if (error) throw error;
-        const data = { ...fields, ...files }
-
-        async function personal() {
+            const idCiudad = await pool.query("select idCiudad from Ciudades where ciudad='" + data.ciudad + "'")
+            const idC = idCiudad[0][0].idCiudad
 
             const [estado] = await pool.query(
-                "SELECT * FROM Estados where estado='" + data.estado + "'"
+                "SELECT * FROM Estados where estado='activo'"
             );
 
             if (estado.length == 0) {
                 await pool.query("insert into Estados set ?", {
-                    estado: data.estado
+                    estado: "activo"
                 })
             }
 
-            const [tipo] = await pool.query(
+            const idEstado = await pool.query("select idEstado from Estados where estado='activo'")
+            const idEst = idEstado[0][0].idEstado
+
+            pool.query("INSERT INTO Sedes set ?",
+                {
+                    img: data.imagen,
+                    titulo: data.titulo,
+                    descripcion: data.descripcion,
+                    idCiudad: idC,
+                    idEstado: idEst
+
+                }, (error) => {
+                    if (error) throw error;
+                }
+            )
+
+        }
+
+        sede()
+        return res.status(200).json({
+            success: true,
+            message: "Sede Agregada"
+        })
+
+    } catch (error) {
+        console.error('Error en la función postSedes:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+}
+
+export const postPersonal = async (req, res) => {
+    try {
+
+        const data = req.body
+        const cedulas = await pool.query("select cedula from Personal where cedula= ?", [data.cedula])
+        const emails = await pool.query("select email from Personal where email= ?", [data.email])
+
+        if (data.cedula == null || data.nombres == null || data.apellidos == null || data.email == null || data.contraseña == null || data.tipoPersonal == null || data.sede == null || data.descripcion == null) {
+            return res.status(200).json({
+                success: false,
+                message: "No pueden haber campos nulos"
+            })
+        } else if (cedulas[0].length != 0) {
+            return res.status(200).json({
+                success: false,
+                message: "La cedula ya esta en uso"
+            })
+        } else if (emails[0].length != 0) {
+            return res.status(200).json({
+                success: false,
+                message: "El correo ya esta en uso"
+            })
+        }
+        else if (data.contraseña.length < 6) {
+            return res.status(200).json({
+                success: false,
+                message: "La contraseña debe tener al menos 6 caracteres"
+            })
+        }
+
+        async function Personal() {
+
+            let passwordHaash = await bcrypt.hash(data.contraseña, 8);
+
+            const [tipoPersonal] = await pool.query(
                 "SELECT * FROM TipoPersonal where tipoPersonal='" + data.tipoPersonal + "'"
             );
 
-            if (tipo.length == 0) {
-                await pool.query("insert into tipoPersonal set ?", {
+            if (tipoPersonal.length == 0) {
+                await pool.query("insert into TipoPersonal set ?", {
                     tipoPersonal: data.tipoPersonal
                 })
             }
 
-            const idEstado = await pool.query("select idEstado from Estados where estado='" + data.estado + "'")
+            const idTipoP = await pool.query("select idTipoPersonal from TipoPersonal where tipoPersonal='" + data.tipoPersonal + "'")
+            const idTP = idTipoP[0][0].idTipoPersonal
+
+            const [estado] = await pool.query(
+                "SELECT * FROM Estados where estado='activo'"
+            );
+
+            if (estado.length == 0) {
+                await pool.query("insert into Estados set ?", {
+                    estado: "activo"
+                })
+            }
+
+            const idEstado = await pool.query("select idEstado from Estados where estado='activo'")
             const idEst = idEstado[0][0].idEstado
 
-            const idTipo = await pool.query("select idTipoPersonal from TipoPersonal where tipoPersonal='" + data.tipoPersonal + "'")
-            const idT = idTipo[0][0].idTipoPersonal
+            pool.query("INSERT INTO Personal set ?",
+                {
+                    cedula: data.cedula,
+                    password: passwordHaash,
+                    nombres: data.nombres,
+                    apellidos: data.apellidos,
+                    email: data.email,
+                    profesion: data.descripcion,
+                    fotoPerfil: data.imagen,
+                    idTipoPersonal: idTP,
+                    idEstado: idEst
 
-            pool.query("insert into Personal set ?", {
-                cedula: data.cedula,
-                password: data.password,
-                nombres: data.nombres,
-                apellidos: data.apellidos,
-                email: data.email,
-                profesion: data.profesion,
-                fotoPerfil: data.fotoPerfil,
-                idTipoPersonal: idT,
-                idEstado: idEst
+                }, (error) => {
+                    if (error) throw error;
+                }
+            )
+
+            await sleep(1000)
+
+            pool.query("INSERT INTO historialPersonal set ?", {
+                FechaInic: new Date(Date.now()),
+                idSede: data.sede,
+                cedula: data.cedula
+            }, (error) => {
+                if (error) throw error
             })
+
 
         }
 
-        personal()
+        Personal()
 
-        res.send("DATA SAVE!")
-    })
+        return res.status(200).json({
+            success: true,
+            message: "Personal Agregado"
+        })
+
+    } catch (error) {
+        console.error('Error en la función postPersonal:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
 
 }
 

@@ -11,6 +11,8 @@ import { CgOpenCollective, CgSoftwareUpload } from 'react-icons/cg'
 import sede from '../../../assets/sede def.png'
 import vet from '../../../assets/vet def.png'
 import ser from '../../../assets/ser def.png'
+import { createPersonal, createSedes, createServices } from '../../../api/vet';
+import Swal from "sweetalert2";
 
 
 
@@ -116,9 +118,47 @@ const PersonalSwiper = ({ Sedes }) => {
                         }} className='form__close'> </AiOutlineClose>
                         <h1 className='form__title text-cs'> Agregar Sede </h1>
                         <Formik
-                            initialValues={{}}
-                            onSubmit={(values) => {
+                            initialValues={{
+                                imagen: "",
+                                titulo: null,
+                                ciudad: null,
+                                descripcion: null
+                            }}
+                            onSubmit={async (values) => {
+                                try {
+                                    values.imagen = imgForm
+                                    const response = await createSedes(values)
 
+                                    if (response.status < 200 || response.status >= 300) {
+                                        throw new Error(`Error - ${response.status}`);
+                                    }
+
+                                    const data = response.data
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: data.message,
+                                            text: "Sede Creada Exitosamente",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        })
+                                        for (let i = 0; i < 2; i++) {
+                                            document.getElementsByClassName('form__input')[i].value = ""
+                                        }
+                                        document.getElementsByClassName('form__input__des')[0].value = ""
+                                        setImage(null)
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Creación de Sede Fallida',
+                                            text: data.message
+                                        });
+                                    }
+
+                                    console.log(response)
+                                } catch (error) {
+                                    console.log(error)
+                                }
                             }}
                         >{({ handleChange, handleSubmit }) => (
                             <Form>
@@ -188,19 +228,52 @@ const PersonalSwiper = ({ Sedes }) => {
                         <h1 className='form__per__title text-cs'> Agregar Personal </h1>
                         <Formik
                             initialValues={{
-                                cedula: "",
-                                nombres: "",
-                                apellidos: "",
-                                email: "",
-                                contraseña: "",
-                                tipoPersonal: "",
-                                sede: "",
-                                descripcion: "",
-                                imagen: ""
+                                cedula: null,
+                                nombres: null,
+                                apellidos: null,
+                                email: null,
+                                contraseña: null,
+                                tipoPersonal: null,
+                                sede: null,
+                                descripcion: null,
+                                imagen: null
                             }}
-                            onSubmit={(values) => {
-                                values.imagen = imgForm
-                                console.log(values)
+                            onSubmit={async (values) => {
+                                try {
+                                    values.imagen = imgForm
+                                    const response = await createPersonal(values)
+
+                                    if (response.status < 200 || response.status >= 300) {
+                                        throw new Error(`Error - ${response.status}`);
+                                    }
+
+                                    const data = response.data
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: data.message,
+                                            text: "Personal Creado Exitosamente",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        })
+                                        setImage(null)
+                                        for (let x = 0; x < 10; x++) {
+                                            document.getElementsByClassName('form__input')[x].value = ""
+                                        }
+                                        document.getElementsByClassName('form__input__des')[1].value = ""
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Creación de Personal Fallida',
+                                            text: data.message
+                                        });
+                                    }
+
+                                    console.log(response)
+                                } catch (error) {
+                                    console.log(error)
+                                }
+
                             }}
                         >{({ handleChange, handleSubmit }) => (
                             <Form>
@@ -248,8 +321,8 @@ const PersonalSwiper = ({ Sedes }) => {
                                             </div>
 
                                             <div className='form__sep__p'>
-                                                <label htmlFor="pass" className='label__form__mas text-cs'> Contraseña </label>
-                                                <input type="password" name='pass' className='form__input' onChange={handleChange} onSubmit={handleSubmit} placeholder="Contraseña" />
+                                                <label htmlFor="contraseña" className='label__form__mas text-cs'> Contraseña </label>
+                                                <input type="password" name='contraseña' className='form__input' onChange={handleChange} onSubmit={handleSubmit} placeholder="Contraseña" />
                                             </div>
 
                                             <div className='form__sep__p'>
@@ -308,16 +381,52 @@ const PersonalSwiper = ({ Sedes }) => {
                         <h1 className='form__title text-cs'> Agregar Servicio </h1>
                         <Formik
                             initialValues={{
-                                imagen: "",
-                                imagen2: "",
-                                nombre: "",
-                                idName: "",
-                                descripcion: ""
+                                imagen: null,
+                                imagen2: null,
+                                nombre: null,
+                                idName: null,
+                                descripcion: null
                             }}
-                            onSubmit={(values) => {
-                                values.imagen = imgForm
-                                values.imagen2 = imgForm2
-                                console.log(values)
+                            onSubmit={async (values) => {
+
+                                try {
+                                    values.imagen = imgForm
+                                    values.imagen2 = imgForm2
+                                    const response = await createServices(values)
+
+                                    if (response.status < 200 || response.status >= 300) {
+                                        throw new Error(`Error - ${response.status}`);
+                                    }
+
+                                    const data = response.data
+                                    if (data.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: data.message,
+                                            text: "Servicio Creado Exitosamente",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        })
+                                        setImage(null)
+                                        for (let x = 0; x < 10; x++) {
+                                            document.getElementsByClassName('form__input')[x].value = ""
+                                        }
+                                        document.getElementsByClassName('form__input__des')[2].value = ""
+                                        setImage(null)
+                                        setImage2(null)
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Creación de Servicio Fallida',
+                                            text: data.message
+                                        });
+                                    }
+
+                                    console.log(response)
+                                } catch (error) {
+                                    console.log(error)
+                                }
+
                             }}
                         >{({ handleChange, handleSubmit }) => (
                             <Form>

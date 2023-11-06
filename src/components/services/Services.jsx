@@ -4,6 +4,7 @@ import './services.css'
 import { Link } from 'react-router-dom'
 import { getServicesRequest } from "../../api/vet.js";
 import { useEffect, useState } from "react";
+import ser from '../../assets/ser def.png'
 
 
 export default function Services() {
@@ -33,7 +34,9 @@ export default function Services() {
 
                             <div key={service.idServicio} className="servicios_s" id={service.idName}>
                                 <p className="servicios-p">{service.nombre}</p>
-                                <img src={"data:image/png;base64," + service.imgVista} alt="" className="services_img" />
+                                {
+                                    service.imgVista ? <img src={"data:image/png;base64," + service.imgVista} alt="" className="services_img" /> : <img src={ser} alt="" className="services_img sd" />
+                                }
                                 <div className="div-btn">
                                     <Link to={`/servicios/${service.idServicio}`}>
                                         <button className="btn-servicios" id="conoce-mas">Conoce más</button>
