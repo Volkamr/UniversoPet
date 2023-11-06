@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './contact.css';
 import { FaRegAddressBook, FaRegEnvelope, FaRegUser, FaRegMap } from 'react-icons/fa';
+import { sendEmail } from '../../api/vet';
+import Swal from "sweetalert2";
 
 const Contact = () => {
 
@@ -15,9 +17,31 @@ const Contact = () => {
         setForm({ ...form, [name]: value });
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setForm({ name: '', email: '', subject: '', message: '' });
+        const response = await sendEmail(form)
+
+        if (response.status < 200 || response.status >= 300) {
+            throw new Error(`Error - ${response.status}`);
+        }
+
+        const data = response.data
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: data.message,
+                text: "Email Enviado Exitosamente",
+                showConfirmButton: false,
+                timer: 1500
+            })
+            setForm({ name: '', email: '', subject: '', message: '' });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Envio de Correo Fallido',
+                text: data.message
+            });
+        }
     }
 
     return (
@@ -37,7 +61,7 @@ const Contact = () => {
                             <FaRegMap></FaRegMap>
                         </span>
                         <h3 className="contact__card-title"> Direccion </h3>
-                        <p className="contact__card-data"> Direccion Principal</p>
+                        <p className="contact__card-data"> Circular 1a 70-01 </p>
                     </div>
 
                     <div className="contact__card">
@@ -45,7 +69,7 @@ const Contact = () => {
                             <FaRegUser></FaRegUser>
                         </span>
                         <h3 className="contact__card-title"> Persona Principal </h3>
-                        <p className="contact__card-data"> Nombre Cuenta </p>
+                        <p className="contact__card-data"> UPB </p>
                     </div>
 
                     <div className="contact__card">
@@ -53,7 +77,7 @@ const Contact = () => {
                             <FaRegEnvelope></FaRegEnvelope>
                         </span>
                         <h3 className="contact__card-title"> Email</h3>
-                        <p className="contact__card-data">Correo Electronico</p>
+                        <p className="contact__card-data"> universopetupb@gmail.com </p>
                     </div>
 
                     <div className="contact__card">

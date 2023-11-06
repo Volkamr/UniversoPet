@@ -2,6 +2,43 @@ import { pool } from '../db.js'
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 
+import { Resend } from 'resend';
+
+const resend = new Resend('re_R7EnvHXW_FdemyUBeNSce2U7DWbdWHm1B');
+
+export const sendEmail = async (req, res) => {
+    try {
+        const data = req.body
+
+        if (data.name == null || data.email == null || data.subject == null || data.message == null) {
+            return res.status(200).json({
+                success: false,
+                title: 'Datos incompletos',
+                message: "No puede haber campos nulos"
+            })
+        }
+
+        resend.emails.send({
+            from: 'UniversoPet@resend.dev',
+            to: 'universopetupb@gmail.com',
+            subject: data.subject,
+            html: '<p>' + data.name + " (" + data.email + ")" + " dice : " + data.message + '</p>'
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Mensaje Enviado"
+        })
+
+    } catch (error) {
+        if (error) {
+            return res.status(500).json({
+                message: "Error en el servidor",
+                success: false
+            });
+        }
+    }
+}
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

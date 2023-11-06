@@ -87,6 +87,8 @@ export const getDiagnosticoxCitaRequest = async (idCita) => {
     return response;
 }
 
+export const sendEmail = async (email) => await axios.post('http://localhost:3001/UniversoPet/Api/sendEmail', email);
+
 export const createSedes = async (sede) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateSedes', sede);
 
 export const createServices = async (service) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateServices', service);
