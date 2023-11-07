@@ -141,3 +141,11 @@ export const postAgendarCitaRequest = async (fecha, cedulaVet, idSede, idMascota
         idServicio: idServicio
     })
 }
+
+export const postDiagnosticoRequest = async (idCita, comentario, diagnostico) =>{
+    return await axios.post('http://localhost:3001/UniversoPet/Api/postDiagnostico', {
+        idCita: idCita,
+        diagnostico: diagnostico,
+        comentario: comentario
+    })
+}

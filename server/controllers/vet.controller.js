@@ -231,7 +231,7 @@ export const getCitasVet = async (req, res) => {
 export const getCita = async (req, res) => {
     try {
         const idCita = req.params.idCita;
-        const [result] = await pool.query("Select peso, raza, Personal.nombres as nombres_vet, Personal.apellidos as apellidos_vet, Personal.email as email_vet, tipoAnimal, Usuarios.nombres as nombres_user, Usuarios.apellidos as apellidos_user, Servicios.nombre as servicio, estadoCita, Sedes.titulo as sede, FechaInicio, Mascotas.nombre AS mascota FROM Citas inner join Mascotas on Mascotas.idMascota=Citas.idMascota" +
+        const [result] = await pool.query("Select peso, raza, Personal.nombres as nombres_vet, Personal.apellidos as apellidos_vet, Personal.email as email_vet, tipoAnimal, Usuarios.nombres as nombres_user, Usuarios.apellidos as apellidos_user, Usuarios.email as email_usuario, Servicios.nombre as servicio, estadoCita, Sedes.titulo as sede, FechaInicio, Mascotas.nombre AS mascota FROM Citas inner join Mascotas on Mascotas.idMascota=Citas.idMascota" +
             " inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Citas.idSede = Sedes.idSede inner join EstadosCitas on EstadosCitas.idEstadoCita = Citas.idEstadoCita inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario inner join Razas on Razas.idRaza = Mascotas.idRaza" +
             " inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal inner join Personal on Personal.cedula = Citas.cedula where Citas.idCita = ?", [idCita])
         return res.status(200).json(result)
@@ -641,6 +641,100 @@ export const PostAgendarCita = async (req, res) => {
         });
     }
 
+}
+
+
+export const postDiagnostico = async (req, res) => {
+    try {
+
+        const data = req.body;
+        const [result_diagnostico] = await pool.query('select * from Diagnosticos WHERE idCita = ? ', [data.idCita])
+
+        if (result_diagnostico.length == 0) {
+            if (data.diagnostico == null || data.comentario == null) {
+                return res.status(200).json({
+                    success: false,
+                    message: 'No pueden haber campos vacíos'
+                })
+            } else if (data.diagnostico.length < 10 || data.comentario.length < 10) {
+                return res.status(200).json({
+                    success: false,
+                    message: 'Debe ingresar al menos 10 caracteres'
+                })
+            } else {
+                try {
+
+                    const [result_estadoCita] = await pool.query('SELECT idEstadoCita FROM EstadosCitas WHERE estadoCita = ?', ["completada"])
+                    const idEstadoCita = result_estadoCita[0].idEstadoCita
+
+                    await pool.query('insert into Diagnosticos set ? ', {
+                        descDIagnostico: data.diagnostico,
+                        comentario: data.comentario,
+                        idCita: data.idCita
+                    })
+
+                    await pool.query("UPDATE Citas set idEstadoCita = ? WHERE idCita = ?", [idEstadoCita, data.idCita])
+
+                } catch (error) {
+                    console.error('Error en la función postDiagnostico al enviar los datos a la bd:', error);
+                    return res.status(500).json({
+                        message: "Error en el servidor",
+                        success: false
+                    });
+                }
+
+                return res.status(200).json({
+                    success:true,
+                    message:'Se añadió el diagnóstico correctamente'
+                })
+            }
+        }else{
+            if(data.diagnostico == null || data.comentario == null){
+                return res.status(200).json({
+                    message: 'No dejar el diagnóstico o el comentario vacíos'
+                })
+            }else if (data.diagnostico.length < 10 || data.comentario.length < 10) {
+                return res.status(200).json({
+                    success: false,
+                    message: 'Debe ingresar al menos 10 caracteres'
+                })
+            }else{
+                if(result_diagnostico[0].descDIagnostico == data.diagnostico && result_diagnostico[0].comentario != data.comentario){
+                    await pool.query('update Diagnosticos set comentario = ? where idCita = ?', [data.comentario, data.idCita])
+                    return res.status(200).json({
+                        success: true,
+                        message: "Cambió el comentario exitosamente"
+                    })
+                }else if(result_diagnostico[0].descDIagnostico != data.descDIagnostico && result_diagnostico[0].comentario == data.comentario){
+                    await pool.query('update Diagnosticos set descDIagnostico = ? where idCita = ?', [data.diagnostico, data.idCita])
+                    return res.status(200).json({
+                        success: true,
+                        message: "Cambió el diagnóstico de la cita exitosamente"
+                    })
+                }else if (result_diagnostico[0].descDIagnostico != data.descDIagnostico && result_diagnostico[0].comentario != data.comentario){
+                    await pool.query('update Diagnosticos set descDIagnostico = ?, comentario =? where idCita = ?', [data.diagnostico, data.comentario, data.idCita])
+                    return res.status(200).json({
+                        success: true,
+                        message: "Cambió el diagnóstico y el comentario de la cita exitosamente"
+                    })
+                }else{
+                    return res.status(200).json({
+                        success: true,
+                        mesage: "No realizó ningún cambio"
+                    })
+                }
+            }
+        }
+
+
+
+    } catch (error) {
+        console.error('Error en la función postDiagnostico:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
 }
 
 

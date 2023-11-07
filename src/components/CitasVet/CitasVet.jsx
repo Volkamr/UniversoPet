@@ -4,16 +4,18 @@ import img from '../../assets/davinky-r.png'
 import './citasVet.css'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
-import { getCitaRequest, getDiagnosticoxCitaRequest } from '../../api/vet'
+import { getCitaRequest, getDiagnosticoxCitaRequest, postDiagnosticoRequest } from '../../api/vet'
 import { useEffect } from 'react'
+import Swal from 'sweetalert2'
 
 const CitasVet = () => {
 
     const idCita = useParams().idCita
     const [citaVet, setCitaVet] = useState([])
     const [diagnostico, setDiagnostico] = useState([])
+    const [modo, setModo] = useState('Normal')
 
-    useEffect(() =>{
+    useEffect(() => {
         async function loadCitaVet() {
             const response = await getCitaRequest(idCita)
             setCitaVet(response.data[0])
@@ -21,8 +23,8 @@ const CitasVet = () => {
         loadCitaVet()
     }, [citaVet.idCita])
 
-    useEffect(() =>{
-        async function loadDIagnostico(){
+    useEffect(() => {
+        async function loadDIagnostico() {
             const response = await getDiagnosticoxCitaRequest(idCita);
             setDiagnostico(response.data)
         }
@@ -39,8 +41,94 @@ const CitasVet = () => {
         return dia + "/" + mes + "/" + year
     }
 
-    const handleAgregarDiagnostico = () => {
-        //Lógica de agregar diagnóstico
+    let diagnostico_inicial
+    let comentario_inicial
+
+    if (diagnostico.length == 0) {
+        diagnostico_inicial = '';
+        comentario_inicial = '';
+    } else {
+        diagnostico_inicial = diagnostico[0].descDIagnostico;
+        comentario_inicial = diagnostico[0].comentario;
+    }
+
+    const [diag, setDiag] = useState(diagnostico_inicial)
+    const [comment, setComment] = useState(comentario_inicial)
+
+    useEffect(() => {
+        if (diagnostico.length === 0) {
+            setDiag('');
+            setComment('');
+        } else {
+            setDiag(diagnostico[0].descDIagnostico);
+            setComment(diagnostico[0].comentario);
+        }
+    }, [diagnostico]);
+
+    console.log(comment)
+
+    const handleDiagnosticoChange = (e) => {
+        setDiag(e.target.value)
+    }
+
+    const handleComentarioChange = (e) => {
+        setComment(e.target.value)
+    }
+
+    const handleAgregarDiagnostico = async (event) => {
+        event.preventDefault();
+
+        try {
+            const fechaAct = new Date()
+
+            if (citaVet.FechaInicio > fechaAct) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No editó el diagnóstico',
+                    text: 'No puede editar el diagnóstico si la cita aún no ha sido completada',
+                    showConfirmButton: true,
+                })
+            } else {
+
+                const response = await postDiagnosticoRequest(idCita, comment, diag);
+
+                if (response.status < 200 || response.status >= 300) {
+                    throw new Error(`Error - ${response.status}`);
+                }
+
+                const data = response.data;
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: "Actualizó la cita exitosamente",
+                        text: data.message,
+                        showConfirmButton: true,
+                    })
+                        .then(() => {
+                            setModo('Normal')
+                        });
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login fallido',
+                        text: data.message
+                    });
+                }
+
+            }
+
+        } catch (error) {
+            console.error('Login error:', error);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Falló editar diagnóstico',
+                text: 'Error'
+            });
+        }
+
     }
 
     return (
@@ -66,7 +154,7 @@ const CitasVet = () => {
                             <h1 className='citasVet__subtitle text-cs'> Servicio </h1>
                             <p> {citaVet.servicio} </p>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -78,6 +166,8 @@ const CitasVet = () => {
                     <div className='citasVet__mascota__top'>
                         <h1 className='citasVet__title__m text-cs'> {citaVet.mascota} </h1>
                         <h1 className='citasVet__subtitle text-cs'> Dueño: {citaVet.nombres_user + " " + citaVet.apellidos_user} </h1>
+                        <h1 className='citasVet__subtitle text-cs'> Correo: {citaVet.email_usuario} </h1>
+
                     </div>
                     <div className='citasVet__mascota__bott'>
                         <div className='citasVet__mascota__info grid'>
@@ -91,27 +181,48 @@ const CitasVet = () => {
                         <div className='citasVet__mascota__info grid'>
                             <h1 className='citasVet__subtitle text-cs'> Tipo Animal </h1>
                             <p> {citaVet.tipoAnimal} </p>
+
                         </div>
                     </div>
                 </div>
             </div>
-            
+
+            {
+                modo === 'Normal' ? (
                     <div>
                         <div className='citasVet__info__cita grid'>
                             <div className='citasVet__comentario'>
                                 <h1 className='citasVet__title text-cs'> Comentario </h1>
-                                <p className='citasVet__comentario'> {diagnostico.length === 0 ? 'Aún no hay diagnóstico' : diagnostico[0].descDIagnostico} </p>
+                                <p className='citasVet__comentario'> {diagnostico.length === 0 ? 'Aún no hay diagnóstico' : comment} </p>
                             </div>
                             <div className='citasVet__diagnostico'>
                                 <h1 className='citasVet__title text-cs'> Diagnostico </h1>
-                                <p className='citasVet__comentario'> {diagnostico.length === 0 ? 'Aún no hay comentario' : diagnostico[0].comentario}</p>
+                                <p className='citasVet__comentario'> {diagnostico.length === 0 ? 'Aún no hay comentario' : diag}</p>
                             </div>
                         </div>
-                        <div className='citasVet__btn'>
-                            <p  className="citasVet__btn__act btn text-cs"> Editar </p>
+                        <div className='citasVet__btn' >
+                            <p className="citasVet__btn__act btn text-cs" onClick={() => { setModo('Editar') }}> Editar </p>
                         </div>
                     </div>
-  
+                ) : (
+                    <form onSubmit={handleAgregarDiagnostico}>
+                        <div className='citasVet__info__cita grid'>
+                            <div className='citasVet__comentario'>
+                                <h1 className='citasVet__title text-cs'> Comentario </h1>
+                                <textarea className='area_texto' placeholder="Escriba el comentario de la cita" value={comment} onChange={handleComentarioChange}></textarea>
+                            </div>
+                            <div className='citasVet__diagnostico'>
+                                <h1 className='citasVet__title text-cs'> Diagnostico </h1>
+                                <textarea className='area_texto' placeholder='Escriba el diagnóstico de la cita' value={diag} onChange={handleDiagnosticoChange}></textarea>
+                            </div>
+                        </div>
+                        <div className='citasVet__btn' >
+                            <input type="submit" className="citasVet__btn__act btn text-cs" id="Actualizar" value="Actualizar" ></input>
+                        </div>
+                    </form>
+                )
+            }
+
         </section>
     )
 }

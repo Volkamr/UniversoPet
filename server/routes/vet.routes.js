@@ -28,7 +28,8 @@ import {
     getCitasVet,
     getCita,
     getDiagnosticoxCita,
-    sendEmail
+    sendEmail,
+    postDiagnostico
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -63,5 +64,7 @@ router.post('/UniversoPet/Api/eliMascota', eliMascota)
 router.post('/UniversoPet/Api/cambiarInfo', postCambiarInfo)
 router.post('/UniversoPet/Api/AgendarCita', PostAgendarCita)
 router.post('/UniversoPet/Api/sendEmail', sendEmail)
+router.post('/UniversoPet/Api/postDiagnostico', postDiagnostico)
+
 
 export default router
