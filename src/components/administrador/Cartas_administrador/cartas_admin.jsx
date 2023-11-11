@@ -1,18 +1,17 @@
 import React from 'react'
 import './cartas_admin.css';
 import añadir from '../../../assets/añadir.png'
-import buscar from '../../../assets/buscar.png'
-import { Link } from 'react-router-dom'
 import shapeTwo from '../../../assets/shape-2.png'
 import { useState } from 'react'
 import { Form, Formik } from 'formik'
 import { AiOutlineClose } from 'react-icons/ai'
-import { CgOpenCollective, CgSoftwareUpload } from 'react-icons/cg'
+import { CgSoftwareUpload } from 'react-icons/cg'
 import sede from '../../../assets/sede def.png'
 import vet from '../../../assets/vet def.png'
 import ser from '../../../assets/ser def.png'
 import { createPersonal, createSedes, createServices } from '../../../api/vet';
 import Swal from "sweetalert2";
+import { busSede, busPersonal, busServicio } from '../../../api/vet';
 
 
 
@@ -23,10 +22,17 @@ const PersonalSwiper = ({ Sedes }) => {
         setAgregar(n.target.value)
     }
 
+    const [buscar, setBuscar] = useState("sede")
+    const buscarChange = (n) => {
+        setBuscar(n.target.value)
+    }
+
     const [toggleState, setToggleState] = useState(0)
     const toggleTab = (index) => {
         setToggleState(index)
     }
+
+    const [result, setResult] = useState([])
 
     const [image, setImage] = useState(null)
     const [fileName, setFileName] = useState("Imagen sin seleccionar")
@@ -51,22 +57,82 @@ const PersonalSwiper = ({ Sedes }) => {
             <div className="Cartasad__container">
                 {/*primera tarjeta */}
                 <div className='tarjeta1'>
-                    <h3 className='Cartas__title'> Buscar empleado</h3>
-                    <div className='contenido_carta'>
-                        <div className='imagen_carta'>
-                            <img src={buscar} />
-                        </div>
-                        <div className='texto_carta'>
-                            <input type='text' name='search' required="required" placeholder='   '></input>
-                            <span>Ingrese nombre o ID</span>
-                            <div className='div_btn_busc'>
-                                <Link to={''}>
-                                    <button className="btn_buscar">Buscar</button>
-                                </Link>
-                            </div>
-                            <div className='dec'>
-                                <img src={shapeTwo} alt="" className='s' />
-                            </div>
+                    <h3 className='Cartas__title'> Buscar {buscar}</h3>
+                    <div className='contenido_carta_bus'>
+                        <Formik
+                            initialValues={{
+                                bus__name: null,
+                                bus__selc: buscar
+                            }}
+                            onSubmit={(values) => {
+                                values.bus__selc = buscar
+
+                                if (values.bus__selc === "sede" && values.bus__name !== "") {
+                                    //Funcion Buscar Sede
+                                    async function buscar() {
+                                        const res = await busSede(values.bus__name)
+                                        setResult(res.data)
+                                        if (res.data.length !== 0) {
+                                            toggleTab(4)
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'No Sede',
+                                                text: "No se encontro ningun resultado"
+                                            });
+                                        }
+                                    }
+                                    buscar()
+                                } else if (values.bus__selc === "personal" && values.bus__name !== "") {
+                                    //Funcion Buscar Personal
+                                    async function buscar() {
+                                        const res = await busPersonal(values.bus__name)
+                                        setResult(res.data)
+                                        if (res.data.length !== 0) {
+                                            toggleTab(5)
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'No Personal',
+                                                text: "No se encontro ningun resultado"
+                                            });
+                                        }
+                                    }
+                                    buscar()
+                                } else if (values.bus__selc === "servicio" && values.bus__name !== "") {
+                                    //Funcion Buscar Servicio
+                                    async function buscar() {
+                                        const res = await busServicio(values.bus__name)
+                                        setResult(res.data)
+                                        if (res.data.length !== 0) {
+                                            toggleTab(6)
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'No Servicio',
+                                                text: "No se encontro ningun resultado"
+                                            });
+                                        }
+                                    }
+                                    buscar()
+                                }
+                            }}
+                        >{({ handleChange, handleSubmit }) => (
+                            <Form className='form__busSelc'>
+                                <div className='bus__sobre'>
+                                    <input type="text" name='bus__name' id='bus__name' placeholder="Buscar" onChange={handleChange} onSubmit={handleSubmit} className='input__bus' />
+                                    <select name="bus__selc" id="bus__selc" className='bus__selc' onSubmit={handleSubmit} onChange={buscarChange}>
+                                        <option value="sede"> Sede </option>
+                                        <option value="personal"> Personal </option>
+                                        <option value="servicio"> Servicio </option>
+                                    </select>
+                                </div>
+                                <button type='submit' className="btn_bus"> Buscar {buscar} </button>
+                            </Form>
+                        )}
+                        </Formik>
+                        <div className='dec'>
+                            <img src={shapeTwo} alt="" className='s' />
                         </div>
                     </div>
                 </div>
@@ -466,7 +532,7 @@ const PersonalSwiper = ({ Sedes }) => {
                                             }} />
                                             {
                                                 image2 !== null ?
-                                                    <img src={image2} alt={fileName} className='img__ser' /> : <img src={ser} alt="" className='img__ser' />
+                                                    <img src={image2} alt={fileName2} className='img__ser' /> : <img src={ser} alt="" className='img__ser' />
                                             }
                                         </div>
                                     </div>
@@ -503,6 +569,174 @@ const PersonalSwiper = ({ Sedes }) => {
                         </Formik>
                     </div>
                 </div>
+
+                <div className={toggleState === 4 ? "sede__form active-form" : "sede__form"}>
+                    <div className='sede__form__cnt'>
+                        <AiOutlineClose onClick={() => {
+                            toggleTab(0)
+                        }} className='form__close'> </AiOutlineClose>
+                        {
+                            result.map((r, index) => {
+                                return <>
+                                    <div key={index}>
+                                        <h1 className='form__title text-cs'> {r.titulo} </h1>
+                                        <div className='result__info grid'>
+                                            <div className='res__img'>
+                                                <img src={"data:image/png;base64," + r.img} alt="" className='img__res' />
+                                            </div>
+                                            <div className='result__info__cnt'>
+                                                <div className='result__info__pri grid'>
+                                                    <div className='res__sep'>
+                                                        <p className='result__titulo text-cs'> Titulo </p>
+                                                        <p> {r.titulo} </p>
+                                                    </div>
+                                                    <div className='res__sep'>
+                                                        <p className='result__titulo text-cs'> Ciudad </p>
+                                                        <p> {r.ciudad} </p>
+                                                    </div>
+                                                </div>
+                                                <div className='res__sep'>
+                                                    <p className='result__titulo text-cs'> Descripcion </p>
+                                                    <p className='result__des'> {r.descripcion} </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='res__btn grid'>
+                                            <div className='form__btn'>
+                                                <button className="btn text-cs"> Editar </button>
+                                            </div>
+                                            <div className='form__btn'>
+                                                <button className="btn text-cs"> Borrar </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </>
+                            })
+                        }
+                    </div>
+                </div>
+
+                <div className={toggleState === 5 ? "sede__form active-form" : "sede__form"}>
+                    <div className='personal__form__cnt'>
+                        <AiOutlineClose onClick={() => {
+                            toggleTab(0)
+                        }} className='form__close'> </AiOutlineClose>
+                        {
+                            result.map((r, index) => {
+                                return <>
+                                    <div key={index}>
+                                        <h1 className='form__title text-cs'> {r.nombres + " " + r.apellidos} </h1>
+                                        <div className='result__info grid'>
+                                            <div className='res__img'>
+                                                <img src={"data:image/png;base64," + r.fotoPerfil} alt="" className='img__res' />
+                                            </div>
+                                            <div className='result__info__cnt'>
+                                                <div className='result__per__pri grid'>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> Cedula </p>
+                                                        <p> {r.cedula} </p>
+                                                    </div>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> Nombres </p>
+                                                        <p> {r.nombres} </p>
+                                                    </div>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> Apellidos </p>
+                                                        <p className='result__des'> {r.apellidos} </p>
+                                                    </div>
+                                                </div>
+                                                <div className='result__per__sec grid'>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> Email </p>
+                                                        <p> {r.email} </p>
+                                                    </div>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> T. Personal </p>
+                                                        <p> {r.tipoPersonal} </p>
+                                                    </div>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> Sede </p>
+                                                        <p className='result__des'> {r.titulo} </p>
+                                                    </div>
+                                                </div>
+                                                <div className='result__info__bottom'>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> Descripcion </p>
+                                                        <p className='result__des'> {r.profesion} </p>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div className='res__btn grid'>
+                                            <div className='form__btn'>
+                                                <button className="btn text-cs"> Editar </button>
+                                            </div>
+                                            <div className='form__btn'>
+                                                <button className="btn text-cs"> Borrar </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </>
+                            })
+                        }
+                    </div>
+                </div>
+
+                <div className={toggleState === 6 ? "sede__form active-form" : "sede__form"}>
+                    <div className='sede__form__cnt'>
+                        <AiOutlineClose onClick={() => {
+                            toggleTab(0)
+                        }} className='form__close'> </AiOutlineClose>
+                        {
+                            result.map((r, index) => {
+                                return <>
+                                    <div key={index}>
+                                        <h1 className='form__title text-cs'> {r.nombre} </h1>
+                                        <div className='result__info grid'>
+                                            <div>
+                                                <div className='ser__img'>
+                                                    <img src={"data:image/png;base64," + r.imgVista} alt="" className='img__ser' />
+                                                </div>
+                                                <div className='ser__img'>
+                                                    <img src={"data:image/png;base64," + r.imgServicio} alt="" className='img__ser' />
+                                                </div>
+                                            </div>
+                                            <div className='result__info__cnt'>
+                                                <div className='result__info__pri grid'>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> Nombre </p>
+                                                        <p> {r.nombre} </p>
+                                                    </div>
+                                                    <div className='res__sepP'>
+                                                        <p className='result__titulo text-cs'> idName </p>
+                                                        <p> {r.idName} </p>
+                                                    </div>
+                                                </div>
+                                                <div className='res__sepP'>
+                                                    <p className='result__titulo text-cs'> Descripcion </p>
+                                                    <p className='result__des'> {r.descripcion} </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='res__Sbtn grid'>
+                                            <div className='form__btn'>
+                                                <button className="btn text-cs"> Editar </button>
+                                            </div>
+                                            <div className='form__btn'>
+                                                <button className="btn text-cs"> Borrar </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </>
+                            })
+                        }
+                    </div>
+                </div>
+
             </div>
         </section >
     )

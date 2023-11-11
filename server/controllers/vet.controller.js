@@ -46,6 +46,30 @@ function sleep(ms) {
 
 //---------------------------------------------------------------------------> GET
 
+export const busSede = async (req, res) => {
+    const name = req.params.name;
+    const [result] = await pool.query(
+        "SELECT * FROM (Sedes inner join Ciudades on Sedes.idCiudad = Ciudades.idCiudad) inner join Estados on Sedes.idEstado = Estados.idEstado WHERE estado = 'activo' AND titulo LIKE '%" + name + "%'"
+    );
+    res.json(result);
+}
+
+export const busPersonal = async (req, res) => {
+    const name = req.params.name;
+    const [result] = await pool.query(
+        "SELECT * FROM (((Personal inner join TipoPersonal on TipoPersonal.idTipoPersonal = Personal.idTipoPersonal) inner join historialPersonal on historialPersonal.cedula = Personal.cedula) inner join Sedes on Sedes.idSede = historialPersonal.idSede ) inner join Estados on Personal.idEstado = Estados.idEstado WHERE estado = 'activo' AND FechaFinal is NULL AND nombres LIKE '%" + name + "%' OR apellidos LIKE '%" + name + "%'"
+    );
+    res.json(result);
+}
+
+export const busServicio = async (req, res) => {
+    const name = req.params.name;
+    const [result] = await pool.query(
+        "SELECT * FROM Servicios inner join Estados on Servicios.idEstado = Estados.idEstado WHERE estado = 'activo' AND nombre LIKE '%" + name + "%'"
+    );
+    res.json(result);
+}
+
 export const getServices = async (req, res) => {
     const [result] = await pool.query(
         "SELECT * FROM Servicios"
@@ -684,40 +708,40 @@ export const postDiagnostico = async (req, res) => {
                 }
 
                 return res.status(200).json({
-                    success:true,
-                    message:'Se añadió el diagnóstico correctamente'
+                    success: true,
+                    message: 'Se añadió el diagnóstico correctamente'
                 })
             }
-        }else{
-            if(data.diagnostico == null || data.comentario == null){
+        } else {
+            if (data.diagnostico == null || data.comentario == null) {
                 return res.status(200).json({
                     message: 'No dejar el diagnóstico o el comentario vacíos'
                 })
-            }else if (data.diagnostico.length < 10 || data.comentario.length < 10) {
+            } else if (data.diagnostico.length < 10 || data.comentario.length < 10) {
                 return res.status(200).json({
                     success: false,
                     message: 'Debe ingresar al menos 10 caracteres'
                 })
-            }else{
-                if(result_diagnostico[0].descDIagnostico == data.diagnostico && result_diagnostico[0].comentario != data.comentario){
+            } else {
+                if (result_diagnostico[0].descDIagnostico == data.diagnostico && result_diagnostico[0].comentario != data.comentario) {
                     await pool.query('update Diagnosticos set comentario = ? where idCita = ?', [data.comentario, data.idCita])
                     return res.status(200).json({
                         success: true,
                         message: "Cambió el comentario exitosamente"
                     })
-                }else if(result_diagnostico[0].descDIagnostico != data.descDIagnostico && result_diagnostico[0].comentario == data.comentario){
+                } else if (result_diagnostico[0].descDIagnostico != data.descDIagnostico && result_diagnostico[0].comentario == data.comentario) {
                     await pool.query('update Diagnosticos set descDIagnostico = ? where idCita = ?', [data.diagnostico, data.idCita])
                     return res.status(200).json({
                         success: true,
                         message: "Cambió el diagnóstico de la cita exitosamente"
                     })
-                }else if (result_diagnostico[0].descDIagnostico != data.descDIagnostico && result_diagnostico[0].comentario != data.comentario){
+                } else if (result_diagnostico[0].descDIagnostico != data.descDIagnostico && result_diagnostico[0].comentario != data.comentario) {
                     await pool.query('update Diagnosticos set descDIagnostico = ?, comentario =? where idCita = ?', [data.diagnostico, data.comentario, data.idCita])
                     return res.status(200).json({
                         success: true,
                         message: "Cambió el diagnóstico y el comentario de la cita exitosamente"
                     })
-                }else{
+                } else {
                     return res.status(200).json({
                         success: true,
                         mesage: "No realizó ningún cambio"
