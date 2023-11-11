@@ -32,7 +32,8 @@ import {
     postDiagnostico,
     busSede,
     busPersonal,
-    busServicio
+    busServicio,
+    putCancelarCita
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -71,6 +72,8 @@ router.post('/UniversoPet/Api/cambiarInfo', postCambiarInfo)
 router.post('/UniversoPet/Api/AgendarCita', PostAgendarCita)
 router.post('/UniversoPet/Api/sendEmail', sendEmail)
 router.post('/UniversoPet/Api/postDiagnostico', postDiagnostico)
+
+router.put('/UniversoPet/Api/CancelarCita', putCancelarCita)
 
 
 export default router

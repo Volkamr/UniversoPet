@@ -97,7 +97,7 @@ export const Login = () => {
                     timer: 2000 
                 })
                     .then(() => {
-                        localStorage.setItem('UserToken', JSON.stringify({token: data.accessToken, rol: 'usuario'}));
+                        localStorage.setItem('UserToken', JSON.stringify({token: data.accessToken, rol: 'usuario', email: email_log}));
                         window.location.href = `/perfil/${data.accessToken}`;
                     });
 

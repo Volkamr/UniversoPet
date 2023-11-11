@@ -533,13 +533,17 @@ export const PostAgendarCita = async (req, res) => {
         const fechaActual = new Date();
         const horaActual = fechaActual.getHours();
         const minutoActual = fechaActual.getMinutes();
+        const mesActual = fechaActual.getMonth () + 1;
         const minutoHoraActual = (horaActual * 60) + minutoActual;
+        const actualYear = fechaActual.getFullYear()
         const diaActual = fechaActual.getDate();
 
         const fechaCita = new Date(data.fecha);
         const horaCita = fechaCita.getHours();
         const diaCita = fechaCita.getDate();
+        const mesCita = fechaCita.getMonth() + 1;
         const minutoCita = fechaCita.getMinutes();
+        const citaYear = fechaCita.getFullYear();
 
         const minutoHoraCita = (horaCita * 60) + minutoCita;
 
@@ -591,7 +595,7 @@ export const PostAgendarCita = async (req, res) => {
                 title: 'Hora incorrecta',
                 message: "Nuestro Horario de atención es de 8:00AM a 8:00PM"
             })
-        } else if (((minutoHoraCita - minutoHoraActual) < 30) && diaCita == diaActual) {
+        } else if (((minutoHoraCita - minutoHoraActual) < 30) && diaCita == diaActual && mesCita == mesActual && actualYear==citaYear) {
             return res.status(200).json({
                 success: false,
                 title: 'Hora incorrecta',
@@ -665,6 +669,56 @@ export const PostAgendarCita = async (req, res) => {
         });
     }
 
+}
+
+export const putCancelarCita = async (req, res) => {
+    try{
+
+        const data = req.body;
+        const [result_cita] = await pool.query('SELECT estadoCita, FechaInicio FROM Citas inner join EstadosCitas on EstadosCitas.idEstadoCita = Citas.idEStadoCita WHERE idCita = ?', [data.idCita])
+        const fechaActual = new Date();
+         
+        if(result_cita[0].estadoCita !== 'agendada'){
+            return res.status(200).json({
+                message: 'No puede cancelar la cita',
+                success: false
+            })
+        }else if (result_cita[0].FechaInicio<fechaActual){
+            return res.status(200).json({
+                message: 'No puede cancelar una cita que ya pasó',
+                success: false
+            })
+        }else{
+
+            try{
+                const [result_estado] = await pool.query('Select * from EstadosCitas WHERE estadoCita = ? ', ["cancelada"])
+                const idEstadoCita = result_estado[0].idEStadoCita 
+                await pool.query('UPDATE Citas set idEstadoCita = ? WHERE idCita = ? ', [idEstadoCita, data.idCita])
+
+            }catch(error){
+                console.error('Error al enviar datos a la BD:', error);
+                        return res.status(500).json({
+                            message: "Error en el servidor",
+                            success: false
+                        });
+            }
+
+            return res.status(200).json({
+                success: true,
+                title: 'Cita cancelada correctamente',
+                message: "Recibirá un correo confirmando la cancelación de su cita"
+            })
+
+        }
+
+
+    }catch(error){
+        console.error('Error en la función postDiagnostico:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
 }
 
 

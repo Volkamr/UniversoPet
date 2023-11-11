@@ -164,3 +164,9 @@ export const postDiagnosticoRequest = async (idCita, comentario, diagnostico) =>
         comentario: comentario
     })
 }
+
+export const putCancelarCitaRequest = async (idCita) => {
+    return await axios.put('http://localhost:3001/UniversoPet/Api/CancelarCita', {
+        idCita: idCita
+    })
+}

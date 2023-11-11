@@ -55,7 +55,7 @@ const CalendarioVet = ({cedula, token}) => {
     const parseFecha = (fecha) =>{
         const fechaP = new Date(fecha);
         const dia = fechaP.getDate();
-        const mes = fechaP.getMonth();
+        const mes = fechaP.getMonth() + 1;
         const year = fechaP.getFullYear();
         return dia + "/" + mes + "/" + year
     }

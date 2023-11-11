@@ -14,13 +14,10 @@ export const NavBar = () => {
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('UserToken');
         const local_data = JSON.parse(loggedUserJSON)
-        console.log(loggedUserJSON)
         if (loggedUserJSON != null) {
             setEstado('Loggeado');
             setToken(local_data.token)
             setRol(local_data.rol)
-            console.log(token)
-            console.log(estado)
         }
     }, [estado, token, rol])
 

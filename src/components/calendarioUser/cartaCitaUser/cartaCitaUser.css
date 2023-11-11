@@ -13,9 +13,9 @@
 }
 
 .ventana{
-    background-color: '#fffff';
+    background-color:#ffffff   ;
     width: 1250px;
-    height: 200px;
+    min-height: 220px;
     backdrop-filter: blur(20px);
     padding: 30px 50px 50px 40px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -24,22 +24,31 @@
     z-index: 1000;
     position: absolute;
     transition: transform 0.3s, box-shadow 0.3s;
+    display: grid;
+    overflow: hidden;
 }
 
 .header{
     display: grid;
-    grid-template-columns: 5fr 1fr;
+    grid-template-columns: 6fr 6fr;
 }
+
 
 #titulo{
     grid-column: 1;
     font-size: 30px;
+    margin-bottom: 5px;
 }
 
+
+
 .cerrar{
-    grid-column: 2;
-    margin-left: 150px;
+    grid-column: 3;
     cursor: pointer;
+}
+
+.cerrar:hover{
+    color: var(--color-primario)
 }
 
 .body{
@@ -73,4 +82,17 @@
 
 .titulos{
     font-size: 20px;
+}
+
+.cancelar{
+    cursor: pointer;
+}
+
+.cancelar:hover{
+    color: var(--color-primario)
+}
+
+.footer{
+    align-items: center;
+    align-self: center;
 }

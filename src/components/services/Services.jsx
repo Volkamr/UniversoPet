@@ -4,7 +4,8 @@ import './services.css'
 import { Link } from 'react-router-dom'
 import { getServicesRequest } from "../../api/vet.js";
 import { useEffect, useState } from "react";
-import ser from '../../assets/ser def.png'
+import ser from '../../assets/ser def.png';
+import Swal from 'sweetalert2'
 
 
 export default function Services() {
@@ -18,6 +19,20 @@ export default function Services() {
         }
         loadServices()
     }, [])
+
+    const [estado, setEstado] = useState('');
+    const [token, setToken] = useState('');
+    const [rol, setRol] = useState('');
+
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('UserToken');
+        const local_data = JSON.parse(loggedUserJSON)
+        if (loggedUserJSON != null) {
+            setEstado('Loggeado');
+            setToken(local_data.token)
+            setRol(local_data.rol)
+        }
+    }, [estado, token, rol])
 
     return (
         <section className="services_view section">
@@ -41,7 +56,29 @@ export default function Services() {
                                     <Link to={`/servicios/${service.idServicio}`}>
                                         <button className="btn-servicios" id="conoce-mas">Conoce más</button>
                                     </Link>
-                                    <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
+                                    {
+                                        estado === 'Loggeado' && rol === 'usuario' ? (
+                                        <Link to={`/perfil/${token}`}>
+                                             <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
+                                        </Link>
+                                        ) : (
+                                        <Link onClick={() => {
+                                            Swal.fire({
+                                                icon: 'info',
+                                                title: 'Tiene que iniciar sesión',
+                                                text: 'Debe iniciar sesión para poder agendar una cita',
+                                            })
+                                                .then(() => {
+                                                    localStorage.removeItem('UserToken');
+                                                    window.location.href = '/login';
+                                                });
+                                        }}>
+                                            <button className="btn-servicios" id="agendar">¡Agenda ya!</button>
+                                       </Link>
+                                        )
+
+
+                                    }
                                 </div>
                             </div>
 
