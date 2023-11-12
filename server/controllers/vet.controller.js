@@ -48,6 +48,17 @@ function sleep(ms) {
 
 export const busSede = async (req, res) => {
     const name = req.params.name;
+
+    const [estado] = await pool.query(
+        "SELECT * FROM Estados where estado='activo'"
+    );
+
+    if (estado.length == 0) {
+        await pool.query("insert into Estados set ?", {
+            estado: "activo"
+        })
+    }
+
     const [result] = await pool.query(
         "SELECT * FROM (Sedes inner join Ciudades on Sedes.idCiudad = Ciudades.idCiudad) inner join Estados on Sedes.idEstado = Estados.idEstado WHERE estado = 'activo' AND titulo LIKE '%" + name + "%'"
     );
@@ -56,14 +67,46 @@ export const busSede = async (req, res) => {
 
 export const busPersonal = async (req, res) => {
     const name = req.params.name;
-    const [result] = await pool.query(
-        "SELECT * FROM (((Personal inner join TipoPersonal on TipoPersonal.idTipoPersonal = Personal.idTipoPersonal) inner join historialPersonal on historialPersonal.cedula = Personal.cedula) inner join Sedes on Sedes.idSede = historialPersonal.idSede ) inner join Estados on Personal.idEstado = Estados.idEstado WHERE estado = 'activo' AND FechaFinal is NULL AND nombres LIKE '%" + name + "%' OR apellidos LIKE '%" + name + "%'"
+    var result
+    var sep
+
+    const [estado] = await pool.query(
+        "SELECT * FROM Estados where estado='activo'"
     );
+
+    if (estado.length == 0) {
+        await pool.query("insert into Estados set ?", {
+            estado: "activo"
+        })
+    }
+
+    if (name.includes(" ")) {
+        sep = name.split(" ");
+        [result] = await pool.query(
+            "SELECT * FROM (((Personal inner join TipoPersonal on TipoPersonal.idTipoPersonal = Personal.idTipoPersonal) inner join historialPersonal on historialPersonal.cedula = Personal.cedula) inner join Sedes on Sedes.idSede = historialPersonal.idSede ) inner join Estados on Personal.idEstado = Estados.idEstado WHERE estado = 'activo' AND FechaFinal is NULL AND nombres LIKE '%" + sep[0] + "%' AND apellidos LIKE '%" + sep[1] + "%'"
+        );
+    } else {
+        [result] = await pool.query(
+            "SELECT * FROM (((Personal inner join TipoPersonal on TipoPersonal.idTipoPersonal = Personal.idTipoPersonal) inner join historialPersonal on historialPersonal.cedula = Personal.cedula) inner join Sedes on Sedes.idSede = historialPersonal.idSede ) inner join Estados on Personal.idEstado = Estados.idEstado WHERE estado = 'activo' AND FechaFinal is NULL AND nombres LIKE '%" + name + "%' OR apellidos LIKE '%" + name + "%'"
+        );
+    }
+
     res.json(result);
 }
 
 export const busServicio = async (req, res) => {
     const name = req.params.name;
+
+    const [estado] = await pool.query(
+        "SELECT * FROM Estados where estado='activo'"
+    );
+
+    if (estado.length == 0) {
+        await pool.query("insert into Estados set ?", {
+            estado: "activo"
+        })
+    }
+
     const [result] = await pool.query(
         "SELECT * FROM Servicios inner join Estados on Servicios.idEstado = Estados.idEstado WHERE estado = 'activo' AND nombre LIKE '%" + name + "%'"
     );
@@ -72,21 +115,21 @@ export const busServicio = async (req, res) => {
 
 export const getServices = async (req, res) => {
     const [result] = await pool.query(
-        "SELECT * FROM Servicios"
+        "SELECT * FROM Servicios inner join Estados on Estados.idEstado = Servicios.idEstado where estado='activo'"
     );
     res.json(result);
 }
 
 export const getSedes = async (req, res) => {
     const [result] = await pool.query(
-        "SELECT idSede, img, ciudad, titulo, descripcion FROM Sedes inner join Ciudades on Sedes.idCiudad = Ciudades.idCiudad"
+        "SELECT idSede, img, ciudad, titulo, descripcion FROM (Sedes inner join Ciudades on Sedes.idCiudad = Ciudades.idCiudad) inner join Estados on Estados.idEstado = Sedes.idEstado where estado = 'activo'"
     );
     res.json(result);
 }
 
 export const getService = async (req, res) => {
     const [result] = await pool.query(
-        "SELECT * FROM Servicios where idServicio = ?", [req.params.idServicio]
+        "SELECT * FROM Servicios inner join Estados where Estados.idEstado = Servicios.idEstado where idServicio = ? and estado = 'activo'", [req.params.idServicio]
     );
 
     if (result.length == 0) {
@@ -99,7 +142,7 @@ export const getService = async (req, res) => {
 
 export const getPersonal = async (req, res) => {
     const [result] = await pool.query(
-        "SELECT cedula, password, nombres, apellidos, email, profesion, fotoPerfil, estado, tipoPersonal FROM ((Personal inner join TipoPersonal on Personal.idTipoPersonal = TipoPersonal.idTipoPersonal) inner join Estados on Personal.idEstado = Estados.idEstado) ORDER BY nombres ASC"
+        "SELECT cedula, password, nombres, apellidos, email, profesion, fotoPerfil, estado, tipoPersonal FROM ((Personal inner join TipoPersonal on Personal.idTipoPersonal = TipoPersonal.idTipoPersonal) inner join Estados on Personal.idEstado = Estados.idEstado) where estado='activo' ORDER BY nombres ASC"
     );
     res.json(result);
 }
@@ -180,7 +223,7 @@ export const getUserPets = async (req, res) => {
 
 export const getPersonalP = async (req, res) => {
     const [result] = await pool.query(
-        "SELECT cedula, password, nombres, apellidos, email, profesion, fotoPerfil, estado, tipoPersonal FROM ((Personal inner join TipoPersonal on Personal.idTipoPersonal = TipoPersonal.idTipoPersonal) inner join Estados on Personal.idEstado = Estados.idEstado) limit 3"
+        "SELECT cedula, password, nombres, apellidos, email, profesion, fotoPerfil, estado, tipoPersonal FROM ((Personal inner join TipoPersonal on Personal.idTipoPersonal = TipoPersonal.idTipoPersonal) inner join Estados on Personal.idEstado = Estados.idEstado) where estado='activo' limit 3"
     );
     res.json(result);
 }
@@ -533,7 +576,7 @@ export const PostAgendarCita = async (req, res) => {
         const fechaActual = new Date();
         const horaActual = fechaActual.getHours();
         const minutoActual = fechaActual.getMinutes();
-        const mesActual = fechaActual.getMonth () + 1;
+        const mesActual = fechaActual.getMonth() + 1;
         const minutoHoraActual = (horaActual * 60) + minutoActual;
         const actualYear = fechaActual.getFullYear()
         const diaActual = fechaActual.getDate();
@@ -595,7 +638,7 @@ export const PostAgendarCita = async (req, res) => {
                 title: 'Hora incorrecta',
                 message: "Nuestro Horario de atención es de 8:00AM a 8:00PM"
             })
-        } else if (((minutoHoraCita - minutoHoraActual) < 30) && diaCita == diaActual && mesCita == mesActual && actualYear==citaYear) {
+        } else if (((minutoHoraCita - minutoHoraActual) < 30) && diaCita == diaActual && mesCita == mesActual && actualYear == citaYear) {
             return res.status(200).json({
                 success: false,
                 title: 'Hora incorrecta',
@@ -672,35 +715,35 @@ export const PostAgendarCita = async (req, res) => {
 }
 
 export const putCancelarCita = async (req, res) => {
-    try{
+    try {
 
         const data = req.body;
         const [result_cita] = await pool.query('SELECT estadoCita, FechaInicio FROM Citas inner join EstadosCitas on EstadosCitas.idEstadoCita = Citas.idEStadoCita WHERE idCita = ?', [data.idCita])
         const fechaActual = new Date();
-         
-        if(result_cita[0].estadoCita !== 'agendada'){
+
+        if (result_cita[0].estadoCita !== 'agendada') {
             return res.status(200).json({
                 message: 'No puede cancelar la cita',
                 success: false
             })
-        }else if (result_cita[0].FechaInicio<fechaActual){
+        } else if (result_cita[0].FechaInicio < fechaActual) {
             return res.status(200).json({
                 message: 'No puede cancelar una cita que ya pasó',
                 success: false
             })
-        }else{
+        } else {
 
-            try{
+            try {
                 const [result_estado] = await pool.query('Select * from EstadosCitas WHERE estadoCita = ? ', ["cancelada"])
-                const idEstadoCita = result_estado[0].idEStadoCita 
+                const idEstadoCita = result_estado[0].idEStadoCita
                 await pool.query('UPDATE Citas set idEstadoCita = ? WHERE idCita = ? ', [idEstadoCita, data.idCita])
 
-            }catch(error){
+            } catch (error) {
                 console.error('Error al enviar datos a la BD:', error);
-                        return res.status(500).json({
-                            message: "Error en el servidor",
-                            success: false
-                        });
+                return res.status(500).json({
+                    message: "Error en el servidor",
+                    success: false
+                });
             }
 
             return res.status(200).json({
@@ -712,7 +755,7 @@ export const putCancelarCita = async (req, res) => {
         }
 
 
-    }catch(error){
+    } catch (error) {
         console.error('Error en la función postDiagnostico:', error);
         return res.status(500).json({
             message: "Error en el servidor",
@@ -1349,6 +1392,365 @@ export const eliMascota = async (req, res) => {
         })
     } catch (error) {
         console.error('Error en la función eliMascota:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+
+}
+
+export const updateSede = async (req, res) => {
+
+    try {
+
+        const data = req.body
+        const ant = await pool.query("select img, titulo, descripcion, ciudad from Sedes inner join Ciudades on Ciudades.idCiudad = Sedes.idCiudad where idSede=?", [data.idSede]);
+
+        if (data.titulo == null && data.img == "" && data.descripcion == null && data.ciudad == null) {
+            return res.status(200).json({
+                success: true,
+                message: "No Hay Cambios"
+            })
+        }
+
+        if (data.titulo == null) {
+            data.titulo = ant[0][0].titulo
+        }
+        if (data.descripcion == null) {
+            data.descripcion = ant[0][0].descripcion
+        }
+        if (data.img == "") {
+            data.img = ant[0][0].img
+        }
+        if (data.ciudad == null) {
+            data.ciudad = ant[0][0].ciudad
+        }
+
+        async function sede() {
+
+            const [ciudad] = await pool.query(
+                "SELECT * FROM Ciudades where ciudad='" + data.ciudad + "'"
+            );
+
+            if (ciudad.length == 0) {
+                await pool.query("insert into Ciudades set ?", {
+                    ciudad: data.ciudad
+                })
+            }
+
+            const idCiudad = await pool.query("select idCiudad from Ciudades where ciudad='" + data.ciudad + "'")
+            const idC = idCiudad[0][0].idCiudad
+
+            pool.query("update Sedes set ? where idSede='" + data.idSede + "'",
+                {
+                    img: data.img,
+                    titulo: data.titulo,
+                    descripcion: data.descripcion,
+                    idCiudad: idC
+                }, (error) => {
+                    if (error) throw error;
+                }
+            )
+        }
+
+        sede()
+        return res.status(200).json({
+            success: true,
+            message: "Sede Actualizada"
+        })
+
+    } catch (error) {
+        console.error('Error en la función updateSede:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+
+}
+
+export const updatePersonal = async (req, res) => {
+    try {
+
+        const data = req.body
+        const ant = await pool.query("Select password, nombres, apellidos, email, profesion, fotoPerfil, tipoPersonal from Personal inner join TipoPersonal on Personal.idTipoPersonal = TipoPersonal.idTipoPersonal where cedula = ?", [data.cedula])
+        let emails
+        let passwordHaash
+
+        if (data.nombres === null && data.apellidos === null && data.email === null && data.descripcion === null && data.imagen === "" && data.tipoPersonal === null && data.password === null) {
+            return res.status(200).json({
+                success: true,
+                message: "No Hay Cambios"
+            })
+        }
+
+        if (data.nombres === "" && data.apellidos === "" && data.email === "" && data.descripcion === "" && data.imagen === "" && data.tipoPersonal === "" && data.password === "") {
+            return res.status(200).json({
+                success: true,
+                message: "No Hay Cambios"
+            })
+        }
+
+        if (data.email !== null && data.email !== "") {
+            emails = await pool.query("select email from Personal where email= ?", [data.email])
+            if (emails[0].length !== 0) {
+                return res.status(200).json({
+                    success: false,
+                    message: "El correo ya esta en uso"
+                })
+            }
+        }
+
+        if (data.password !== null && data.password !== "") {
+            if (data.password.length < 6) {
+                return res.status(200).json({
+                    success: false,
+                    message: "La contraseña debe tener al menos 6 caracteres"
+                })
+            } else {
+                passwordHaash = await bcrypt.hash(data.password, 8);
+            }
+        } else {
+            passwordHaash = ant[0][0].password
+        }
+
+        if (data.nombres === null || data.nombres === "") {
+            data.nombres = ant[0][0].nombres
+        }
+
+        if (data.apellidos === null || data.apellidos === "") {
+            data.apellidos = ant[0][0].apellidos
+        }
+
+        if (data.email === null || data.email === "") {
+            data.email = ant[0][0].email
+        }
+
+        if (data.descripcion === null || data.descripcion === "") {
+            data.descripcion = ant[0][0].profesion
+        }
+
+        if (data.imagen === "") {
+            data.imagen = ant[0][0].fotoPerfil
+        }
+
+        if (data.tipoPersonal === null || data.tipoPersonal === "") {
+            data.tipoPersonal = ant[0][0].tipoPersonal
+        }
+
+        async function personal() {
+
+            const [tipoPersonal] = await pool.query(
+                "SELECT * FROM TipoPersonal where tipoPersonal='" + data.tipoPersonal + "'"
+            );
+
+            if (tipoPersonal.length == 0) {
+                await pool.query("insert into TipoPersonal set ?", {
+                    tipoPersonal: data.tipoPersonal
+                })
+            }
+
+            const idTipoP = await pool.query("select idTipoPersonal from TipoPersonal where tipoPersonal='" + data.tipoPersonal + "'")
+            const idTP = idTipoP[0][0].idTipoPersonal
+
+            pool.query("UPDATE Personal set ? where cedula = ?",
+                [{
+                    password: passwordHaash,
+                    nombres: data.nombres,
+                    apellidos: data.apellidos,
+                    email: data.email,
+                    profesion: data.descripcion,
+                    fotoPerfil: data.imagen,
+                    idTipoPersonal: idTP,
+
+                }, data.cedula], (error) => {
+                    if (error) throw error;
+                }
+            )
+
+        }
+
+        personal()
+        return res.status(200).json({
+            success: true,
+            message: "Personal Actualizado"
+        })
+
+
+    } catch (error) {
+        console.error('Error en la función updatePersonal:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+}
+
+export const updateServicio = async (req, res) => {
+
+    try {
+
+        const data = req.body
+        const ant = await pool.query("select nombre, idName, descripcion, imgVista, imgServicio from Servicios where idServicio=?", [data.idServicio]);
+
+        if (data.nombre == null && data.idName == null && data.imagen == "" && data.imagen2 == "" && data.descripcion == null) {
+            return res.status(200).json({
+                success: true,
+                message: "No Hay Cambios"
+            })
+        }
+
+        if (data.nombre == null) {
+            data.nombre = ant[0][0].nombre
+        }
+        if (data.idName == null) {
+            data.idName = ant[0][0].idName
+        }
+        if (data.imagen == "") {
+            data.imagen = ant[0][0].imgVista
+        }
+        if (data.imagen2 == "") {
+            data.imagen2 = ant[0][0].imgServicio
+        }
+        if (data.descripcion == null) {
+            data.descripcion = ant[0][0].descripcion
+        }
+
+        async function servicio() {
+            pool.query("update Servicios set ? where idServicio='" + data.idServicio + "'",
+                {
+                    imgVista: data.imagen,
+                    imgServicio: data.imagen2,
+                    nombre: data.nombre,
+                    descripcion: data.descripcion,
+                    idName: data.idName
+                }, (error) => {
+                    if (error) throw error;
+                }
+            )
+        }
+
+        servicio()
+        return res.status(200).json({
+            success: true,
+            message: "Servicio Actualizada"
+        })
+
+    } catch (error) {
+        console.error('Error en la función updateServicio:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+
+}
+
+export const eliSede = async (req, res) => {
+
+    try {
+        const data = req.body
+
+        const [estado] = await pool.query(
+            "SELECT * FROM Estados where estado='cesante'"
+        );
+
+        if (estado.length == 0) {
+            await pool.query("insert into Estados set ?", {
+                estado: "cesante"
+            })
+        }
+
+        const Ces = await pool.query("select idEstado from Estados where estado='cesante'")
+        const idCes = Ces[0][0].idEstado
+
+        await pool.query("update Sedes set ? where idSede='" + data.idSede + "'", {
+            idEstado: idCes
+        })
+
+        return res.status(200).json({
+            success: true,
+            message: "Sede Eliminada"
+        })
+    } catch (error) {
+        console.error('Error en la función eliSede:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+
+}
+
+export const eliPersonal = async (req, res) => {
+
+    try {
+        const data = req.body
+
+        const [estado] = await pool.query(
+            "SELECT * FROM Estados where estado='cesante'"
+        );
+
+        if (estado.length == 0) {
+            await pool.query("insert into Estados set ?", {
+                estado: "cesante"
+            })
+        }
+
+        const Ces = await pool.query("select idEstado from Estados where estado='cesante'")
+        const idCes = Ces[0][0].idEstado
+
+        await pool.query("update Personal set ? where cedula='" + data.cedula + "'", {
+            idEstado: idCes
+        })
+
+        await pool.query("update historialPersonal set ? where cedula='" + data.cedula + "'", {
+            FechaFinal: new Date(Date.now())
+        })
+
+        return res.status(200).json({
+            success: true,
+            message: "Personal Eliminado"
+        })
+    } catch (error) {
+        console.error('Error en la función eliPersonal:', error);
+        return res.status(500).json({
+            message: "Error en el servidor",
+            success: false
+        });
+    }
+
+}
+
+export const eliServicio = async (req, res) => {
+
+    try {
+        const data = req.body
+
+        const [estado] = await pool.query(
+            "SELECT * FROM Estados where estado='cesante'"
+        );
+
+        if (estado.length == 0) {
+            await pool.query("insert into Estados set ?", {
+                estado: "cesante"
+            })
+        }
+
+        const Ces = await pool.query("select idEstado from Estados where estado='cesante'")
+        const idCes = Ces[0][0].idEstado
+
+        await pool.query("update Servicios set ? where idServicio='" + data.idServicio + "'", {
+            idEstado: idCes
+        })
+
+        return res.status(200).json({
+            success: true,
+            message: "Servicio Eliminado"
+        })
+    } catch (error) {
+        console.error('Error en la función eliServicio:', error);
         return res.status(500).json({
             message: "Error en el servidor",
             success: false

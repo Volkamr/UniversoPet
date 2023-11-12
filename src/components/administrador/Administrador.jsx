@@ -4,7 +4,6 @@ import './administrador.css';
 import usuarios from '../../assets/usuarios_ad.png';
 import adminImg from '../../assets/perro_admin.png';
 import Cartas from "./Cartas_administrador/cartas_admin";
-import PersonalSwiper from "./swiper_administrador/s_administrador";
 import estado from '../../assets/estado_pagina_ad.png';
 import mascotas from '../../assets/mascotas_ad.png';
 import { useState } from 'react'
@@ -81,12 +80,10 @@ const Administrador = () => {
             </div>
             <br />
             <br />
+            <br />
+            <br />
             <h2 className="empleados__title"> Empleados</h2>
             <Cartas Sedes={Sedes}></Cartas>
-            <h3 className="sede__title"> Sede 1</h3>
-            <PersonalSwiper></PersonalSwiper>
-            <h3 className="sede__title"> Sede 2</h3>
-            <PersonalSwiper></PersonalSwiper>
             <h2 className="empleados__title"> General</h2>
             <div className="general">
                 <div className="separacion">

@@ -105,15 +105,19 @@ export const busServicio = async (name) => {
 export const sendEmail = async (email) => await axios.post('http://localhost:3001/UniversoPet/Api/sendEmail', email);
 
 export const createSedes = async (sede) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateSedes', sede);
+export const updateSede = async (sede) => await axios.post('http://localhost:3001/UniversoPet/Api/UpdateSede', sede);
+export const eliSede = async (sede) => await axios.post('http://localhost:3001/UniversoPet/Api/EliSede', sede);
 
 export const createServices = async (service) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateServices', service);
+export const updateServices = async (service) => await axios.post('http://localhost:3001/UniversoPet/Api/UpdateServicio', service);
+export const eliServices = async (service) => await axios.post('http://localhost:3001/UniversoPet/Api/EliServicio', service);
 
 export const createPersonal = async (personal) => await axios.post('http://localhost:3001/UniversoPet/Api/CreatePersonal', personal);
+export const updatePersonal = async (personal) => await axios.post('http://localhost:3001/UniversoPet/Api/UpdatePersonal', personal);
+export const eliPersonal = async (personal) => await axios.post('http://localhost:3001/UniversoPet/Api/EliPersonal', personal);
 
 export const createMascota = async (mascota) => await axios.post('http://localhost:3001/UniversoPet/Api/CreateMascota', mascota);
-
 export const updateMascota = async (mascota) => await axios.post('http://localhost:3001/UniversoPet/Api/UpdateMascota', mascota);
-
 export const eliMascota = async (idMascota) => await axios.post('http://localhost:3001/UniversoPet/Api/eliMascota', idMascota);
 
 export const postCambioInfoRequest = async (idUsuario, email, celular, nombres, imagen) => {
