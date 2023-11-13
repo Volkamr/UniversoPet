@@ -39,7 +39,10 @@ import {
     updateServicio,
     eliSede,
     eliPersonal,
-    eliServicio
+    eliServicio,
+    pruinsert,
+    recuperar,
+    cambiar_contrasena
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -85,6 +88,8 @@ router.post('/UniversoPet/Api/UpdateServicio', updateServicio)
 router.post('/UniversoPet/Api/EliSede', eliSede)
 router.post('/UniversoPet/Api/EliPersonal', eliPersonal)
 router.post('/UniversoPet/Api/EliServicio', eliServicio)
-
+router.post('/UniversoPet/Api/pruinsert', pruinsert)
+router.post('/UniversoPet/Api/recuperar', recuperar)
+router.post('/UniversoPet/Api/cam_con', cambiar_contrasena)
 
 export default router

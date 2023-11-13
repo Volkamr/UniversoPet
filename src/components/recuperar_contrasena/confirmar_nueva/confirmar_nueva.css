@@ -1,0 +1,100 @@
+.cambiar_con {
+    margin-top: -3%;
+}
+
+.titulo_cam {
+    text-align: center;
+    font-size: 38px;
+    margin-bottom: 30px;
+}
+
+.xd {
+    height: 30px;
+}
+
+.div_btn_busc {
+    margin-top: -2%;
+}
+
+.carta_principal {
+    margin-top: 10%;
+    background-color: white;
+    width: 50%;
+    text-align: center;
+    justify-self: center;
+    margin-left: 25%;
+    border-radius: 25px;
+}
+
+.texto_carta {
+    position: relative;
+    margin-left: 60px;
+    width: 80%;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.texto_carta input {
+    width: 100%;
+    border: 1px solid gray;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    color: rgb(0, 0, 0);
+    transition: 0.5s;
+    margin-bottom: 20px;
+}
+
+.texto_carta input:hover {
+    border-color: var(--color-primario);
+}
+
+.texto_carta input:focus {
+    border-color: green;
+}
+
+.text_a {
+    font-size: 15px;
+    padding-bottom: 2%;
+}
+
+.texto_carta span {
+    position: absolute;
+    width: 200px;
+    top: 9px;
+    left: 8px;
+    padding: 2px;
+    pointer-events: none;
+    font-size: 15px;
+    color: #000;
+    cursor: text;
+    transition: top 50ms ease-in,
+        left 50ms ease-in, font-size 50ms ease-in;
+
+}
+
+.texto_carta input:focus~span,
+.texto_carta input:valid+span {
+    top: -12px;
+    font-size: 12px;
+    left: 8px;
+    width: auto;
+    height: auto;
+    background-color: white;
+    color: green;
+    text-transform: uppercase;
+}
+
+.btn_cambiar {
+
+    overflow: hidden;
+    border: 1px solid green;
+    width: 50%;
+    padding: 10px;
+    color: white;
+    background-color: green;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.4s ease-in;
+}

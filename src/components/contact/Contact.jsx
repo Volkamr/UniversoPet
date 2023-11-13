@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useEffect } from "react";
 import './contact.css';
 import { FaRegAddressBook, FaRegEnvelope, FaRegUser, FaRegMap } from 'react-icons/fa';
 import { sendEmail } from '../../api/vet';
 import Swal from "sweetalert2";
+import { postPrueba } from '../../api/vet';
+import { Link } from 'react-router-dom';
 
 const Contact = () => {
 
@@ -12,39 +15,73 @@ const Contact = () => {
     });
 
     const handleChange = (e) => {
+
         const name = e.target.name;
         const value = e.target.value;
         setForm({ ...form, [name]: value });
     }
 
-    const handleSubmit = async (e) => {
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const response = await sendEmail(form)
+
+    //     if (response.status < 200 || response.status >= 300) {
+    //         throw new Error(`Error - ${response.status}`);
+    //     }
+
+    //     const data = response.data
+    //     if (data.success) {
+    //         Swal.fire({
+    //             icon: 'success',
+    //             title: data.message,
+    //             text: "Email Enviado Exitosamente",
+    //             showConfirmButton: false,
+    //             timer: 1500
+    //         })
+    //         setForm({ name: '', email: '', subject: '', message: '' });
+    //     } else {
+    //         Swal.fire({
+    //             icon: 'error',
+    //             title: 'Envio de Correo Fallido',
+    //             text: data.message
+    //         });
+    //     }
+    // }
+
+    const handleSubmit = (e) => {
+
         e.preventDefault();
-        const response = await sendEmail(form)
-
-        if (response.status < 200 || response.status >= 300) {
-            throw new Error(`Error - ${response.status}`);
-        }
-
-        const data = response.data
-        if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: data.message,
-                text: "Email Enviado Exitosamente",
-                showConfirmButton: false,
-                timer: 1500
-            })
-            setForm({ name: '', email: '', subject: '', message: '' });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Envio de Correo Fallido',
-                text: data.message
-            });
-        }
+        setForm({ name: '', email: '', subject: '', message: '' });
     }
 
+    const sendEmail = () => {
+
+        if (form.email && form.name && form.subject && form.message) {
+            const resp = postPrueba(form.name, form.email, form.subject, form.message);
+        }
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al enviar el mensaje',
+                text: "Faltan campos por llenar"
+            });
+        }
+
+    }
+
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('UserToken');
+        const local_data = JSON.parse(loggedUserJSON);
+        if (loggedUserJSON != null && local_data.rol == "usuario") {
+            form.email = local_data.email;
+            document.getElementById('email').disabled = true;
+            document.getElementById('email').placeholder = form.email;
+
+        };
+    }, [])
+
     return (
+
         <section className="contact " id="contact">
             <h2 className="section__title text-cs">
                 Contactanos
@@ -77,7 +114,7 @@ const Contact = () => {
                             <FaRegEnvelope></FaRegEnvelope>
                         </span>
                         <h3 className="contact__card-title"> Email</h3>
-                        <p className="contact__card-data"> universopetupb@gmail.com </p>
+                        <p className="contact__card-data"> vetuniversopet@gmail.com </p>
                     </div>
 
                     <div className="contact__card">
@@ -102,7 +139,7 @@ const Contact = () => {
                             <label htmlFor="" className="contact__form-tag text-cs">
                                 Tu correo electronico <b>*</b>
                             </label>
-                            <input type="email" name='email' onChange={handleChange} value={form.email} className="contact__form-input" />
+                            <input type="email" name='email' id="email" onChange={handleChange} value={form.email} className="contact__form-input" />
                         </div>
                     </div>
 
@@ -122,14 +159,21 @@ const Contact = () => {
 
                     <div className="contact__submit">
                         <p>* Acepto los terminos y condiciones. </p>
-                        <button type='submit' className='btn text-cs'>Enviar Mensaje</button>
+                        <button type='submit' onClick={sendEmail} className='btn text-cs'>Enviar Mensaje</button>
+                    </div>
+                    <div>
+                        <Link to="/UniversoPet/recuperar" className="nav_link text-cs">
+                            <button type='submit' className='btn text-cs'>Enviar Mensaje</button>
+                        </Link>
                     </div>
 
                 </form>
 
             </div>
         </section>
+
     )
 }
+
 
 export default Contact

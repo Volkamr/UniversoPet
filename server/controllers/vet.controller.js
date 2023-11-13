@@ -1,10 +1,12 @@
 import { pool } from '../db.js'
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
-
+import { enviarMail_contact } from "../mailer_contact.js";
 import { Resend } from 'resend';
+import { enviarMail } from '../mailer.js';
 
 const resend = new Resend('re_R7EnvHXW_FdemyUBeNSce2U7DWbdWHm1B');
+
 
 export const sendEmail = async (req, res) => {
     try {
@@ -39,6 +41,39 @@ export const sendEmail = async (req, res) => {
         }
     }
 }
+
+export const pruinsert = async (req, res) => {
+    const name = req.body.name;
+    const mail = req.body.mail;
+    const subject = req.body.subject;
+    const message = req.body.message;
+
+    const cod = enviarMail_contact(name, mail, subject, message);
+
+}
+
+export const recuperar = async (req, res) => {
+    const mail = req.body.mail;
+    const OTP = req.body.OTP;
+
+    const cod = enviarMail(mail, OTP);
+
+    // const [result] = await pool.query(
+    //     "UPDATE Ciudades SET ciudad = ? WHERE ciudad = ? ", [num, nombre]
+    // );
+}
+
+export const cambiar_contrasena = async (req, res) => {
+    const correo = req.body.correo;
+    const contrasena = req.body.contrasena;
+
+    let hash = bcrypt.hashSync(contrasena, 9);
+
+    const [result] = await pool.query(
+        "UPDATE Usuarios SET  password = ? WHERE email = ? ", [hash, correo]
+    );
+}
+
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

@@ -1,0 +1,102 @@
+.recuperar {
+    margin-top: 6%;
+}
+
+.titulo_rec {
+    font-size: 38px;
+}
+
+.descripcion {
+    margin-top: 20px;
+    width: 80%;
+    text-align: left;
+    margin-left: 10%;
+    margin-bottom: 30px;
+}
+
+.carta_principal_1 {
+    margin-top: 2%;
+    background-color: white;
+    width: 50%;
+    text-align: center;
+    justify-self: center;
+    margin-left: 25%;
+    border-radius: 25px;
+}
+
+.texto_carta_1 {
+    position: relative;
+    margin-left: 10%;
+    width: 80%;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.texto_carta_1 input {
+    width: 100%;
+    border: 1px solid gray;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    color: rgb(0, 0, 0);
+    transition: 0.5s;
+}
+
+.texto_carta_1 input:hover {
+    border-color: var(--color-primario);
+}
+
+.texto_carta_1 input:focus {
+    border-color: green;
+}
+
+.text_a {
+    font-size: 15px;
+    padding-bottom: 2%;
+}
+
+.texto_carta_1 span {
+    position: absolute;
+    width: 200px;
+    top: 9px;
+    left: 8px;
+    padding: 2px;
+    pointer-events: none;
+    font-size: 15px;
+    color: #000;
+    cursor: text;
+    transition: top 50ms ease-in,
+        left 50ms ease-in, font-size 50ms ease-in;
+
+}
+
+.texto_carta_1 input:focus~span,
+.texto_carta_1 input:valid+span {
+    top: -12px;
+    font-size: 12px;
+    left: 8px;
+    width: auto;
+    height: auto;
+    background-color: white;
+    color: green;
+    text-transform: uppercase;
+}
+
+.btn_sig {
+
+    overflow: hidden;
+    border: 1px solid green;
+    width: 20%;
+    padding: 10px;
+    color: green;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.4s ease-in;
+    margin-left: 50%;
+}
+
+.btn_sig:hover {
+    background-color: rgb(1, 153, 1);
+    color: white;
+}

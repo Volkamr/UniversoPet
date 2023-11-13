@@ -81,7 +81,7 @@ export const Login = () => {
 
         try {
             const response = await postLoginRequest(email_log, password_log)
-            
+
             if (response.status < 200 || response.status >= 300) {
                 throw new Error(`Error - ${response.status}`);
             }
@@ -94,10 +94,10 @@ export const Login = () => {
                     title: "Login exitoso",
                     text: "Será redireccionado",
                     showConfirmButton: false,
-                    timer: 2000 
+                    timer: 2000
                 })
                     .then(() => {
-                        localStorage.setItem('UserToken', JSON.stringify({token: data.accessToken, rol: 'usuario', email: email_log}));
+                        localStorage.setItem('UserToken', JSON.stringify({ token: data.accessToken, rol: 'usuario', email: email_log }));
                         window.location.href = `/perfil/${data.accessToken}`;
                     });
 
@@ -142,10 +142,10 @@ export const Login = () => {
                     timer: 2000
                 })
 
-                .then(() => {
-                    localStorage.setItem('UserToken', JSON.stringify({token: data.accessToken, rol: 'veterinario'}));
-                    window.location.href = `/Veterinario/${data.accessToken}`;
-                });
+                    .then(() => {
+                        localStorage.setItem('UserToken', JSON.stringify({ token: data.accessToken, rol: 'veterinario' }));
+                        window.location.href = `/Veterinario/${data.accessToken}`;
+                    });
 
             } else {
 
@@ -161,9 +161,9 @@ export const Login = () => {
 
     }
 
-    const handleLoginAdmin = async (event) =>{
+    const handleLoginAdmin = async (event) => {
         event.preventDefault();
-        try{
+        try {
             const response = await postLoginAdminRequest(adminusr, password_log);
 
             if (response.status < 200 || response.status >= 300) {
@@ -181,10 +181,10 @@ export const Login = () => {
                     timer: 2000
                 })
 
-                .then(() => {
-                    localStorage.setItem('UserToken', JSON.stringify({token: data.accessToken, rol: 'administrador'}));
-                    window.location.href = `/Administrador/${data.accessToken}`;
-                });
+                    .then(() => {
+                        localStorage.setItem('UserToken', JSON.stringify({ token: data.accessToken, rol: 'administrador' }));
+                        window.location.href = `/Administrador/${data.accessToken}`;
+                    });
 
             } else {
 
@@ -195,7 +195,7 @@ export const Login = () => {
                 });
             }
 
-        }catch(error){
+        } catch (error) {
 
         }
     }
@@ -233,15 +233,15 @@ export const Login = () => {
                     title: data.message,
                     text: "Debe iniciar sesión",
                 })
-                .then(() => {
-                   setNombres('');
-                   setCelular('');
-                   setPassReg('');
-                   setAPellidos('');
-                   setNombres('');
-                   setEmailReg('');
-                   setEdad('');
-                });
+                    .then(() => {
+                        setNombres('');
+                        setCelular('');
+                        setPassReg('');
+                        setAPellidos('');
+                        setNombres('');
+                        setEmailReg('');
+                        setEdad('');
+                    });
 
             } else {
                 Swal.fire({
@@ -273,7 +273,7 @@ export const Login = () => {
                 <div className={`wrapper_login ${action === 'Registrarse' ? 'active' : ''}`}>
 
                     <div class="form-box login">
-                        <form onSubmit={rol.value === "Veterinario" ? (handleLoginVeterinario) : rol.value==="Usuario" ? (handleLoginUsuario) : handleLoginAdmin}>
+                        <form onSubmit={rol.value === "Veterinario" ? (handleLoginVeterinario) : rol.value === "Usuario" ? (handleLoginUsuario) : handleLoginAdmin}>
                             <h2 className="h2-login-reg">Login</h2>
                             <span className="line"></span>
 
@@ -293,8 +293,8 @@ export const Login = () => {
                                 <input className="input-log" type={rol.value === 'Usuario' ? ("email") : rol.value === 'Veterinario' ? ("number") : ("text")}
                                     name={rol.value === 'Usuario' ? ("email") : rol.value === 'Veterinario' ? ("cedula") : ("admin_user")}
                                     value={rol.value === 'Usuario' ? (email_log) : rol.value === 'Veterinario' ? (cedula) : (adminusr)} required
-                                    placeholder={rol.value === 'Usuario' ? ("Ingrese su correo electrónico") : rol.value === "Veterinario" ? ("Ingrese su cédula"):
-                                    ("Ingrese su usuario de Administrador")} id="email"
+                                    placeholder={rol.value === 'Usuario' ? ("Ingrese su correo electrónico") : rol.value === "Veterinario" ? ("Ingrese su cédula") :
+                                        ("Ingrese su usuario de Administrador")} id="email"
                                     onChange={rol.value === 'Usuario' ? (emailLoginChange) : rol.value === 'Veterinario' ? (cedulaChange) : (AdminUSrChange)}></input>
 
 
@@ -304,7 +304,7 @@ export const Login = () => {
 
                                 <p className="mensaje">
                                     ¿Olvidó su contraseña?
-                                    <a className="a-login" href="#">Recuperar contraseña</a>
+                                    <a className="a-login" href="/UniversoPet/recuperar">Recuperar contraseña</a>
                                 </p>
 
                                 <input className="btn-login-reg btn-login-depth" type="submit" value="Login"></input>
@@ -380,7 +380,7 @@ export const Login = () => {
                                     onClick={() => {
                                         setAction("Login");
 
-                                    }}>Inice sesión</a>
+                                    }}>Inicie sesión</a>
                             </p>
                         </div>
 

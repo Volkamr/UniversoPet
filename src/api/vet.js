@@ -174,3 +174,26 @@ export const putCancelarCitaRequest = async (idCita) => {
         idCita: idCita
     })
 }
+
+export const postPrueba = async (name, mail, subject, message) => {
+    return await axios.post("http://localhost:3001/UniversoPet/Api/pruinsert", {
+        name: name,
+        mail: mail,
+        subject: subject,
+        message: message
+    })
+}
+
+export const recuperar_cont = async (mail, OTP) => {
+    return await axios.post("http://localhost:3001/UniversoPet/Api/recuperar", {
+        mail: mail,
+        OTP: OTP
+    })
+}
+
+export const cambiar_contrasena = async (correo, contrasena) => {
+    return await axios.post("http://localhost:3001/UniversoPet/Api/cam_con", {
+        correo: correo,
+        contrasena: contrasena
+    })
+}
