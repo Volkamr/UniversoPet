@@ -1,10 +1,11 @@
 import { pool } from '../db.js'
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
-import { enviarMail_contact } from "../mailer_contact.js";
+import { enviarMail_contact } from "../mailers/mailer_contact.js";
 import { Resend } from 'resend';
-import { enviarMail } from '../mailer.js';
-import { enviarMail_cita } from '../mailer_citas.js';
+import { enviarMail } from '../mailers/mailer.js';
+import { enviarMail_cita } from '../mailers/mailer_citas.js';
+import { enviarMailVet } from '../mailers/mailerCitasVet.js';
 
 const resend = new Resend('re_R7EnvHXW_FdemyUBeNSce2U7DWbdWHm1B');
 
@@ -50,22 +51,6 @@ export const pruinsert = async (req, res) => {
     const message = req.body.message;
 
     const cod = enviarMail_contact(name, mail, subject, message);
-
-}
-
-export const mail_cita = async (req, res) => {
-    const vetSeleccionado = req.body.vetSeleccionado;
-    const usuario = req.body.usuario;
-    const ser = req.body.SelectedService;
-    const fecha = req.body.fechaHora
-
-    const vetmailob = await pool.query('SELECT email FROM Personal WHERE cedula = ?', [vetSeleccionado]);
-    const vetmail = vetmailob[0][0].email;
-    const serviciob = await pool.query('SELECT nombre FROM Servicios WHERE idServicio = ?', [ser]);
-    const servicio = serviciob[0][0].nombre
-
-    const vet = enviarMail_cita(vetmail, servicio, fecha);
-    const usu = enviarMail_cita(usuario, servicio, fecha);
 
 }
 
@@ -620,7 +605,7 @@ export const postCambiarInfo = async (req, res) => {
 }
 
 
-export const PostAgendarCita = async (req, res) => {
+export const postAgendarCita = async (req, res) => {
 
     try {
         const data = req.body;
@@ -728,6 +713,26 @@ export const PostAgendarCita = async (req, res) => {
                         })
                     }
 
+                    const [result_vet] = await pool.query('SELECT email, nombres, apellidos from Personal where cedula = ? ', [data.cedulaVet])
+                    const vetMail = result_vet[0].email
+                    const nombreVet = result_vet[0].nombres + " " + result_vet[0].apellidos
+
+                    const [result_servicio] = await pool.query('SELECT nombre from Servicios where idServicio = ? ', [data.idServicio])
+                    const servicio = result_servicio[0].nombre;
+
+                    const [result_usuario] = await pool.query('SELECT email,nombres, apellidos from Usuarios where idUsuario = ? ', [data.idUsuario])
+                    const usuarioEmail = result_usuario[0].email
+                    const usuarioNombres = result_usuario[0].nombres + " " + result_usuario[0].apellidos
+
+                    const [result_mascota] = await pool.query('SELECT nombre from Mascotas where idMascota = ? ', [data.idMascota])
+                    const mascota = result_mascota[0].nombre
+
+                    const [result_sede] = await pool.query('SELECT titulo, ciudad from Sedes inner join Ciudades on Sedes.idCiudad = Ciudades.idCiudad where idSede = ? ', [data.idSede])
+                    const sede = result_sede[0].titulo + " en la ciudad de " + result_sede[0].ciudad
+
+                    enviarMailVet(usuarioNombres, sede, nombreVet, mascota, vetMail, servicio, data.fechaParse, data.hora, usuarioEmail);
+                    enviarMail_cita(usuarioNombres, sede, nombreVet, mascota, usuarioEmail, servicio, data.fechaParse, data.hora, vetMail);
+
                     try {
                         await pool.query("INSERT INTO Citas SET ?", {
                             fechaInicio: fechaCita,
@@ -808,7 +813,7 @@ export const putCancelarCita = async (req, res) => {
 
 
     } catch (error) {
-        console.error('Error en la función postDiagnostico:', error);
+        console.error('Error en la función cancelarCita:', error);
         return res.status(500).json({
             message: "Error en el servidor",
             success: false
@@ -822,6 +827,8 @@ export const postDiagnostico = async (req, res) => {
 
         const data = req.body;
         const [result_diagnostico] = await pool.query('select * from Diagnosticos WHERE idCita = ? ', [data.idCita])
+        const fechaActual = new Date();
+        const fechaCita = new Date(data.fecha)
 
         if (result_diagnostico.length == 0) {
             if (data.diagnostico == null || data.comentario == null) {
@@ -834,7 +841,13 @@ export const postDiagnostico = async (req, res) => {
                     success: false,
                     message: 'Debe ingresar al menos 10 caracteres'
                 })
-            } else {
+            } else if(fechaCita>fechaActual){
+                return res.status(200).json({
+                    success: false,
+                    message: 'No puede agregar un diagnóstico a una cita que no se ha completado'
+                })
+            }
+            else{
                 try {
 
                     const [result_estadoCita] = await pool.query('SELECT idEstadoCita FROM EstadosCitas WHERE estadoCita = ?', ["completada"])
@@ -1175,7 +1188,7 @@ export const postMascota = async (req, res) => {
 
         const id = data.idUsuario;
 
-        if (data.nombre == null) {
+        if (data.nombre == null || data.nombre == '') {
             return res.status(200).json({
                 success: false,
                 message: "Una mascota necesita un nombre"
@@ -1190,12 +1203,12 @@ export const postMascota = async (req, res) => {
                 success: false,
                 message: "Una mascota no puede nacer en el futuro"
             })
-        } else if (data.tipoAnimal == null) {
+        } else if (data.tipoAnimal == null || data.tipoAnimal == '') {
             return res.status(200).json({
                 success: false,
                 message: "Una mascota debe tener un tipo"
             })
-        } else if (data.raza == null) {
+        } else if (data.raza == null || data.raza == '') {
             return res.status(200).json({
                 success: false,
                 message: "Una mascota debe tener una raza"
@@ -1210,16 +1223,16 @@ export const postMascota = async (req, res) => {
         async function mascota() {
 
             const [tipoAnimal] = await pool.query(
-                "SELECT * FROM TipoAnimal where tipoAnimal='" + data.tipoAnimal + "'"
+                "SELECT * FROM TipoAnimal where tipoAnimal='" + data.tipoAnimal.toLowerCase() + "'"
             );
 
             if (tipoAnimal.length == 0) {
                 await pool.query("insert into TipoAnimal set ?", {
-                    tipoAnimal: data.tipoAnimal
+                    tipoAnimal: data.tipoAnimal.toLowerCase()
                 })
             }
 
-            const idTipoAnimal = await pool.query("select idTipoAnimal from TipoAnimal where tipoAnimal='" + data.tipoAnimal + "'")
+            const idTipoAnimal = await pool.query("select idTipoAnimal from TipoAnimal where tipoAnimal='" + data.tipoAnimal.toLowerCase() + "'")
             const idTA = idTipoAnimal[0][0].idTipoAnimal
 
             const [estado] = await pool.query(
@@ -1233,17 +1246,17 @@ export const postMascota = async (req, res) => {
             }
 
             const [raza] = await pool.query(
-                "SELECT * FROM Razas where raza='" + data.raza + "'"
+                "SELECT * FROM Razas where raza='" + data.raza.toLowerCase() + "'"
             );
 
             if (raza.length == 0) {
                 await pool.query("insert into Razas set ?", {
-                    raza: data.raza,
+                    raza: data.raza.toLowerCase(),
                     idTipoAnimal: idTA
                 })
             }
 
-            const idRaza = await pool.query("select idRaza from Razas where raza='" + data.raza + "'")
+            const idRaza = await pool.query("select idRaza from Razas where raza='" + data.raza.toLowerCase() + "'")
             const idRA = idRaza[0][0].idRaza
 
             const idEstado = await pool.query("select idEstado from Estados where estado='" + data.estado + "'")

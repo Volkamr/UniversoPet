@@ -42,7 +42,7 @@ const Veterinario = () => {
                 <div className="vet__info grid">
                     <div className='vet__foto'>
                         {
-                            veterinario.fotoPerfil !== "" ? <img src={"data:img/png;base64," + veterinario.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
+                            veterinario.fotoPerfil !== '' ? <img src={"data:img/png;base64," + veterinario.fotoPerfil} alt="" className="perfil__img" /> : <BiSolidUser className='icon__default'></BiSolidUser>
                         }
                     </div>
                     <div className="vet__info__content">
@@ -77,32 +77,6 @@ const Veterinario = () => {
                             {veterinario.profesion}
                         </p>
                     </div>
-                </div>
-                <div className='btn__info'>
-                    <p className="vet__btn__info btn text-cs"> editar </p>
-                </div>
-
-                <h2 className='section__title text-cs'>
-                    Mascotas
-                </h2>
-                <p className='section__subtitle'>
-                    Mirar <span> Mascotas </span>
-                </p>
-                <div className='vet__finder'>
-                    <Formik
-                        initialValues={{
-                            nombreMascota: null
-                        }}
-                    >{({ handleChange, handleSubmit }) => (
-                        <Form className='vet__finder__form grid'>
-                            <div className='vet__finder__bar'>
-                                <BsSearchHeart className='vet__finder__icon'></BsSearchHeart>
-                                <input type="text" name="nombreMascota" className='vet__bar' placeholder='Nombre Mascota' id="nombreMascota" onChange={handleChange} onSubmit={handleSubmit} />
-                            </div>
-                            <p className="vet__btn__finder btn text-cs"> Buscar </p>
-                        </Form>
-                    )}
-                    </Formik>
                 </div>
                 <h2 className='section__title text-cs'>
                     Calendario

@@ -151,21 +151,25 @@ export const postLoginAdminRequest = async (adminusr, password) => {
     })
 }
 
-export const postAgendarCitaRequest = async (fecha, cedulaVet, idSede, idMascota, idServicio) => {
+export const postAgendarCitaRequest = async (fecha, cedulaVet, idSede, idMascota, idServicio, idUsuario, fechaParse, hora) => {
     return await axios.post('http://localhost:3001/UniversoPet/Api/AgendarCita', {
         fecha: fecha,
         cedulaVet: cedulaVet,
         idSede: idSede,
         idMascota: idMascota,
-        idServicio: idServicio
+        idServicio: idServicio,
+        idUsuario: idUsuario,
+        fechaParse: fechaParse,
+        hora: hora
     })
 }
 
-export const postDiagnosticoRequest = async (idCita, comentario, diagnostico) => {
+export const postDiagnosticoRequest = async (idCita, comentario, diagnostico, fecha) => {
     return await axios.post('http://localhost:3001/UniversoPet/Api/postDiagnostico', {
         idCita: idCita,
         diagnostico: diagnostico,
-        comentario: comentario
+        comentario: comentario,
+        fecha: fecha
     })
 }
 
@@ -195,14 +199,5 @@ export const cambiar_contrasena = async (correo, contrasena) => {
     return await axios.post("http://localhost:3001/UniversoPet/Api/cam_con", {
         correo: correo,
         contrasena: contrasena
-    })
-}
-
-export const m_cita = async (vetSeleccionado, usuario, SelectedService, fechaHora) => {
-    return await axios.post("http://localhost:3001/UniversoPet/Api/m_cita", {
-        vetSeleccionado: vetSeleccionado,
-        usuario: usuario,
-        SelectedService: SelectedService,
-        fechaHora: fechaHora
     })
 }

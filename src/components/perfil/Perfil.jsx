@@ -160,9 +160,8 @@ const Perfil = () => {
 
                     .then(() => {
                         setAction("Normal");
+                        setImgActual(imgForm)
                     });
-
-                setImgActual(imgForm)
             } else {
 
                 Swal.fire({
@@ -241,21 +240,21 @@ const Perfil = () => {
         setVetSeleccionado(event.target.value)
     }
 
-
-    console.log("vet: " + vetSeleccionado)
-    console.log("pet: " + selectedPet)
-    console.log("servicio: " + SelectedService);
-    console.log("sede: " + sedeSeleccionada);
-    console.log("fecha: " + fechaHora);
-
-    const sendEmail = () => {
-
-        const loggedUserJSON = window.localStorage.getItem('UserToken');
-        const local_data = JSON.parse(loggedUserJSON);
-        const usuario = local_data.email;
-
-        const resp = m_cita(vetSeleccionado, usuario, SelectedService, fechaHora);
+    const parseFecha = (fecha) =>{
+        const fechaP = new Date(fecha);
+        const dia = fechaP.getDate();
+        const mes = fechaP.getMonth() + 1;
+        const year = fechaP.getFullYear();
+        return dia + "/" + mes + "/" + year
     }
+
+    const parseHora = (fecha) =>{
+        const fechaP = new Date(fecha);
+        const hora = fechaP.getHours();
+        const minutos = fechaP.getMinutes();
+        return hora + ":" + minutos;
+    }
+
 
     const handleAgendarCita = async (event) => {
         event.preventDefault();
@@ -274,7 +273,7 @@ const Perfil = () => {
 
 
             if (result.isConfirmed == true) {
-                const response = await postAgendarCitaRequest(fechaHora, vetSeleccionado, sedeSeleccionada, selectedPet, SelectedService)
+                const response = await postAgendarCitaRequest(fechaHora, vetSeleccionado, sedeSeleccionada, selectedPet, SelectedService, user.idUsuario, parseFecha(fechaHora), parseHora(fechaHora))
 
                 if (response.status < 200 || response.status >= 300) {
                     throw new Error(`Error - ${response.status}`);
@@ -289,6 +288,10 @@ const Perfil = () => {
                         text: data.message,
                         showConfirmButton: true,
                     })
+
+                    .then(() => {
+                        window.location.reload()
+                    });
 
                 } else {
                     Swal.fire({
@@ -541,7 +544,7 @@ const Perfil = () => {
                         </div>
 
                         <div className='form__btn'>
-                            <button onClick={sendEmail} className="btn text-cs h"> Agendar3 Cita </button>
+                            <button className="btn text-cs h"> Agendar Cita </button>
                         </div>
                     </form>
 

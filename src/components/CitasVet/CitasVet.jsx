@@ -79,48 +79,38 @@ const CitasVet = () => {
         event.preventDefault();
 
         try {
-            const fechaAct = new Date()
+            const response = await postDiagnosticoRequest(idCita, comment, diag, citaVet.FechaInicio);
 
-            if (citaVet.FechaInicio > fechaAct) {
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(`Error - ${response.status}`);
+            }
+
+            const data = response.data;
+
+            if (data.success) {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'No editó el diagnóstico',
-                    text: 'No puede editar el diagnóstico si la cita aún no ha sido completada',
+                    icon: 'success',
+                    title: "Actualizó la cita exitosamente",
+                    text: data.message,
                     showConfirmButton: true,
                 })
-            } else {
-
-                const response = await postDiagnosticoRequest(idCita, comment, diag);
-
-                if (response.status < 200 || response.status >= 300) {
-                    throw new Error(`Error - ${response.status}`);
-                }
-
-                const data = response.data;
-
-                if (data.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: "Actualizó la cita exitosamente",
-                        text: data.message,
-                        showConfirmButton: true,
-                    })
-                        .then(() => {
-                            setModo('Normal')
-                        });
-
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Login fallido',
-                        text: data.message
+                    .then(() => {
+                        setModo('Normal')
+                        window.location.reload()
                     });
-                }
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No añadió el diagnóstico',
+                    text: data.message
+                });
+
 
             }
 
         } catch (error) {
-            console.error('Login error:', error);
+            console.error('Diagnóstico error:', error);
 
             Swal.fire({
                 icon: 'error',

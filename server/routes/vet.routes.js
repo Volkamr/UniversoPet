@@ -22,7 +22,7 @@ import {
     getVeterinario,
     getAdministrador,
     getVeterinariosxSede,
-    PostAgendarCita,
+    postAgendarCita,
     getCitasMascota,
     getCitasUsuario,
     getCitasVet,
@@ -43,7 +43,6 @@ import {
     pruinsert,
     recuperar,
     cambiar_contrasena,
-    mail_cita
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -79,7 +78,7 @@ router.post('/UniversoPet/Api/CreateMascota', postMascota)
 router.post('/UniversoPet/Api/UpdateMascota', updateMascota)
 router.post('/UniversoPet/Api/eliMascota', eliMascota)
 router.post('/UniversoPet/Api/cambiarInfo', postCambiarInfo)
-router.post('/UniversoPet/Api/AgendarCita', PostAgendarCita)
+router.post('/UniversoPet/Api/AgendarCita', postAgendarCita)
 router.post('/UniversoPet/Api/sendEmail', sendEmail)
 router.post('/UniversoPet/Api/postDiagnostico', postDiagnostico)
 router.put('/UniversoPet/Api/CancelarCita', putCancelarCita)
@@ -92,6 +91,5 @@ router.post('/UniversoPet/Api/EliServicio', eliServicio)
 router.post('/UniversoPet/Api/pruinsert', pruinsert)
 router.post('/UniversoPet/Api/recuperar', recuperar)
 router.post('/UniversoPet/Api/cam_con', cambiar_contrasena)
-router.post('/UniversoPet/Api/m_cita', mail_cita)
 
 export default router
