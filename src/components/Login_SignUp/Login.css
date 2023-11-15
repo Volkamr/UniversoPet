@@ -68,12 +68,12 @@
     transform: translateX(0);
 }
 
-#req-title{
+#req-title {
     grid-row: 1;
     align-self: center;
 }
 
-#inp-reg{
+#inp-reg {
     grid-column: span 2;
     grid-row: 2;
     padding: 15px;
@@ -85,101 +85,101 @@
     grid-template-rows: 3fr 3fr 3fr 1f 2fr;
 }
 
-#l-n{
+#l-n {
     grid-column: 1;
     grid-row: 1;
 }
 
-#nombres-reg{
+#nombres-reg {
     grid-column: 1;
     grid-row: 1;
     padding: 10px;
     margin-top: 20px;
 }
 
-#l-e{
+#l-e {
     grid-column: 1;
     grid-row: 2;
 }
 
-#email-reg{
+#email-reg {
     grid-column: 1;
     grid-row: 2;
     margin-top: 20px;
 }
 
-#l-a{
+#l-a {
     grid-column: 2;
     grid-row: 1;
 }
 
-#apell-reg{
+#apell-reg {
     grid-column: 2;
     grid-row: 1;
     padding: 10px;
     margin-top: 20px;
 }
 
-#l-p{
-    grid-column:2;
-    grid-row:3;
+#l-p {
+    grid-column: 2;
+    grid-row: 3;
 }
 
-#psswd-reg{
-    grid-column:2;
-    grid-row:3;
+#psswd-reg {
+    grid-column: 2;
+    grid-row: 3;
     padding: 10px;
     margin-top: 20px;
 }
 
-.terminos-cond{
+.terminos-cond {
     grid-column: span 2;
-    grid-row:4;
+    grid-row: 4;
     text-align: center;
     align-self: center;
     margin-bottom: 10px;
 }
 
-#btn-reg{
+#btn-reg {
     grid-column: span 2;
-    grid-row:5;
-    margin:auto;
+    grid-row: 5;
+    margin: auto;
     text-align: center;
     align-self: center;
 }
 
-#cel-reg{
+#cel-reg {
     grid-column: 1;
     grid-row: 3;
     padding: 10px;
     margin-top: 20px;
 }
 
-#l-c{
+#l-c {
     margin-bottom: 30px;
     grid-column: 1;
     grid-row: 3;
 }
 
-#l-ed{
+#l-ed {
     grid-column: 2;
     grid-row: 2;
 }
 
-#edad-reg{
+#edad-reg {
     grid-column: 2;
     grid-row: 2;
     margin-top: 20px;
 }
 
 
-#cambio-reg{
+#cambio-reg {
     align-self: center;
     height: 40px;
     width: 570px;
     transition: width 0.5s ease;
 
-    
+
 }
 
 .inputs {
@@ -304,7 +304,7 @@ label {
     align-items: center;
 }
 
-#mensaje{
+#mensaje {
     margin-top: 10px;
 }
 
@@ -329,12 +329,12 @@ label {
     text-decoration: underline;
 }
 
-#seleccionar-rol{
+#seleccionar-rol {
     margin-top: 5px;
     font-size: 12px;
     font-weight: 600;
 }
 
-#select-r{
+#select-r {
     margin-bottom: 5px;
 }

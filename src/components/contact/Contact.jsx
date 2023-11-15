@@ -161,12 +161,6 @@ const Contact = () => {
                         <p>* Acepto los terminos y condiciones. </p>
                         <button type='submit' onClick={sendEmail} className='btn text-cs'>Enviar Mensaje</button>
                     </div>
-                    <div>
-                        <Link to="/UniversoPet/recuperar" className="nav_link text-cs">
-                            <button type='submit' className='btn text-cs'>Enviar Mensaje</button>
-                        </Link>
-                    </div>
-
                 </form>
 
             </div>
