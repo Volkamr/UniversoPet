@@ -1,0 +1,116 @@
+.principal_otp {
+    background-color: white;
+    width: 50%;
+    justify-self: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 3%;
+    margin-left: 25%;
+    border-radius: 10px;
+}
+
+.principal_otp h1 {
+    top: 10px;
+    font-size: 38px;
+}
+
+.sub {
+    margin-top: 5px;
+    text-align: center;
+    color: grey;
+}
+
+.ft {
+    text-align: center;
+    color: grey;
+    bottom: 20px;
+    font-size: 14px;
+}
+
+.divft {
+    height: 30px;
+}
+
+.reenviar {
+    color: blue;
+    cursor: pointer;
+}
+
+.inpuses {
+    margin-top: 65px;
+    display: flex;
+    flex-direction: row;
+    height: 80px;
+}
+
+.in1 {
+    border: 1px solid black;
+    width: 12%;
+    height: 100%;
+    margin-left: 23%;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid green;
+    font-size: 20px;
+}
+
+.in2 {
+    border: 1px solid black;
+    width: 12%;
+    height: 100%;
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid green;
+    font-size: 20px;
+}
+
+.in3 {
+    border: 1px solid black;
+    width: 12%;
+    height: 100%;
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid green;
+    font-size: 20px;
+}
+
+.in4 {
+    border: 1px solid black;
+    width: 12%;
+    height: 100%;
+    margin-left: 10px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid green;
+    font-size: 20px;
+}
+
+.texto {
+    margin-top: 20px;
+}
+
+.texto h1 {
+    font-size: 38px;
+}
+
+.btn_verificar {
+
+    overflow: hidden;
+    border: 1px solid green;
+    width: 65%;
+    padding: 10px;
+    color: green;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.1s ease-in;
+    margin-bottom: 20px;
+    margin-top: 65px;
+    height: 50px;
+}
+
+.btn_verificar:hover {
+    background-color: rgb(1, 153, 1);
+    color: white;
+}
