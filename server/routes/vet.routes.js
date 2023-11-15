@@ -42,7 +42,8 @@ import {
     eliServicio,
     pruinsert,
     recuperar,
-    cambiar_contrasena
+    cambiar_contrasena,
+    mail_cita
 } from '../controllers/vet.controller.js'
 
 const router = Router()
@@ -91,5 +92,6 @@ router.post('/UniversoPet/Api/EliServicio', eliServicio)
 router.post('/UniversoPet/Api/pruinsert', pruinsert)
 router.post('/UniversoPet/Api/recuperar', recuperar)
 router.post('/UniversoPet/Api/cam_con', cambiar_contrasena)
+router.post('/UniversoPet/Api/m_cita', mail_cita)
 
 export default router

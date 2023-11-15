@@ -5,7 +5,7 @@ import "./perfil.css"
 import Mascotas from '../mascotas/Mascotas'
 import { useEffect, useState } from "react";
 import Calendario from '../calendarioUser/Calendario'
-import { getSedesRequest, getUserPetsRequest, getVetRequest, getVeterinarioxSedeRequest, postAgendarCitaRequest, getCitasxUsuarioRequest } from '../../api/vet'
+import { getSedesRequest, getUserPetsRequest, getVetRequest, getVeterinarioxSedeRequest, postAgendarCitaRequest, getCitasxUsuarioRequest, m_cita } from '../../api/vet'
 import { AiOutlineClose } from 'react-icons/ai'
 import { Form, Formik } from 'formik'
 import { getServicesRequest } from '../../api/vet'
@@ -47,6 +47,8 @@ const Perfil = () => {
             };
         });
     };
+
+
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -187,7 +189,7 @@ const Perfil = () => {
     const service_def = services.length > 0 ? services[0].idServicio : null;
     useEffect(() => {
         setSelectedService(service_def);
-      }, [service_def]);
+    }, [service_def]);
 
     const handleCambioServicio = (event) => {
         setSelectedService(event.target.value)
@@ -198,7 +200,7 @@ const Perfil = () => {
     const pet_def = UserPets.length > 0 ? UserPets[0].idMascota : null;
     useEffect(() => {
         setSelectedPet(pet_def);
-      }, [pet_def]);
+    }, [pet_def]);
 
     const handleCambioMascota = (event) => {
         setSelectedPet(event.target.value);
@@ -209,7 +211,7 @@ const Perfil = () => {
     const sede_def = sedes.length > 0 ? sedes[0].idSede : null;
     useEffect(() => {
         setSedeSeleccionada(sede_def);
-      }, [sede_def]);
+    }, [sede_def]);
 
 
     const handleCambioSede = (event) => {
@@ -233,16 +235,27 @@ const Perfil = () => {
 
     useEffect(() => {
         setVetSeleccionado(vet_def);
-      }, [vet_def]);
+    }, [vet_def]);
 
     const handleVetSeleccionado = (event) => {
         setVetSeleccionado(event.target.value)
     }
 
+
     console.log("vet: " + vetSeleccionado)
     console.log("pet: " + selectedPet)
     console.log("servicio: " + SelectedService);
-    console.log("sede: " + sedeSeleccionada)
+    console.log("sede: " + sedeSeleccionada);
+    console.log("fecha: " + fechaHora);
+
+    const sendEmail = () => {
+
+        const loggedUserJSON = window.localStorage.getItem('UserToken');
+        const local_data = JSON.parse(loggedUserJSON);
+        const usuario = local_data.email;
+
+        const resp = m_cita(vetSeleccionado, usuario, SelectedService, fechaHora);
+    }
 
     const handleAgendarCita = async (event) => {
         event.preventDefault();
@@ -528,7 +541,7 @@ const Perfil = () => {
                         </div>
 
                         <div className='form__btn'>
-                            <button className="btn text-cs h"> Agendar Cita </button>
+                            <button onClick={sendEmail} className="btn text-cs h"> Agendar3 Cita </button>
                         </div>
                     </form>
 

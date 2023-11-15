@@ -197,3 +197,12 @@ export const cambiar_contrasena = async (correo, contrasena) => {
         contrasena: contrasena
     })
 }
+
+export const m_cita = async (vetSeleccionado, usuario, SelectedService, fechaHora) => {
+    return await axios.post("http://localhost:3001/UniversoPet/Api/m_cita", {
+        vetSeleccionado: vetSeleccionado,
+        usuario: usuario,
+        SelectedService: SelectedService,
+        fechaHora: fechaHora
+    })
+}

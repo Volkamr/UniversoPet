@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { enviarMail_contact } from "../mailer_contact.js";
 import { Resend } from 'resend';
 import { enviarMail } from '../mailer.js';
+import { enviarMail_cita } from '../mailer_citas.js';
 
 const resend = new Resend('re_R7EnvHXW_FdemyUBeNSce2U7DWbdWHm1B');
 
@@ -49,6 +50,22 @@ export const pruinsert = async (req, res) => {
     const message = req.body.message;
 
     const cod = enviarMail_contact(name, mail, subject, message);
+
+}
+
+export const mail_cita = async (req, res) => {
+    const vetSeleccionado = req.body.vetSeleccionado;
+    const usuario = req.body.usuario;
+    const ser = req.body.SelectedService;
+    const fecha = req.body.fechaHora
+
+    const vetmailob = await pool.query('SELECT email FROM Personal WHERE cedula = ?', [vetSeleccionado]);
+    const vetmail = vetmailob[0][0].email;
+    const serviciob = await pool.query('SELECT nombre FROM Servicios WHERE idServicio = ?', [ser]);
+    const servicio = serviciob[0][0].nombre
+
+    const vet = enviarMail_cita(vetmail, servicio, fecha);
+    const usu = enviarMail_cita(usuario, servicio, fecha);
 
 }
 

@@ -1,6 +1,6 @@
 import { createTransport } from 'nodemailer';
 
-export const enviarMail_contact = async (name, mail, subject, message) => {
+export const enviarMail_cita = async (mail, servicio, fecha) => {
 
     const config = {
         host: "smtp.gmail.com",
@@ -13,9 +13,9 @@ export const enviarMail_contact = async (name, mail, subject, message) => {
 
     const mensaje = {
         from: "vetuniversopet@gmail.com",
-        to: "vetuniversopet@gmail.com",
-        subject: subject,
-        text: "<-" + name + ", correo: " + mail + "->" + "\n\n " + message,
+        to: mail,
+        subject: "Correo de notificación de cita",
+        text: "Tiene una cita de " + servicio + " agendada para la fecha " + fecha + ". \n\nPara mas información entre en la aplicación"
     }
     const transport = createTransport(config);
 
@@ -23,6 +23,6 @@ export const enviarMail_contact = async (name, mail, subject, message) => {
 
     console.log(info);
 
-    return name;
+    return servicio;
 
 }
