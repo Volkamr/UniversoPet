@@ -100,7 +100,7 @@ const Mascotas = ({ UserPets, idUsuario, citas, token }) => {
                                         </div>
 
                                     </div>
-                                    <div className="mascota__adicional container grid">
+                                    <div className="mascota__adicional container">
                                         <div className='mascota__citas'>
                                             <h1 className='text-cs'>Citas</h1>
                                             {citas.map(cita => {

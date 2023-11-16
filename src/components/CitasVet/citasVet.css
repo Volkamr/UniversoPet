@@ -1,15 +1,16 @@
 .citasVet__top {
     grid-template-columns: repeat(2, 1fr);
-    padding: 1rem 10rem;
+    padding: 1rem 5rem;
     margin-top: 8%;
+    margin-left: -8%;
     text-align: center;
 }
 
 .citasVet__top__info {
-    padding: 1rem 2.5rem;
+    padding: 1rem;
     grid-template-columns: repeat(4, 1fr);
     line-height: 8px;
-    margin-left: -20%;
+    margin-left: -27%;
 }
 
 .citasVet__num {
@@ -116,10 +117,10 @@
     border-style: solid;
 }
 
-.area_texto:is(:focus,:valid){
+.area_texto:is(:focus, :valid) {
     border-color: var(--color-primario);
 }
 
-.area_texto::-webkit-scrollbar{
-    width:0px;
+.area_texto::-webkit-scrollbar {
+    width: 0px;
 }

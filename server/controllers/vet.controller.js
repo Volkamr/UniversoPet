@@ -166,7 +166,7 @@ export const getSedes = async (req, res) => {
 
 export const getService = async (req, res) => {
     const [result] = await pool.query(
-        "SELECT * FROM Servicios inner join Estados where Estados.idEstado = Servicios.idEstado where idServicio = ? and estado = 'activo'", [req.params.idServicio]
+        "SELECT * FROM Servicios inner join Estados on Estados.idEstado = Servicios.idEstado where idServicio = ? and estado = 'activo'", [req.params.idServicio]
     );
 
     if (result.length == 0) {
@@ -335,7 +335,7 @@ export const getCitasVet = async (req, res) => {
 export const getCita = async (req, res) => {
     try {
         const idCita = req.params.idCita;
-        const [result] = await pool.query("Select peso, raza, Personal.nombres as nombres_vet, Personal.apellidos as apellidos_vet, Personal.email as email_vet, tipoAnimal, Usuarios.nombres as nombres_user, Usuarios.apellidos as apellidos_user, Usuarios.email as email_usuario, Servicios.nombre as servicio, estadoCita, Sedes.titulo as sede, FechaInicio, Mascotas.nombre AS mascota FROM Citas inner join Mascotas on Mascotas.idMascota=Citas.idMascota" +
+        const [result] = await pool.query("Select peso, raza, Mascotas.imagen as pet_img, Personal.fotoPerfil as foto_vet, Personal.nombres as nombres_vet, Personal.apellidos as apellidos_vet, Personal.email as email_vet, tipoAnimal, Usuarios.nombres as nombres_user, Usuarios.apellidos as apellidos_user, Usuarios.email as email_usuario, Servicios.nombre as servicio, estadoCita, Sedes.titulo as sede, FechaInicio, Mascotas.nombre AS mascota FROM Citas inner join Mascotas on Mascotas.idMascota=Citas.idMascota" +
             " inner join Servicios on Citas.idServicio = Servicios.idServicio inner join Sedes on Citas.idSede = Sedes.idSede inner join EstadosCitas on EstadosCitas.idEstadoCita = Citas.idEstadoCita inner join Usuarios on Usuarios.idUsuario = Mascotas.idUsuario inner join Razas on Razas.idRaza = Mascotas.idRaza" +
             " inner join TipoAnimal on TipoAnimal.idTipoAnimal = Razas.idTipoAnimal inner join Personal on Personal.cedula = Citas.cedula where Citas.idCita = ?", [idCita])
         return res.status(200).json(result)
@@ -347,7 +347,6 @@ export const getCita = async (req, res) => {
         });
     }
 }
-
 
 export const getDiagnosticoxCita = async (req, res) => {
     try {
@@ -841,13 +840,13 @@ export const postDiagnostico = async (req, res) => {
                     success: false,
                     message: 'Debe ingresar al menos 10 caracteres'
                 })
-            } else if(fechaCita>fechaActual){
+            } else if (fechaCita > fechaActual) {
                 return res.status(200).json({
                     success: false,
                     message: 'No puede agregar un diagnóstico a una cita que no se ha completado'
                 })
             }
-            else{
+            else {
                 try {
 
                     const [result_estadoCita] = await pool.query('SELECT idEstadoCita FROM EstadosCitas WHERE estadoCita = ?', ["completada"])

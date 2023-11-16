@@ -5,6 +5,8 @@ import './ServiceDetails.css';
 import { getService } from '../../../api/vet';
 import { useEffect, useState } from "react";
 import ser from '../../../assets/servicio def.jpg'
+import Swal from 'sweetalert2'
+import { Link } from 'react-router-dom'
 
 export default function ServiceDetails() {
 
@@ -18,6 +20,20 @@ export default function ServiceDetails() {
     }
     loadServices()
   }, [idServicio])
+
+  const [estado, setEstado] = useState('');
+  const [token, setToken] = useState('');
+  const [rol, setRol] = useState('');
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('UserToken');
+    const local_data = JSON.parse(loggedUserJSON)
+    if (loggedUserJSON != null) {
+      setEstado('Loggeado');
+      setToken(local_data.token)
+      setRol(local_data.rol)
+    }
+  }, [estado, token, rol])
 
   return (
     <section className="serviceDetailsView section">
@@ -33,7 +49,29 @@ export default function ServiceDetails() {
           <div>
             <p className="contenido-servicio">{service.descripcion}</p>
             <div className='btn__servicio'>
-              <button className="btn text-cs h"> Agendar Cita </button>
+              {
+                estado === 'Loggeado' && rol === 'usuario' ? (
+                  <Link to={`/perfil/${token}`}>
+                    <button className="btn text-cs h"> Agendar Cita </button>
+                  </Link>
+                ) : (
+                  <Link onClick={() => {
+                    Swal.fire({
+                      icon: 'info',
+                      title: 'Tiene que iniciar sesión',
+                      text: 'Debe iniciar sesión para poder agendar una cita',
+                    })
+                      .then(() => {
+                        localStorage.removeItem('UserToken');
+                        window.location.href = '/login';
+                      });
+                  }}>
+                    <button className="btn text-cs h"> Agendar Cita </button>
+                  </Link>
+                )
+
+
+              }
             </div>
           </div>
         </container>

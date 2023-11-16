@@ -1,8 +1,6 @@
 import React from 'react'
 import NavToggle from '../navToggle/NavToggle'
-import { citas } from '../../Data'
 import { useParams } from 'react-router-dom'
-import { veterinario } from '../../Data'
 import './citas.css'
 import { getCitaRequest, getCitasxMascotaRequest, getDiagnosticoxCitaRequest } from '../../api/vet'
 import { useState, useEffect } from 'react'
@@ -30,6 +28,7 @@ const Citas = () => {
             const response = await getDiagnosticoxCitaRequest(idCita)
             setDiagnostico(response.data)
         }
+        loadDiagnostico()
     }, [cita.idCita])
 
 
@@ -98,13 +97,13 @@ const Citas = () => {
                         DIAGNOSTICO
                     </h1>
                     <p className='citas__content__content '>
-                        {diagnostico.length === 0 ? "Aún no hay diagnóstico" : diagnostico[0].diagnostico}
+                        {diagnostico.length === 0 ? "Aún no hay diagnóstico" : diagnostico[0].descDIagnostico}
                     </p>
                 </div>
             </div>
             <div className='citas__content__vet'>
                 <div className="citas__vet container grid">
-                    <img src={veterinario.avatar} alt="" className='vet__img' />
+                    <img src={"data:image/png;base64," + cita.foto_vet} alt="" className='vet__img' />
                     <div className="vet__info">
                         <h1 className='text-cs' > veterinario </h1>
                         <div className='vet__content container grid'>

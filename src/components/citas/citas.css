@@ -5,7 +5,7 @@
 
 .citas__header {
     grid-template-columns: repeat(2, 1fr);
-    padding: 1.5rem 15rem;
+    padding: 1.5rem 10rem;
     height: 200px;
 }
 
@@ -19,10 +19,11 @@
     display: flex;
     align-items: center;
     text-align: center;
-    padding: 1rem 2.5rem 2.2rem 2.5rem;
+    padding: 1rem;
     width: 580px;
     height: 70.5%;
     column-gap: 2.5rem;
+    margin-top: -10px;
 }
 
 .citas__content {
@@ -73,10 +74,11 @@
 }
 
 .vet__img {
-    width: 200px;
+    width: 250px;
     height: 200px;
     border-radius: 1.5rem;
     justify-self: center;
+    margin-left: 100px;
 }
 
 .citas__vet {

@@ -150,14 +150,12 @@ const CitasVet = () => {
             </div>
             <div className='citasVet__mascota grid'>
                 <div className='citasVet__fondo'>
-                    <img src={img} className='citasVet__img' alt="" />
+                    <img src={"data:image/png;base64," + citaVet.pet_img} className='citasVet__img' alt="" />
                 </div>
                 <div className='citasVet__mascota__content'>
                     <div className='citasVet__mascota__top'>
                         <h1 className='citasVet__title__m text-cs'> {citaVet.mascota} </h1>
-                        <h1 className='citasVet__subtitle text-cs'> Dueño: {citaVet.nombres_user + " " + citaVet.apellidos_user} </h1>
-                        <h1 className='citasVet__subtitle text-cs'> Correo: {citaVet.email_usuario} </h1>
-
+                        <h1 className='citasVet__subtitle text-cs'> {citaVet.nombres_user + " " + citaVet.apellidos_user} - {citaVet.email_usuario} </h1>
                     </div>
                     <div className='citasVet__mascota__bott'>
                         <div className='citasVet__mascota__info grid'>
